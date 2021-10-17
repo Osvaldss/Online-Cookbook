@@ -1,24 +1,24 @@
 {% extends "base.html" %}
 {% block content %}
-    <div class="container">
-        <h1>Main Page of CookBook</h1>
-        <div class="row">
-            <img class="col s12 m4"
-                src="https://images.unsplash.com/photo-1546552580-9427ccb15af4?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2070&q=80"
-                alt="hero image example">
-            <p class="col s12 m8">
-                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's
-                standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make
-                a type specimen book.<br />
-                Want to add your own recipe join our community. <br />
-                <button><a href="{{ url_for('register')}}">Create CookBook Account</a></button>
-            </p>
-        </div>
-        {% for recipe in recipes %}
-        {{recipe.recipe_name}}<br />
-        {{recipe.recipe_description}}<br />
-        {{recipe.time}}<br />
-        {% endfor %}
+
+    <h1>Main Page of CookBook</h1>
+    <div class="row">
+        <img class="col s12 m4"
+            src="https://images.unsplash.com/photo-1546552580-9427ccb15af4?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2070&q=80"
+            alt="hero image example">
+        <p class="col s12 m8">
+            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's
+            standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make
+            a type specimen book.<br />
+            Want to add your own recipe join our community. <br />
+            <button><a href="{{ url_for('register')}}">Create CookBook Account</a></button>
+        </p>
     </div>
+    {% for recipe in recipes %}
+    {{recipe.recipe_name}}<br />
+    {{recipe.recipe_description}}<br />
+    {{recipe.time}}<br />
+    {% endfor %}
+
 
 {% endblock %}
