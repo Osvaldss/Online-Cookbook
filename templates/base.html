@@ -16,6 +16,32 @@
 
 <body>
 
+    <header>
+        <!--Large screen top navbar-->
+        <nav class="nav-extended  light-green darken-3">
+            <div class="nav-wrapper">
+                <a href="{{ url_for('get_latest') }}" class="brand-logo">Online CookBook</a>
+                <a href="#" data-target="mobile-demo" class="sidenav-trigger right"><i class="fas fa-bars"></i></a>
+                <ul class="right hide-on-med-and-down">
+                    <li><a href="{{ url_for('get_latest') }}">Home</a></li>
+                    <li><a href="#">Recipes</a></li>
+                    <li><a href="#">Add Recipe</a></li>
+                    <li><a href="#">Log In</a></li>
+                    <li><a href="#">Log Out</a></li>
+                </ul>
+            </div>
+        </nav>
+        <!--Small Mobile device navbar-->
+        <ul class="sidenav" id="mobile-demo">
+            <h4 class="center-align grey-text text-darken-4">CookBook</h4>
+            <li><a href="{{ url_for('get_latest') }}">Home</a></li>
+            <li><a href="#">Recipes</a></li>
+            <li><a href="#">Add Recipe</a></li>
+            <li><a href="#">Log In</a></li>
+            <li><a href="#">Log Out</a></li>
+        </ul>
+    </header>
+
     {% block content %}
     {% endblock %}
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"

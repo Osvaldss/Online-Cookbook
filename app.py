@@ -27,6 +27,13 @@ def get_recipe():
     return render_template("recipes.html", recipes=recipes)
 
 
+@app.route("/get_latest")
+def get_latest():
+    '''Find recent added recipes and display then on home page'''
+    recipes = mongo.db.recipes.find()
+    return render_template("main_page.html", recipes=recipes)
+
+
 if __name__ == "__main__":
     app.run(host=os.environ.get("IP"),
             port=int(os.environ.get("PORT")),
