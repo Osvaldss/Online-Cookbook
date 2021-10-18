@@ -1,6 +1,6 @@
 import os
 from flask import (
-    Flask, flash, render_template, 
+    Flask, flash, render_template,
     redirect, request, session, url_for)
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
@@ -23,7 +23,7 @@ mongo = PyMongo(app)
 @app.route("/")
 @app.route("/get_latest")
 def get_latest():
-    '''Find recent added recipes and display then on home page'''
+    '''Find recent added recipes and display then on home page.'''
     recipes = mongo.db.recipes.find()
     return render_template("main_page.html", recipes=recipes)
 
@@ -37,6 +37,7 @@ def get_recipe():
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
+    '''Creating register method for user to create account.'''
     if request.method == "POST":
         # check if the user already exist
         existing_user = mongo.db.users.find_one(
@@ -47,21 +48,46 @@ def register():
         if existing_user:
             flash("Username already exist")
             return redirect(url_for("register"))
-
         elif password_one != password_two:
             flash("Your password didn't match")
             return redirect(url_for("register"))
 
-        register = {
-            "username" : request.form.get("username").lower(),
-            "password" : generate_password_hash(request.form.get('password'))
+        new_user = {
+            "username": request.form.get("username").lower(),
+            "password": generate_password_hash(request.form.get('password'))
         }
-        mongo.db.users.insert_one(register)
+        mongo.db.users.insert_one(new_user)
 
         # put new user into session
         session["user"] = request.form.get("username").lower()
         flash("Congratz!!! You joined our community")
     return render_template("register.html")
+
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    '''Login methon to login into user profile page.'''
+    if request.method == "POST":
+        # check for account if it exist in db
+        existing_user = mongo.db.users.find_one(
+            {"username": request.form.get("username").lower()})
+        if existing_user:
+            # check if password is correct
+            if check_password_hash(
+                    existing_user['password'], request.form.get("password")):
+                session['user'] = request.form.get('username').lower()
+                flash("Welcome, {}".format(request.form.get('username')))
+            else:
+                # if user inputs wrong password
+                flash("Incorrect Cook Name and/or Password")
+                return redirect(url_for('login'))
+
+        else:
+            # if user inputs wrong username
+            flash("Incorrect Cook Name and/or Password")
+            return redirect(url_for('login'))
+
+    return render_template("login.html")
 
 
 if __name__ == "__main__":
