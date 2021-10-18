@@ -25,10 +25,13 @@
                 <ul class="right hide-on-med-and-down">
                     <li><a href="{{ url_for('get_latest') }}">Home</a></li>
                     <li><a href="#">Recipes</a></li>
-                    <li><a href="#">Add Recipe</a></li>
-                    <li><a href="{{ url_for('login') }}">Log In</a></li>
-                    <li><a href="{{ url_for('profile', username=session['user']) }}">{{username.capitalize()}}</a></li>
-                    <li><a href="#">Log Out</a></li>
+                    {% if session.user %}
+                        <li><a href="#">Add Recipe</a></li>
+                        <li><a href="{{ url_for('profile', username=session['user']) }}">{{session.user.capitalize()}}</a></li>
+                        <li><a href="{{ url_for('logout') }}">Log Out</a></li>
+                    {% else %}
+                        <li><a href="{{ url_for('login') }}">Log In</a></li>
+                    {% endif %}
                 </ul>
             </div>
         </nav>
@@ -37,10 +40,13 @@
             <h4 class="center-align grey-text text-darken-4">CookBook</h4>
             <li><a href="{{ url_for('get_latest') }}">Home</a></li>
             <li><a href="#">Recipes</a></li>
-            <li><a href="#">Add Recipe</a></li>
-            <li><a href="{{ url_for('login') }}">Log In</a></li>
-            <li><a href="{{ url_for('profile', username=session['user']) }}">{{username.capitalize()}}</a></li>
-            <li><a href="#">Log Out</a></li>
+            {% if session.user %}
+                <li><a href="#">Add Recipe</a></li>
+                <li><a href="{{ url_for('profile', username=session['user']) }}">{{session.user.capitalize()}}</a></li>
+                <li><a href="{{ url_for('logout') }}">Log Out</a></li>
+            {% else %}
+                <li><a href="{{ url_for('login') }}">Log In</a></li>
+            {% endif %}
         </ul>
     </header>
 
