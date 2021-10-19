@@ -1,27 +1,33 @@
 {% extends "base.html" %}
 {% block content %}
 
-    <div class="col s12 m7">
-        <h2 class="header">Horizontal Card</h2>
-        <div class="card horizontal">
-            <div class="card-image">
-                <img src="https://lorempixel.com/100/190/nature/6">
-            </div>
-            <div class="card-stacked">
-                <div class="card-action">
-                    <a href="#">This is a link</a>
-                </div>
-                <div class="card-content">
-                    <p>I am a very simple card. I am good at containing small bits of information.</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
+    <h2 class="header">All recipes</h2>
     {% for recipe in recipes %}
-    {{recipe.recipe_name}}<br />
-    {{recipe.recipe_description}}<br />
-    {{recipe.time}}<br />
+        <div class="card horizontal">
+            <div class="row rm-bottom-gap valign-wrapper">
+                <div class="col m9 small-screen">
+                    <div class="card-stacked">
+                        <div class="card-action">
+                            <strong>{{recipe.recipe_name}}</strong>
+                        </div>
+                        <div class="card-content short-desc">
+                            {{recipe.recipe_description}}
+                        </div>
+                        <div class="card-content card-footer">
+                            <i class="far fa-clock"></i>
+                            <strong>{{recipe.time}}</strong>&emsp;
+                            <i class="fas fa-utensil-spoon"></i>
+                            <strong>{{recipe.category_name}}</strong>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="image-container col m3 small-screen center-align">
+                    <img class="responsive-img" width="180" height="180" 
+                        src="https://images.immediate.co.uk/production/volatile/sites/30/2020/08/winter-soup-65c837b.jpg?quality=90&webp=true&resize=300,272">
+                </div>
+            </div>
+        </div>  
     {% endfor %}
 
 {% endblock %}

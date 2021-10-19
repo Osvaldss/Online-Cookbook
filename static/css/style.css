@@ -1,16 +1,40 @@
-body {
-
-}
+body {}
 
 .card .card-action {
     border-bottom: 1px solid rgba(51, 105, 30, 0.5);
-    border-top:  none;
-}
-
-.card-stacked {
-    margin-left: 5px;
+    border-top: none;
 }
 
 .card.horizontal {
     padding: 5px;
+    height: auto;
+}
+
+.row.rm-bottom-gap {
+    margin-bottom: 0px;
+}
+
+.card-content.card-footer {
+    padding: 10px 24px;
+}
+
+.card-content.short-desc {
+    padding: 10px 24px 0px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+}
+
+@media only screen and (max-width: 600px) and (orientation: portrait) {
+    .col.small-screen {
+        padding: 0 10px 0 0;
+    }
+    .image-container img {
+        width: 75px;
+        height: auto;
+    }
+    .card-content.short-desc {
+        min-height: 75px;
+    }
 }
