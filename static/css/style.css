@@ -1,0 +1,16 @@
+body {
+
+}
+
+.card .card-action {
+    border-bottom: 1px solid rgba(51, 105, 30, 0.5);
+    border-top:  none;
+}
+
+.card-stacked {
+    margin-left: 5px;
+}
+
+.card.horizontal {
+    padding: 5px;
+}

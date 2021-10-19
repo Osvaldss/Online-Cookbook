@@ -30,7 +30,7 @@ def get_latest():
 
 @app.route("/get_recipe")
 def get_recipe():
-    '''Testing flask '''
+    '''Page with a list of all added recipes.'''
     recipes = mongo.db.recipes.find()
     return render_template("recipes.html", recipes=recipes)
 
