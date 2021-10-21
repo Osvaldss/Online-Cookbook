@@ -32,6 +32,7 @@ def get_latest():
 def get_recipe():
     '''Page with a list of all added recipes.'''
     recipes = mongo.db.recipes.find()
+    
     return render_template("recipes.html", recipes=recipes)
 
 
@@ -110,6 +111,11 @@ def logout():
     flash("You have been successfully logged out")
     session.pop("user")
     return redirect(url_for("get_latest"))
+
+
+@app.route("/add_recipe")
+def add_recipe():
+    return render_template("add_recipe.html")
 
 
 if __name__ == "__main__":
