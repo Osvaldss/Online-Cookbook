@@ -8,6 +8,9 @@
                 <div class="col m9 small-screen">
                     <div class="card-stacked">
                         <div class="card-action">
+                            <div class="image-container col m3 small-screen center-align">
+                                <img class="responsive-img" src="{{ url_for('file', filename=recipe.recipe_image) }}" alt="{{recipe.recipe_image}}">
+                            </div>
                             <strong>{{recipe.recipe_name}}</strong>
                         </div>
                         <div class="card-content short-desc">
@@ -17,15 +20,15 @@
                             <i class="far fa-clock"></i>
                             <strong>{{recipe.prep_time + recipe.cook_time}}</strong>&emsp;
                             <i class="fas fa-utensil-spoon"></i>
-                            <strong>{{recipe.category_name}}</strong>
-
+                            <strong>{{recipe.category_name}}</strong>&emsp;
+                            <i class="fas fa-user"></i>
+                            <em> by: {{recipe.recipe_by}}</em>
                         </div>
                     </div>
                 </div>
-                <div class="image-container col m3 small-screen center-align">
-                    <img class="responsive-img" width="180" height="180" 
-                        src="https://images.immediate.co.uk/production/volatile/sites/30/2020/08/winter-soup-65c837b.jpg?quality=90&webp=true&resize=300,272">
-                </div>
+                    <div class="image-container-medium col m3 small-screen center-align">
+                        <img class="responsive-img" src="{{ url_for('file', filename=recipe.recipe_image) }}" alt="{{recipe.recipe_image}}">
+                    </div>
             </div>
         </div>  
     {% endfor %}

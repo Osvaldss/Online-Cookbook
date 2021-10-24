@@ -1,4 +1,5 @@
 import os
+import datetime
 from flask import (
     Flask, flash, render_template,
     redirect, request, session, url_for)
@@ -26,6 +27,11 @@ def get_latest():
     '''Find recent added recipes and display then on home page.'''
     recipes = mongo.db.recipes.find()
     return render_template("main_page.html", recipes=recipes)
+
+
+@app.route("/file/<filename>")
+def file(filename):
+    return mongo.send_file(filename)
 
 
 @app.route("/get_recipe")
@@ -112,13 +118,30 @@ def logout():
     return redirect(url_for("get_latest"))
 
 
-@app.route("/add_recipe")
+@app.route("/add_recipe", methods=["GET", "POST"])
 def add_recipe():
+    if request.method == "POST" and 'recipe_image' in request.files:
+        recipe_image = request.files['recipe_image']
+        mongo.save_file(recipe_image.filename, recipe_image)
+        recipes = {
+            "category_name": request.form.get("category_name"),
+            "recipe_name": request.form.get("recipe_name"),
+            "recipe_description": request.form.get("recipe_description"),
+            "ingredients": request.form.getlist("ingredients"),
+            "methods": request.form.getlist("methods"),
+            "cook_time": int(request.form.get("cook_time")),
+            "prep_time": int(request.form.get("prep_time")),
+            "recipe_by": session['user'],
+            "recipe_image": recipe_image.filename,
+            "recipe_add_time": datetime.datetime.now()
+        }
+        mongo.db.recipes.insert_one(recipes)
+        flash("Recipe Was Successfully Added")
+        return redirect(url_for("get_recipe"))
     categories = mongo.db.categories.find().sort("category_name", 1)
     # if 'recipe_image' in request.files:
     #     recipe_image = request.files['recipe_image']
     #     mongo.save_file(recipe_image.filename, recipe_image)
-        
     return render_template("add_recipe.html", categories=categories)
 
 

@@ -26,15 +26,41 @@ body {}
     -webkit-box-orient: vertical;
 }
 
+.move-btn-up {
+    margin-top: -80px;
+}
+
 @media only screen and (max-width: 600px) and (orientation: portrait) {
     .col.small-screen {
-        padding: 0 10px 0 0;
+        padding: 0;
     }
+
+    .image-container {
+        height: 30px;
+        overflow-y: hidden;
+    }
+
+    .card .card-action {
+        padding: 12px;
+    }
+
     .image-container img {
-        width: 75px;
+        width: 100%;
         height: auto;
+        position: relative;
+        top: -100px;
     }
     .card-content.short-desc {
         min-height: 75px;
+    }
+
+    .image-container-medium {
+        display: none;
+    }
+}
+
+@media only screen and (min-width: 600px){
+    .image-container {
+        display: none;
     }
 }
