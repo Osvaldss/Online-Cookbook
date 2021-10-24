@@ -1,5 +1,6 @@
 $(document).ready(function(){
     $('.sidenav').sidenav();
+    $('select').formSelect();
     checkWidth();
     $(window).resize(checkWidth);
     addIngList();

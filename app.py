@@ -32,7 +32,6 @@ def get_latest():
 def get_recipe():
     '''Page with a list of all added recipes.'''
     recipes = mongo.db.recipes.find()
-    
     return render_template("recipes.html", recipes=recipes)
 
 
@@ -115,7 +114,12 @@ def logout():
 
 @app.route("/add_recipe")
 def add_recipe():
-    return render_template("add_recipe.html")
+    categories = mongo.db.categories.find().sort("category_name", 1)
+    # if 'recipe_image' in request.files:
+    #     recipe_image = request.files['recipe_image']
+    #     mongo.save_file(recipe_image.filename, recipe_image)
+        
+    return render_template("add_recipe.html", categories=categories)
 
 
 if __name__ == "__main__":
