@@ -37,7 +37,7 @@ def file(filename):
 @app.route("/get_recipe")
 def get_recipe():
     '''Page with a list of all added recipes.'''
-    recipes = mongo.db.recipes.find()
+    recipes = mongo.db.recipes.find().sort("category_name", 1)
     return render_template("recipes.html", recipes=recipes)
 
 
@@ -112,6 +112,15 @@ def profile(username):
     return redirect(url_for("login"))
 
 
+@app.route("/edit_recipe/<recipe_id>", methods=["GET", "POST"])
+def edit_recipe(recipe_id):
+    recipe = mongo.db.recipes.find_one({"_id": ObjectId(recipe_id)})
+
+    categories = mongo.db.categories.find().sort("category_name", 1)
+    return render_template(
+            "edit_recipe.html", recipe=recipe, categories=categories)
+
+
 @app.route("/logout")
 def logout():
     '''Logout the user from his profile'''
@@ -142,9 +151,6 @@ def add_recipe():
         flash("Recipe Was Successfully Added")
         return redirect(url_for("get_recipe"))
     categories = mongo.db.categories.find().sort("category_name", 1)
-    # if 'recipe_image' in request.files:
-    #     recipe_image = request.files['recipe_image']
-    #     mongo.save_file(recipe_image.filename, recipe_image)
     return render_template("add_recipe.html", categories=categories)
 
 
