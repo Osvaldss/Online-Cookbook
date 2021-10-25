@@ -14,7 +14,7 @@
                             <option value="{{category.category_name}}">{{category.category_name}}</option>
                         {% endfor %}
                     </select>
-                    <label>Recipe category</label>
+                    <label for="category_name">Recipe category</label>
                 </div>
             </div>
             <div class="row">
@@ -78,7 +78,7 @@
                 <div class="file-field input-field col s12">
                     <div class="btn right">
                         <span>Upload Image</span>
-                        <input type="file" name="recipe_image">
+                        <input type="file" name="recipe_image" required>
                     </div>
                     <div class="file-path-wrapper">
                         <i class="fas fa-image amber-text text-lighten-1 prefix"></i>

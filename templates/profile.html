@@ -1,13 +1,51 @@
 {% extends "base.html" %}
 {% block content %}
 
-<div class="row">
-    <div class="col s12 m8 offset-m2" method="POST" action="{{ url_for('profile', username=session['user'])}}">
-        <div class="card-panel">
-            <h3>
-                {{username}}'s Profile
-            </h3>
+    <div class="row">
+        <div class="col s12 m8 offset-m2" method="POST" action="{{ url_for('profile', username=session['user'])}}">
+            <div class="card-panel">
+                <h3>
+                    {{username.capitalize()}}'s Profile
+                </h3>
+            </div>
         </div>
-</div>
+    </div>
+    {% for recipe in recipes %}
+    <div class="card horizontal">
+        <div class="row rm-bottom-gap valign-wrapper">
+            <div class="col m9 small-screen">
+                <div class="card-stacked">
+                    <div class="card-action">
+                        <div class="image-container small-screen center-align">
+                            <img class="responsive-img" src="{{ url_for('file', filename=recipe.recipe_image) }}" alt="{{recipe.recipe_image}}"><br />
+                        </div>
+                        <p class="left">
+                            <strong>{{recipe.recipe_name}}</strong>
+                        </p>
+                    </div>
+                    <div class="card-content short-desc">
+                        {{recipe.recipe_description}}
+                    </div>
+                    <div class="card-content card-footer">
+                        <i class="far fa-clock"></i>
+                        <strong>{{recipe.prep_time + recipe.cook_time}}</strong>&emsp;
+                        <i class="fas fa-utensil-spoon"></i>
+                        <strong>{{recipe.category_name}}</strong>&emsp;
+                        <i class="fas fa-user"></i>
+                        <em> by: {{recipe.recipe_by}}</em>
+                        <div class="center-align">
+                            <a href="" class="waves-effect waves-light btn-small ">Edit Recipe</a>
+                            <a href="" class="waves-effect waves-light btn-small ">Delete Recipe</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="image-container-medium col m3 small-screen center-align">
+                <img class="responsive-img" src="{{ url_for('file', filename=recipe.recipe_image) }}" alt="{{recipe.recipe_image}}">
+            </div>
+        </div>
+    </div>  
+{% endfor %}
+
 
 {% endblock %}

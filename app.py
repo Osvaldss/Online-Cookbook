@@ -1,5 +1,5 @@
 import os
-import datetime
+from datetime import datetime
 from flask import (
     Flask, flash, render_template,
     redirect, request, session, url_for)
@@ -105,7 +105,9 @@ def profile(username):
             {"username": session["user"]})["username"]
 
     if session['user']:
-        return render_template("profile.html", username=username)
+        recipes = mongo.db.recipes.find({"recipe_by": session['user']})
+        return render_template(
+            "profile.html", username=username, recipes=recipes)
 
     return redirect(url_for("login"))
 
@@ -123,6 +125,7 @@ def add_recipe():
     if request.method == "POST" and 'recipe_image' in request.files:
         recipe_image = request.files['recipe_image']
         mongo.save_file(recipe_image.filename, recipe_image)
+        medium_date = datetime.now()
         recipes = {
             "category_name": request.form.get("category_name"),
             "recipe_name": request.form.get("recipe_name"),
@@ -133,7 +136,7 @@ def add_recipe():
             "prep_time": int(request.form.get("prep_time")),
             "recipe_by": session['user'],
             "recipe_image": recipe_image.filename,
-            "recipe_add_time": datetime.datetime.now()
+            "recipe_add_time": medium_date.strftime('%m/%d/%Y %H:%M')
         }
         mongo.db.recipes.insert_one(recipes)
         flash("Recipe Was Successfully Added")

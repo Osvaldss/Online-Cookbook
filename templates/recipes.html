@@ -8,10 +8,12 @@
                 <div class="col m9 small-screen">
                     <div class="card-stacked">
                         <div class="card-action">
-                            <div class="image-container col m3 small-screen center-align">
-                                <img class="responsive-img" src="{{ url_for('file', filename=recipe.recipe_image) }}" alt="{{recipe.recipe_image}}">
+                            <div class="image-container small-screen center-align">
+                                <img class="responsive-img" src="{{ url_for('file', filename=recipe.recipe_image) }}" alt="{{recipe.recipe_image}}"><br />
                             </div>
-                            <strong>{{recipe.recipe_name}}</strong>
+                            <p class="left">
+                                <strong>{{recipe.recipe_name}}</strong>
+                            </p>
                         </div>
                         <div class="card-content short-desc">
                             {{recipe.recipe_description}}
