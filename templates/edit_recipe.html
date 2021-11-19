@@ -96,13 +96,21 @@
             </div>
             <div class="row">
                 <div class="file-field input-field col s12">
-                    <div class="btn right">
+                    <label>
+                        <input id="check_to_upload_image" name="check_to_upload_image" type="checkbox" />
+                        <span>Use same image</span>
+                    </label>
+                </div>
+            </div>
+            <div  class="row">
+                <div class="file-field input-field col s12">
+                    <div id="image_upload_btn" class="btn right">
                         <span>Upload Image</span>
-                        <input type="file" name="recipe_image" required>
+                        <input type="file" name="recipe_image">
                     </div>
                     <div class="file-path-wrapper">
                         <i class="fas fa-image amber-text text-lighten-1 prefix"></i>
-                        <input class="file-path validate" type="text" placeholder="Upload your image">
+                        <input id="image_upload_input" class="file-path validate" type="text" value="{{recipe.recipe_image}}" placeholder="Upload your image">
                     </div>
                 </div>
             </div>

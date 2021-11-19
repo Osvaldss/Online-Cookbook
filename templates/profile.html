@@ -20,7 +20,10 @@
                 <div class="card-stacked">
                     <div class="card-action">
                         <div class="image-container small-screen center-align">
-                            <img class="responsive-img" src="{{ url_for('file', filename=recipe.recipe_image) }}" alt="{{recipe.recipe_image}}"><br />
+                            <img class="responsive-img" src="{{ url_for('display_image', filename=recipe.recipe_image) }}" alt="{{recipe.recipe_image}}"><br />
+                            {% if recipe.recipe_image not in recipe_images %}
+                                <p>Nera tokio paveiksliuko</p>
+                            {% endif %}
                         </div>
                         <p class="left">
                             <strong>{{recipe.recipe_name}}</strong>
@@ -38,13 +41,16 @@
                         <em> by: {{recipe.recipe_by}}</em>
                         <div class="center-align">
                             <a href="{{ url_for('edit_recipe', recipe_id=recipe._id)}}" class="waves-effect waves-light btn-small ">Edit Recipe</a>
-                            <a href="" class="waves-effect waves-light btn-small ">Delete Recipe</a>
+                            <a href="{{ url_for('delete_recipe', recipe_id=recipe._id)}}" class="waves-effect waves-light btn-small ">Delete Recipe</a>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="image-container-medium col m3 small-screen center-align">
-                <img class="responsive-img" src="{{ url_for('file', filename=recipe.recipe_image) }}" alt="{{recipe.recipe_image}}">
+                <img class="responsive-img" src="{{ url_for('display_image', filename=recipe.recipe_image) }}" alt="{{recipe.recipe_image}}"><br />
+                {% if recipe.recipe_image not in recipe_images %}
+                    <p>Nera tokio paveiksliuko</p>
+                {% endif %}
             </div>
         </div>
     </div>  

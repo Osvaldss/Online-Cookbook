@@ -4,6 +4,7 @@ $(document).ready(function () {
   // $(window).resize(checkWidth);
   addIngList();
   removeIngrInput();
+  check_image_checkbox();
 
   validateMaterializeSelect();
 
@@ -80,6 +81,13 @@ function removeIngrInput() {
     $(this).closest('div').remove();
   });
 }
+
+function check_image_checkbox() {
+  $('#check_to_upload_image').on('click', function(){                  
+     $('#image_upload_btn, #image_upload_input').attr('disabled', $(this).is(':checked'));       
+});
+}
+
 
 // function count_list_item(){
 //   $(".ingr-items").each(function(index) {
