@@ -35,7 +35,7 @@ mongo = PyMongo(app)
 @app.route("/get_latest")
 def get_latest():
     '''Find recent added recipes and display then on home page.'''
-    recipes = mongo.db.recipes.find()
+    recipes = mongo.db.recipes.find().sort("recipe_add_time", -1).limit(8)
     return render_template("main_page.html", recipes=recipes)
 
 
@@ -158,7 +158,7 @@ def profile(username):
             {"username": session["user"]})["username"]
 
     if session['user']:
-        recipes = mongo.db.recipes.find({"recipe_by": session['user']})
+        recipes = mongo.db.recipes.find({"recipe_by": session['user']}).sort('recipe_add_time', -1)
         recipe_images = os.listdir('static/uploads')
         return render_template(
             "profile.html", username=username, recipes=recipes, recipe_images=recipe_images)
@@ -187,6 +187,7 @@ def edit_recipe(recipe_id):
                     print('Turejo istrinti: ' + current_recipe_image)
                 else:
                     print("The file does not exist")
+                # create unique image filename
                 filename = secure_filename(recipe_image.filename)
                 splited_filename = filename.split(".")
                 print('That\'s the filename parts: ' + str(splited_filename))
@@ -233,24 +234,6 @@ def edit_recipe(recipe_id):
             "recipe_by": session['user'],
             "recipe_add_time": medium_date.strftime('%m/%d/%Y %H:%M')
         }
-    # if 'recipe_image' in request.files:
-    #     mongo.save_file(recipe_image.filename, recipe_image)
-    # recipe_image = request.files['recipe_image']
-    #     mongo.save_file(recipe_image.filename, recipe_image)
-    # elif request.method == "POST" and 'recipe_image' in request.files:
-    #     medium_date = datetime.now()
-    #     update_recipes = {
-    #         "category_name": request.form.get("category_name"),
-    #         "recipe_name": request.form.get("recipe_name"),
-    #         "recipe_description": request.form.get("recipe_description"),
-    #         "ingredients": request.form.getlist("ingredients"),
-    #         "methods": request.form.getlist("methods"),
-    #         "cook_time": int(request.form.get("cook_time")),
-    #         "prep_time": int(request.form.get("prep_time")),
-    #         "recipe_by": session['user'],
-    #         "recipe_image": recipe_image.filename,
-    #         "recipe_add_time": medium_date.strftime('%m/%d/%Y %H:%M')
-    #     }
         mongo.db.recipes.update_one(
             {"_id": ObjectId(recipe_id)}, {"$set": update_recipe})
         flash("Recipe Was Successfully Updated")
@@ -263,17 +246,14 @@ def edit_recipe(recipe_id):
 
 @app.route("/delete/<recipe_id>")
 def delete_recipe(recipe_id):
-    mongo.db.recipes.aggregate([
-        {"$lookup":
-            {
-                "from": "fs.files",
-                "localField": "recipe_image",
-                "foreignField": "filename",
-                "as": "remove_selection"
-            }}
-    ])
+    current_recipe = mongo.db.recipes.find_one({"_id": ObjectId(recipe_id)})
+    current_recipe_image = current_recipe.get('recipe_image')
+    current_recipe_path = os.path.join(app.config['UPLOAD_FOLDER'], current_recipe_image)
+    print(current_recipe_image)
+    print(current_recipe_path)
+    os.remove(os.path.join(
+        app.config['UPLOAD_FOLDER'], current_recipe_image))
     mongo.db.recipes.remove({"_id": ObjectId(recipe_id)})
-    # filename = mongo.db.fs.files.find({"filename": "recipe_image"})
     flash("Recipe Successfully Deleted")
     return redirect(url_for("profile", username=session["user"]))
 
@@ -298,6 +278,12 @@ def add_recipe():
             return redirect(url_for('add_recipe'))
         if recipe_image and allowed_file(recipe_image.filename):
             filename = secure_filename(recipe_image.filename)
+            splited_filename = filename.split(".")
+            print('That\'s the filename parts: ' + str(splited_filename))
+            suffix = datetime.now().strftime("%y%m%d_%H%M%S")
+            new_filename = "_".join(
+                [splited_filename[0], suffix])
+            filename = ".".join([new_filename, splited_filename[-1]])
             recipe_image.save(os.path.join(
                 app.config['UPLOAD_FOLDER'], filename))
             flash('Image was successfully uploaded')
@@ -314,7 +300,7 @@ def add_recipe():
             "cook_time": int(request.form.get("cook_time")),
             "prep_time": int(request.form.get("prep_time")),
             "recipe_by": session['user'],
-            "recipe_image": recipe_image.filename,
+            "recipe_image": filename,
             "recipe_add_time": medium_date.strftime('%m/%d/%Y %H:%M')
         }
         mongo.db.recipes.insert_one(recipes)

@@ -39,7 +39,7 @@
                         <strong>{{recipe.category_name}}</strong>&emsp;
                         <i class="fas fa-user"></i>
                         <em> by: {{recipe.recipe_by}}</em>
-                        <div class="center-align">
+                        <div class="recipe_edit_del_cont center-align">
                             <a href="{{ url_for('edit_recipe', recipe_id=recipe._id)}}" class="waves-effect waves-light btn-small ">Edit Recipe</a>
                             <a href="{{ url_for('delete_recipe', recipe_id=recipe._id)}}" class="waves-effect waves-light btn-small ">Delete Recipe</a>
                         </div>

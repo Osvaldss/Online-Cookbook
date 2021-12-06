@@ -24,6 +24,10 @@ footer {
     margin-bottom: 0;
 }
 
+.recipe_edit_del_cont{
+    padding: 15px 0 0;
+}
+
 .card .card-action {
     border-bottom: 1px solid rgba(51, 105, 30, 0.5);
     border-top: none;
