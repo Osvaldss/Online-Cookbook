@@ -31,7 +31,7 @@
             <div class="row">
                 <div class="input-field col s12">
                     <i class="fas fa-scroll amber-text text-lighten-1 prefix"></i>
-                    <textarea id="recipe_description" name="recipe_description" class="materialize-textarea validate" required>
+                    <textarea id="recipe_description" name="recipe_description" class="materialize-textarea validate" minlength="150" maxlength="500" data-length="500" required>
                         {{- recipe.recipe_description -}}
                     </textarea>
                     <label for="recipe_description">Short Description Of A Recipe</label>

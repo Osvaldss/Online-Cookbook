@@ -67,15 +67,15 @@
         {% block content %}
         {% endblock %}
     </main>
-    {% if not session.user %}
-        <div class="footer-copyright bottom-registration valign-wrapper deep-orange lighten-4">
-            <div class="container">
-                <strong>Join Us Now By Creating Your Account</strong>
-                <button class="right" >Join Us</button>
-            </div>
-        </div>
-    {% endif %}
     <footer class="page-footer">
+        {% if not session.user %}
+            <div class="footer-copyright deep-orange lighten-4">
+                <div class="container">
+                    <strong>Join Us Now By Creating Your Account</strong>
+                    <button class="right" >Join Us</button>
+                </div>
+            </div>
+        {% endif %}
         <div class="container">
             <div class="row">
                 <div class="col l4 s12">

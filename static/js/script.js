@@ -1,10 +1,18 @@
 $(document).ready(function () {
   $('.sidenav').sidenav();
   $('select').formSelect();
+  $('.tabs').tabs();
+  $('textarea#recipe_description').characterCounter();
+  $('.modal').modal({
+    'dismissible': false,
+    'startingTop': '0%'
+  });
   // $(window).resize(checkWidth);
   addIngList();
   removeIngrInput();
+  // count_chr_recipe_desc();
   check_image_checkbox();
+  
 
   validateMaterializeSelect();
 
@@ -82,6 +90,7 @@ function removeIngrInput() {
   });
 }
 
+// checks if user wants to use current image or add new image while editing recipe 
 function check_image_checkbox() {
   $('#check_to_upload_image').on('click', function(){                  
      $('#image_upload_btn, #image_upload_input').attr('disabled', $(this).is(':checked'));
@@ -95,6 +104,17 @@ function check_image_checkbox() {
 });
 }
 
+// function count_chr_recipe_desc() {
+//   $('#submit_recipe').click(function () {
+//     var minLength = 150;
+//     var $textarea = $('#recipe_description');
+//     if($textarea.text().length < minLength) {
+//       M.toast({
+//         html: 'Your recipe description too short it should be least 150 characters'
+//       })
+//     }
+//   })
+// }
 
 // function count_list_item(){
 //   $(".ingr-items").each(function(index) {

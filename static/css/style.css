@@ -10,7 +10,7 @@ body {
 }
 
 footer {
-    padding: 25px 0 0;
+    /* padding: 25px 0 0; */
     width: 100%;
     position: absolute;
     bottom: 0;
@@ -25,7 +25,7 @@ footer {
 }
 
 .recipe_edit_del_cont{
-    padding: 15px 0 0;
+    padding-bottom: 10px;
 }
 
 .card .card-action {
@@ -51,8 +51,23 @@ footer {
     height: 250px;
 }
 
-.card.small.responsive-size .card-content {
+.card.small.responsive-size-profile {
+    height: 280px;
+}
+
+.card.small.responsive-size .card-content,
+.card.small.responsive-size-profile .card-content {
     padding: 10px;
+}
+
+.delete-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.edit-btn {
+    padding-top: 10px;
 }
 
 .card-content.short-desc {
@@ -73,9 +88,10 @@ footer {
     margin-top: -80px;
 }
 
-.bottom-registration {
-    height: 50px;
+.page-footer {
+    padding-top: 0px;
 }
+
 
 @media only screen and (max-width: 600px) and (orientation: portrait) {
     .col.small-screen {
@@ -109,5 +125,11 @@ footer {
 @media only screen and (min-width: 600px){
     .image-container {
         display: none;
+    }
+}
+
+@media only screen and (min-width: 1150px){
+    .image-container-medium img.responsive-img {
+        max-height: 170px;
     }
 }
