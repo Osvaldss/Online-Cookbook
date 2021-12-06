@@ -1,4 +1,28 @@
-body {}
+* {
+    margin:0;
+    padding:0;  
+}
+
+body {
+    position: relative;
+    min-height: 100vh;
+    padding-bottom: 240px;
+}
+
+footer {
+    padding: 25px 0 0;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+}
+
+.m0 {
+    margin: 0;
+}
+
+.mb0 {
+    margin-bottom: 0;
+}
 
 .card .card-action {
     border-bottom: 1px solid rgba(51, 105, 30, 0.5);
@@ -14,8 +38,17 @@ body {}
     margin-bottom: 0px;
 }
 
+
 .card-content.card-footer {
     padding: 10px 24px;
+}
+
+.card.small.responsive-size {
+    height: 250px;
+}
+
+.card.small.responsive-size .card-content {
+    padding: 10px;
 }
 
 .card-content.short-desc {
@@ -26,8 +59,18 @@ body {}
     -webkit-box-orient: vertical;
 }
 
+.current_img {
+    display: none;
+    max-width: 150px;
+    height: auto;
+}
+
 .move-btn-up {
     margin-top: -80px;
+}
+
+.bottom-registration {
+    height: 50px;
 }
 
 @media only screen and (max-width: 600px) and (orientation: portrait) {

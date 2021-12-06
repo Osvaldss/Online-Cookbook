@@ -51,7 +51,7 @@ $(document).ready(function () {
 // btn to add ingridient item to ingredients_list
 function addIngList() {
   $('.add_list_item').click(function () {
-    var ingredients_val = $('#ingredients').val();
+    var ingredients_val = $('#ingredients_add').val();
     var ingrd_input_count = $(".ingr_input_cont").find("input");
     var input_html = '';
     input_html += '<div class="input-field s12">'
@@ -60,7 +60,7 @@ function addIngList() {
     input_html += '<div class="input-field s12 right">'
     input_html += '<button id="remove_ingr_input" type="button" class="btn-floating move-btn-up right">X</button>';
     input_html += '</div>'
-    if ($('#ingredients').val() != "" && ingrd_input_count.length <= 20) {
+    if ($('#ingredients_add').val() != "" && ingrd_input_count.length <= 20) {
       $('.ingr_input_cont').append(input_html);
     } else if (ingrd_input_count.length > 20) {
       M.toast({
@@ -84,7 +84,14 @@ function removeIngrInput() {
 
 function check_image_checkbox() {
   $('#check_to_upload_image').on('click', function(){                  
-     $('#image_upload_btn, #image_upload_input').attr('disabled', $(this).is(':checked'));       
+     $('#image_upload_btn, #image_upload_input').attr('disabled', $(this).is(':checked'));
+     if ($(this).prop('checked')) {
+      $('.current_img').css('display', 'block');
+      $('.new_img_to_upload').css('display', 'none');
+  } else {
+      $('.current_img').css('display', 'none');
+      $('.new_img_to_upload').css('display', 'block');
+  };     
 });
 }
 

@@ -41,8 +41,8 @@
                 <h4>Ingredients</h4>
                 <div class="ingr_input_cont input-field col s12 l10">
                     <i class="fas fa-list-alt amber-text text-lighten-1 prefix"></i>
-                    <input id="ingredients" name="ingredients" type="text" value="" class="validate">
-                    <label for="ingredients">Add ingredient</label>
+                    <input id="ingredients_add" name="ingredients_add" type="text" value="" class="validate">
+                    <label for="ingredients_add">Add ingredient</label>
                     {% for ingredient in recipe.ingredients %}
                     <div class="input-field s12">
                         <input type="text" name="ingredients" class="validate ingr-items" value="{{ingredient}}" required>
@@ -94,23 +94,38 @@
                     <label for="cook_time">Cook Time / Minutes</label>
                 </div>
             </div>
-            <div class="row">
-                <div class="file-field input-field col s12">
+            <!-- <div class="row">
+                <div class="file-field input-field col s6">
                     <label>
                         <input id="check_to_upload_image" name="check_to_upload_image" type="checkbox" />
                         <span>Use same image</span>
                     </label>
                 </div>
-            </div>
+            </div> -->
             <div  class="row">
-                <div class="file-field input-field col s12">
+                <div class="col s12 m4">
+                    <label>
+                        <input id="check_to_upload_image" name="check_to_upload_image" type="checkbox" />
+                        <span>Use same image</span>
+                    </label>
+                    <!-- <div class="current_img center-align ">
+                        <img class="responsive-img" src="{{ url_for('display_image', filename=recipe.recipe_image) }}" alt="{{image}}">
+                    </div> -->
+                </div>
+                <!-- <div class="current_img center-align col s12 m4">
+                    <img class="responsive-img" src="{{ url_for('display_image', filename=recipe.recipe_image) }}" alt="{{image}}">
+                </div> -->
+                <div class="current_img center-align col s12 m8">
+                    <img class="responsive-img" src="{{ url_for('display_image', filename=recipe.recipe_image) }}" alt="{{image}}">
+                </div>
+                <div class="file-field new_img_to_upload input-field col s12 m8">
                     <div id="image_upload_btn" class="btn right">
                         <span>Upload Image</span>
                         <input type="file" name="recipe_image">
                     </div>
                     <div class="file-path-wrapper">
                         <i class="fas fa-image amber-text text-lighten-1 prefix"></i>
-                        <input id="image_upload_input" class="file-path validate" type="text" value="{{recipe.recipe_image}}" placeholder="Upload your image">
+                        <input id="image_upload_input" name="image_upload_input" class="file-path validate" type="text" value="{{recipe.recipe_image}}" placeholder="Upload your image">
                     </div>
                 </div>
             </div>
