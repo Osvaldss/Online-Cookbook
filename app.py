@@ -49,7 +49,8 @@ def get_recipe():
     '''Page with a list of all added recipes.'''
     recipes = mongo.db.recipes.find().sort("category_name", 1)
     recipe_images = os.listdir('static/uploads')
-    return render_template("recipes.html", recipes=recipes, recipe_images=recipe_images)
+    return render_template(
+                    "recipes.html", recipes=recipes, recipe_images=recipe_images)
 
 
 @app.route("/test_images/")
@@ -60,12 +61,14 @@ def test_images():
     # rec_images = ['uploads/' + filename for filename in rec_images]
     return render_template('test_images.html', rec_images=rec_images)
 
+
 @app.route("/display_image/<filename>")
 def display_image(filename):
     # cia testuoju kaip vaizduojamas ikeltas image
     '''Page with a uploaded images.'''
     # return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
     return redirect(url_for('static', filename='uploads/' + filename), code=301)
+
 
 @app.route("/add_test_image", methods=["GET", "POST"])
 def add_test_image():
@@ -80,6 +83,7 @@ def add_test_image():
             return redirect(url_for("add_test_image"))
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
+            # filename = str(uuid.uuid4())
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             # print('upload_image filename: ' + filename)
             flash('Image successfully uploaded')
@@ -152,7 +156,7 @@ def profile(username):
     ''' User profile page method'''
     username = mongo.db.users.find_one(
             {"username": session["user"]})["username"]
-    
+
     if session['user']:
         recipes = mongo.db.recipes.find({"recipe_by": session['user']})
         recipe_images = os.listdir('static/uploads')
@@ -166,12 +170,33 @@ def profile(username):
 def edit_recipe(recipe_id):
     if request.method == "POST":
         print('pries check box')
-        if request.form.get('check_to_upload_image') == None:
+        if request.form.get('check_to_upload_image') is None:
             print('NePazymeta')
+            current_recipe = mongo.db.recipes.find_one({"_id": ObjectId(recipe_id)})
+            current_recipe_image = current_recipe.get('recipe_image')
+            current_recipe_path = os.path.join(app.config['UPLOAD_FOLDER'], current_recipe_image)
+            print(current_recipe_image)
+            print(current_recipe_path)
             recipe_image = request.files['recipe_image']
             if recipe_image and allowed_file(recipe_image.filename):
+                # for image_list in mongo.db.recipes.find({},{ "_id": 0, "recipe_image": 1}):
+                #     print('cia visas saras paveiksliuku: ' + str(image_list))
+                if os.path.exists(current_recipe_path):
+                    os.remove(os.path.join(
+                        app.config['UPLOAD_FOLDER'], current_recipe_image))
+                    print('Turejo istrinti: ' + current_recipe_image)
+                else:
+                    print("The file does not exist")
                 filename = secure_filename(recipe_image.filename)
-                recipe_image.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                splited_filename = filename.split(".")
+                print('That\'s the filename parts: ' + str(splited_filename))
+                suffix = datetime.now().strftime("%y%m%d_%H%M%S")
+                new_filename = "_".join(
+                            [splited_filename[0], suffix]) # e.g. 'mylogfile_120508_171442'
+                filename = ".".join([new_filename, splited_filename[-1]])
+                print("New filename is: " + filename)
+                recipe_image.save(os.path.join(
+                    app.config['UPLOAD_FOLDER'], filename))
                 flash('Image was successfully uploaded')
             else:
                 flash('Allowed image types are: png, jpg, jpeg, gif')
@@ -186,15 +211,15 @@ def edit_recipe(recipe_id):
                 "cook_time": int(request.form.get("cook_time")),
                 "prep_time": int(request.form.get("prep_time")),
                 "recipe_by": session['user'],
-                "recipe_image": recipe_image.filename,
+                "recipe_image": filename,
                 "recipe_add_time": medium_date.strftime('%m/%d/%Y %H:%M')
             }
             mongo.db.recipes.update_one(
-            {"_id": ObjectId(recipe_id)}, {"$set": update_recipe})
+                {"_id": ObjectId(recipe_id)}, {"$set": update_recipe})
             flash("Recipe Was Successfully Updated")
             return redirect(url_for("profile", username=session["user"]))
         else:
-            print('Pazymeta') 
+            print('Pazymeta')
         print('po check box')
         medium_date = datetime.now()
         update_recipe = {
@@ -273,7 +298,8 @@ def add_recipe():
             return redirect(url_for('add_recipe'))
         if recipe_image and allowed_file(recipe_image.filename):
             filename = secure_filename(recipe_image.filename)
-            recipe_image.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            recipe_image.save(os.path.join(
+                app.config['UPLOAD_FOLDER'], filename))
             flash('Image was successfully uploaded')
         else:
             flash('Allowed image types are: png, jpg, jpeg, gif')
