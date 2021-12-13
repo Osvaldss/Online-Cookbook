@@ -2,11 +2,14 @@
 {% block content %}
 
     <div class="row">
-        <div class="col s12 m8 offset-m2" method="POST" action="{{ url_for('profile', username=session['user'])}}">
+        <div class="col s12 m8 offset-m2">
             <div class="card-panel">
                 <h3>
                     <i class="fas fa-user"></i>
                     {{username.capitalize()}} Profile
+                    {% if isAdmin %}
+                        <p>Hello Admin</p>
+                    {% endif %}
                 </h3>
             </div>
         </div>
@@ -16,13 +19,17 @@
             <ul class="tabs">
                 <li class="tab col s4"><a class="active" href="#test1">Profile Overview</a></li>
                 <li class="tab col s4"><a href="#test2">Your Recipes</a></li>
-                <li class="tab col s4"><a href="#test4">Edit Your Profile</a></li>
+                <li class="tab col s4"><a href="#test3">Edit Your Profile</a></li>
             </ul>
         </div>
         <div id="test1" class="col s12">
             <h6>Your profile details</h6>
             <p>username</p>
             <p>current passwords</p>
+            {% if isAdmin %}
+                <a href="{{ url_for('manage_products') }}" class="btn-large waves-effect waves-light">
+                    Mange your products here -> <i class="fas fa-file right"></i></a>
+            {% endif %}
         </div>
         <div id="test2" class="row rm-bottom-gap valign-wrapper">
             <div>
@@ -49,21 +56,21 @@
                             </div>
                         </div>
                     </div>
+                    <div id="modal1" class="modal">
+                        <div class="modal-content">
+                            <h4>Modal Header</h4>
+                            <p>A bunch of text</p>
+                        </div>
+                        <div class="modal-footer">
+                            <a href="{{ url_for('delete_recipe', recipe_id=recipe._id)}}" class="modal-close waves-effect waves-green btn-flat">Yes I confirm</a>
+                            <a href="#!" class="modal-close waves-effect waves-green btn-flat">No</a>
+                        </div>
+                    </div>
                 </div>
             {% endfor %}
             <!-- </div> -->
         </div>
-        <div id="test4" class="col s12">Editing your profile</div>
-    </div>
-    <div id="modal1" class="modal">
-        <div class="modal-content">
-            <h4>Modal Header</h4>
-            <p>A bunch of text</p>
-        </div>
-        <div class="modal-footer">
-            <a href="#!" class="modal-close waves-effect waves-green btn-flat">Yes</a>
-            <a href="#!" class="modal-close waves-effect waves-green btn-flat">No</a>
-        </div>
+        <div id="test3" class="col s12">Editing your profile</div>
     </div>
 
 

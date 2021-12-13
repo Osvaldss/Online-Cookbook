@@ -36,12 +36,8 @@ mongo = PyMongo(app)
 def get_latest():
     '''Find recent added recipes and display then on home page.'''
     recipes = mongo.db.recipes.find().sort("recipe_add_time", -1).limit(8)
-    return render_template("main_page.html", recipes=recipes)
-
-
-# @app.route("/file/<filename>")
-# def file(filename):
-#     return mongo.send_file(filename)
+    kitchen_tools = mongo.db.kitchen_tools.find().sort("item_add_time", -1).limit(8)
+    return render_template("main_page.html", recipes=recipes, kitchen_tools=kitchen_tools)
 
 
 @app.route("/get_recipe")
@@ -51,6 +47,29 @@ def get_recipe():
     recipe_images = os.listdir('static/uploads')
     return render_template(
                     "recipes.html", recipes=recipes, recipe_images=recipe_images)
+
+@app.route("/product_list")
+def get_product_list():
+    '''Page with a list of all added products.'''
+    kitchen_tools = mongo.db.kitchen_tools.find().sort("product_name", 1)
+    return render_template(
+                    "tools.html", kitchen_tools=kitchen_tools)
+
+
+@app.route("/item_details/<item_id>")
+def item_details(item_id):
+    '''Get an item by it's ID'''
+    kitchen_tools = mongo.db.kitchen_tools.find_one({'_id': ObjectId(item_id)})
+    return render_template(
+                    "item_details.html", kitchen_tools=kitchen_tools)
+
+
+@app.route("/manage_products")
+def manage_products():
+    '''Page with a list of all products to manage(add/edit/delete).'''
+    kitchen_tools = mongo.db.kitchen_tools.find().sort("product_name", 1)
+    return render_template(
+                    "manage_products.html", kitchen_tools=kitchen_tools)
 
 
 @app.route("/test_images/")
@@ -113,7 +132,8 @@ def register():
 
         new_user = {
             "username": request.form.get("username").lower(),
-            "password": generate_password_hash(request.form.get('password'))
+            "password": generate_password_hash(request.form.get('password')),
+            "isAdmin": False
         }
         mongo.db.users.insert_one(new_user)
 
@@ -159,9 +179,16 @@ def profile(username):
 
     if session['user']:
         recipes = mongo.db.recipes.find({"recipe_by": session['user']}).sort('recipe_add_time', -1)
+        kitchen_tools = mongo.db.kitchen_tools.find()
         recipe_images = os.listdir('static/uploads')
-        return render_template(
-            "profile.html", username=username, recipes=recipes, recipe_images=recipe_images)
+        current_user = mongo.db.users.find_one({"username": session['user']})
+        isAdmin = current_user.get("isAdmin")
+        if isAdmin:
+            print(f'Prisijunge Adminas {username}')
+        else:
+            print("Prisijunge neAdminas")
+    return render_template(
+        "profile.html", username=username, recipes=recipes, recipe_images=recipe_images, kitchen_tools=kitchen_tools, isAdmin=isAdmin)
 
     return redirect(url_for("login"))
 
@@ -244,6 +271,25 @@ def edit_recipe(recipe_id):
             "edit_recipe.html", recipe=recipe, categories=categories)
 
 
+@app.route("/edit_item/<item_id>", methods=["GET", "POST"])
+def edit_item(item_id):
+    if request.method == "POST":
+        update_item = {
+            "product_name": request.form.get("product_name"),
+            "product_category": request.form.get("product_category"),
+            "product_image": request.form.get("product_image"),
+            "description": request.form.get("description"),
+            "price": float(request.form.get("price"))
+        }
+        mongo.db.kitchen_tools.update_one(
+            {"_id": ObjectId(item_id)}, {"$set": update_item})
+        flash("Item Was Successfully Updated")
+        return redirect(url_for("manage_products"))
+    item = mongo.db.kitchen_tools.find_one({"_id": ObjectId(item_id)})
+    return render_template(
+            "edit_item.html", item=item)
+
+
 @app.route("/delete/<recipe_id>")
 def delete_recipe(recipe_id):
     current_recipe = mongo.db.recipes.find_one({"_id": ObjectId(recipe_id)})
@@ -257,6 +303,11 @@ def delete_recipe(recipe_id):
     flash("Recipe Successfully Deleted")
     return redirect(url_for("profile", username=session["user"]))
 
+@app.route("/delete_item/<item_id>")
+def delete_item(item_id):
+    mongo.db.kitchen_tools.remove({"_id": ObjectId(item_id)})
+    flash("Item Was Successfully Deleted")
+    return redirect(url_for("manage_products"))
 
 @app.route("/logout")
 def logout():
@@ -308,6 +359,24 @@ def add_recipe():
         return redirect(url_for("get_recipe"))
     categories = mongo.db.categories.find().sort("category_name", 1)
     return render_template("add_recipe.html", categories=categories)
+
+@app.route("/add_item", methods=["GET", "POST"])
+def add_item():
+    if request.method == "POST":
+        medium_date = datetime.now()
+        kitchen_tools = {
+            "product_name": request.form.get("product_name"),
+            "product_category": request.form.get("product_category"),
+            "product_image": request.form.get("product_image"),
+            "description": request.form.get("description"),
+            "price": float(request.form.get("price")),
+            "item_add_time": medium_date.strftime('%m/%d/%Y %H:%M')
+        }
+        mongo.db.kitchen_tools.insert_one(kitchen_tools)
+        flash("Item Was Successfully Added")
+        return redirect(url_for("manage_products"))
+    kitchen_tools = mongo.db.kitchen_tools.find().sort("product_name", 1)
+    return render_template("add_item.html", kitchen_tools=kitchen_tools)
 
 
 if __name__ == "__main__":

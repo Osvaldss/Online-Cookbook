@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block content %}
+
+    <h2 class="header">{{kitchen_tools.product_name}}</h2>
+        <div class="card horizontal">
+            <div class="row rm-bottom-gap valign-wrapper">
+                <div class="col m9 small-screen">
+                    <div class="card-stacked">
+                        <div class="card-action">
+                            <div class="image-container small-screen center-align">
+                                <img class="responsive-img" src="{{kitchen_tools.product_image }}" alt="{{kitchen_tools.product_name}}"><br />
+                            </div>
+                            <p class="left">
+                                <strong>{{kitchen_tools.product_name}}</strong>
+                            </p>
+                        </div>
+                        <div class="card-content short-desc">
+                            {{kitchen_tools.description}}
+                        </div>
+                        <div class="card-content card-footer">
+                            <i class="far fa-clock"></i>
+                            <strong>{{kitchen_tools.price}}</strong>&emsp;
+                            <i class="fas fa-utensil-spoon"></i>
+                            <strong>{{kitchen_tools.product_category}}</strong>&emsp;
+                        </div>
+                    </div>
+                </div>
+                    <div class="image-container-medium col m3 small-screen center-align">
+                        <img class="responsive-img" src="{{kitchen_tools.product_image }}" alt="{{kitchen_tools.product_name}}"><br />
+                    </div>
+            </div>
+        </div>  
+
+{% endblock %}
