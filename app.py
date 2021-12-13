@@ -1,5 +1,4 @@
 import os
-import urllib.request
 from datetime import datetime
 from flask import (
     Flask, flash, render_template, send_from_directory,
@@ -36,8 +35,10 @@ mongo = PyMongo(app)
 def get_latest():
     '''Find recent added recipes and display then on home page.'''
     recipes = mongo.db.recipes.find().sort("recipe_add_time", -1).limit(8)
-    kitchen_tools = mongo.db.kitchen_tools.find().sort("item_add_time", -1).limit(8)
-    return render_template("main_page.html", recipes=recipes, kitchen_tools=kitchen_tools)
+    kitchen_tools = mongo.db.kitchen_tools.find().sort(
+        "item_add_time", -1).limit(8)
+    return render_template(
+        "main_page.html", recipes=recipes, kitchen_tools=kitchen_tools)
 
 
 @app.route("/get_recipe")
@@ -46,7 +47,8 @@ def get_recipe():
     recipes = mongo.db.recipes.find().sort("category_name", 1)
     recipe_images = os.listdir('static/uploads')
     return render_template(
-                    "recipes.html", recipes=recipes, recipe_images=recipe_images)
+        "recipes.html", recipes=recipes, recipe_images=recipe_images)
+
 
 @app.route("/product_list")
 def get_product_list():
@@ -86,7 +88,8 @@ def display_image(filename):
     # cia testuoju kaip vaizduojamas ikeltas image
     '''Page with a uploaded images.'''
     # return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
-    return redirect(url_for('static', filename='uploads/' + filename), code=301)
+    return redirect(url_for(
+        'static', filename='uploads/' + filename), code=301)
 
 
 @app.route("/add_test_image", methods=["GET", "POST"])
@@ -176,20 +179,21 @@ def profile(username):
     ''' User profile page method'''
     username = mongo.db.users.find_one(
             {"username": session["user"]})["username"]
-
     if session['user']:
-        recipes = mongo.db.recipes.find({"recipe_by": session['user']}).sort('recipe_add_time', -1)
+        recipes = mongo.db.recipes.find(
+            {"recipe_by": session['user']}).sort('recipe_add_time', -1)
         kitchen_tools = mongo.db.kitchen_tools.find()
         recipe_images = os.listdir('static/uploads')
         current_user = mongo.db.users.find_one({"username": session['user']})
-        isAdmin = current_user.get("isAdmin")
-        if isAdmin:
+        is_admin = current_user.get("isAdmin")
+        if is_admin:
             print(f'Prisijunge Adminas {username}')
         else:
             print("Prisijunge neAdminas")
-    return render_template(
-        "profile.html", username=username, recipes=recipes, recipe_images=recipe_images, kitchen_tools=kitchen_tools, isAdmin=isAdmin)
-
+        return render_template(
+            "profile.html", username=username, recipes=recipes,
+            recipe_images=recipe_images,
+            kitchen_tools=kitchen_tools, is_admin=is_admin)
     return redirect(url_for("login"))
 
 
@@ -199,15 +203,15 @@ def edit_recipe(recipe_id):
         print('pries check box')
         if request.form.get('check_to_upload_image') is None:
             print('NePazymeta')
-            current_recipe = mongo.db.recipes.find_one({"_id": ObjectId(recipe_id)})
+            current_recipe = mongo.db.recipes.find_one(
+                {"_id": ObjectId(recipe_id)})
             current_recipe_image = current_recipe.get('recipe_image')
-            current_recipe_path = os.path.join(app.config['UPLOAD_FOLDER'], current_recipe_image)
+            current_recipe_path = os.path.join(
+                app.config['UPLOAD_FOLDER'], current_recipe_image)
             print(current_recipe_image)
             print(current_recipe_path)
             recipe_image = request.files['recipe_image']
             if recipe_image and allowed_file(recipe_image.filename):
-                # for image_list in mongo.db.recipes.find({},{ "_id": 0, "recipe_image": 1}):
-                #     print('cia visas saras paveiksliuku: ' + str(image_list))
                 if os.path.exists(current_recipe_path):
                     os.remove(os.path.join(
                         app.config['UPLOAD_FOLDER'], current_recipe_image))
@@ -220,7 +224,7 @@ def edit_recipe(recipe_id):
                 print('That\'s the filename parts: ' + str(splited_filename))
                 suffix = datetime.now().strftime("%y%m%d_%H%M%S")
                 new_filename = "_".join(
-                            [splited_filename[0], suffix]) # e.g. 'mylogfile_120508_171442'
+                            [splited_filename[0], suffix])
                 filename = ".".join([new_filename, splited_filename[-1]])
                 print("New filename is: " + filename)
                 recipe_image.save(os.path.join(
@@ -294,7 +298,8 @@ def edit_item(item_id):
 def delete_recipe(recipe_id):
     current_recipe = mongo.db.recipes.find_one({"_id": ObjectId(recipe_id)})
     current_recipe_image = current_recipe.get('recipe_image')
-    current_recipe_path = os.path.join(app.config['UPLOAD_FOLDER'], current_recipe_image)
+    current_recipe_path = os.path.join(
+        app.config['UPLOAD_FOLDER'], current_recipe_image)
     print(current_recipe_image)
     print(current_recipe_path)
     os.remove(os.path.join(
@@ -303,11 +308,13 @@ def delete_recipe(recipe_id):
     flash("Recipe Successfully Deleted")
     return redirect(url_for("profile", username=session["user"]))
 
+
 @app.route("/delete_item/<item_id>")
 def delete_item(item_id):
     mongo.db.kitchen_tools.remove({"_id": ObjectId(item_id)})
     flash("Item Was Successfully Deleted")
     return redirect(url_for("manage_products"))
+
 
 @app.route("/logout")
 def logout():
@@ -359,6 +366,7 @@ def add_recipe():
         return redirect(url_for("get_recipe"))
     categories = mongo.db.categories.find().sort("category_name", 1)
     return render_template("add_recipe.html", categories=categories)
+
 
 @app.route("/add_item", methods=["GET", "POST"])
 def add_item():

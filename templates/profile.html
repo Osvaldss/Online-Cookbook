@@ -7,7 +7,7 @@
                 <h3>
                     <i class="fas fa-user"></i>
                     {{username.capitalize()}} Profile
-                    {% if isAdmin %}
+                    {% if is_admin %}
                         <p>Hello Admin</p>
                     {% endif %}
                 </h3>
@@ -26,7 +26,7 @@
             <h6>Your profile details</h6>
             <p>username</p>
             <p>current passwords</p>
-            {% if isAdmin %}
+            {% if is_admin %}
                 <a href="{{ url_for('manage_products') }}" class="btn-large waves-effect waves-light">
                     Mange your products here -> <i class="fas fa-file right"></i></a>
             {% endif %}

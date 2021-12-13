@@ -7,6 +7,19 @@ body {
     position: relative;
     min-height: 100vh;
     padding-bottom: 240px;
+    background: url("../images/stripes-light.png") repeat center fixed;
+}
+
+.image-holder {
+    background-image: url("../images/bg-image.jpg");
+    height: 50vh;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
 }
 
 footer {

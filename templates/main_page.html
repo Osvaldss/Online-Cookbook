@@ -1,21 +1,25 @@
 {% extends "base.html" %}
-{% block content %}
-
-    <h1>Main Page of CookBook</h1>
+{% block full_width %}
+<div class="image-holder valign-wrapper">
     <div class="row">
-        <img class="col s12 m4"
-            src="https://images.unsplash.com/photo-1546552580-9427ccb15af4?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2070&q=80"
-                alt="hero image example">
-        <p class="col s12 m8">
-            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's
-            standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make
+        <p class="col s12 m5 grey-text text-lighten-5">
+            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
+            industry's
+            standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it
+            to
+            make
             a type specimen book.<br />
-        {% if not session.user %}
+            {% if not session.user %}
             Want to add your own recipe join our community. <br />
-            <button><a href="{{ url_for('register')}}">Create CookBook Account</a></button>
-        {% endif %}
+            <a href="{{ url_for('register')}}" class="btn-large waves-effect waves-light">
+                Create CookBook Account <i class="fas fa-times-circle right"></i>
+            </a>
+            {% endif %}
         </p>
     </div>
+</div>
+<div class="divider"></div>
+<div class="container">
     <div class="row valign-wrapper">
         <div class="col s6">
             <h2 class="left-align">Latest recipies</h2>
@@ -28,27 +32,30 @@
     </div>
     <div class="row">
         {% for recipe in recipes %}
-            <div class="col s6 m3">
-                <div class="card small responsive-size hoverable">
-                    <div class="card-image">
-                        <img class="responsive-img" src="{{ url_for('display_image', filename=recipe.recipe_image) }}">
-                    </div>
-                    <div class="card-content">
-                        <span class="truncate">{{recipe.recipe_name}}</span>
-                        <strong><p class="truncate">{{recipe.recipe_add_time}}</p></strong>
-                        <span>
-                            <i class="far fa-clock"></i>
-                            <strong>{{recipe.prep_time + recipe.cook_time}}</strong>&emsp;
-                        </span>
-                        <span>
-                            <i class="fas fa-user"></i>
-                            <em> by: {{recipe.recipe_by}}</em>
-                        </span>
-                    </div>
+        <div class="col s6 m3">
+            <div class="card small responsive-size hoverable">
+                <div class="card-image">
+                    <img class="responsive-img" src="{{ url_for('display_image', filename=recipe.recipe_image) }}">
+                </div>
+                <div class="card-content">
+                    <span class="truncate">{{recipe.recipe_name}}</span>
+                    <strong>
+                        <p class="truncate">{{recipe.recipe_add_time}}</p>
+                    </strong>
+                    <span>
+                        <i class="far fa-clock"></i>
+                        <strong>{{recipe.prep_time + recipe.cook_time}}</strong>&emsp;
+                    </span>
+                    <span>
+                        <i class="fas fa-user"></i>
+                        <em> by: {{recipe.recipe_by}}</em>
+                    </span>
                 </div>
             </div>
+        </div>
         {% endfor %}
     </div>
+    <div class="divider"></div>
     <div class="row valign-wrapper">
         <div class="col s6">
             <h2 class="left-align"> Top Kitchen Gadgets</h2>
@@ -61,8 +68,9 @@
     </div>
     <div class="carousel">
         {% for item in kitchen_tools %}
-            <a class="carousel-item" href="{{ url_for('item_details', item_id=item._id)}}"><img src="{{ item.product_image }}">{{item.product_name}}</a>
+        <a class="carousel-item" href="{{ url_for('item_details', item_id=item._id)}}"><img
+                src="{{ item.product_image }}">{{item.product_name}}</a>
         {% endfor %}
     </div>
-
+</div>
 {% endblock %}
