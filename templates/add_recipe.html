@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-
+    {% if session.user %}
     <h2 class="header">Add Your Recipe here</h2>
 
     <div class="row card-panel">
@@ -98,6 +98,12 @@
             </div>
         </form>
     </div>
+    {% else %}
+        <div>
+            <strong>You need to Log In</strong>
+        </div>
+    {% endif %}
+
 
 
 {% endblock %}

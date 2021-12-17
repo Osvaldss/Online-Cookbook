@@ -23,6 +23,7 @@ app.secret_key = os.environ.get("SECRET_KEY")
 
 
 def allowed_file(filename):
+    '''Check if uploaded image extension is in Allowed_xtensions list'''
     return '.' in filename and filename.rsplit(
         '.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
@@ -71,7 +72,7 @@ def recipe_details(recipe_id):
     '''Get a recipe by its' ID'''
     recipes = mongo.db.recipes.find_one({'_id': ObjectId(recipe_id)})
     return render_template(
-                    "recipe_details.html", recipes=recipes )
+                    "recipe_details.html", recipes=recipes)
 
 
 @app.route("/manage_products")
@@ -82,15 +83,6 @@ def manage_products():
                     "manage_products.html", kitchen_tools=kitchen_tools)
 
 
-@app.route("/test_images/")
-def test_images():
-    # cia testuoju kaip vaizduojamas ikeltas image
-    '''Page with a uploaded images.'''
-    rec_images = os.listdir('static/uploads')
-    # rec_images = ['uploads/' + filename for filename in rec_images]
-    return render_template('test_images.html', rec_images=rec_images)
-
-
 @app.route("/display_image/<filename>")
 def display_image(filename):
     # cia testuoju kaip vaizduojamas ikeltas image
@@ -98,30 +90,6 @@ def display_image(filename):
     # return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
     return redirect(url_for(
         'static', filename='uploads/' + filename), code=301)
-
-
-@app.route("/add_test_image", methods=["GET", "POST"])
-def add_test_image():
-    """cia funkcija kuri sukurs puslapi kuriame ikels test image"""
-    if request.method == 'POST':
-        if 'file' not in request.files:
-            flash('No file part')
-            return redirect(url_for("add_test_image"))
-        file = request.files['file']
-        if file.filename == '':
-            flash('No image selected for uploading')
-            return redirect(url_for("add_test_image"))
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            # filename = str(uuid.uuid4())
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            # print('upload_image filename: ' + filename)
-            flash('Image successfully uploaded')
-            return render_template("add_test_image.html", filename=filename)
-        else:
-            flash('Allowed image types are: png, jpg, jpeg, gif')
-            return redirect(url_for("add_test_image"))
-    return render_template("add_test_image.html")
 
 
 @app.route("/register", methods=["GET", "POST"])
@@ -185,28 +153,36 @@ def login():
 @app.route("/profile/<username>", methods=["GET", "POST"])
 def profile(username):
     ''' User profile page method'''
-    username = mongo.db.users.find_one(
-            {"username": session["user"]})["username"]
-    if session['user']:
-        recipes = mongo.db.recipes.find(
-            {"recipe_by": session['user']}).sort('recipe_add_time', -1)
-        kitchen_tools = mongo.db.kitchen_tools.find()
-        recipe_images = os.listdir('static/uploads')
-        current_user = mongo.db.users.find_one({"username": session['user']})
-        is_admin = current_user.get("isAdmin")
-        if is_admin:
-            print(f'Prisijunge Adminas {username}')
-        else:
-            print("Prisijunge neAdminas")
-        return render_template(
-            "profile.html", username=username, recipes=recipes,
-            recipe_images=recipe_images,
-            kitchen_tools=kitchen_tools, is_admin=is_admin)
+    try:
+        username = mongo.db.users.find_one(
+                {"username": session["user"]})["username"]
+        if session['user']:
+            recipes = mongo.db.recipes.find(
+                {"recipe_by": session['user']}).sort('recipe_add_time', -1)
+            count_recip = len(list(mongo.db.recipes.find(
+                {"recipe_by": session['user']})))
+            print(count_recip)
+            kitchen_tools = mongo.db.kitchen_tools.find()
+            recipe_images = os.listdir('static/uploads')
+            current_user = mongo.db.users.find_one(
+                {"username": session['user']})
+            is_admin = current_user.get("isAdmin")
+            if is_admin:
+                print(f'Prisijunge Adminas {username}')
+            else:
+                print("Prisijunge neAdminas")
+            return render_template(
+                "profile.html", username=username, recipes=recipes,
+                recipe_images=recipe_images, count_recip=count_recip,
+                kitchen_tools=kitchen_tools, is_admin=is_admin)
+    except:
+        return redirect(url_for("login"))
     return redirect(url_for("login"))
 
 
 @app.route("/edit_recipe/<recipe_id>", methods=["GET", "POST"])
 def edit_recipe(recipe_id):
+    '''Edit recipe by it ID'''
     if request.method == "POST":
         print('pries check box')
         if request.form.get('check_to_upload_image') is None:
@@ -285,6 +261,7 @@ def edit_recipe(recipe_id):
 
 @app.route("/edit_item/<item_id>", methods=["GET", "POST"])
 def edit_item(item_id):
+    '''Edit item by it ID'''
     if request.method == "POST":
         update_item = {
             "product_name": request.form.get("product_name"),
@@ -304,6 +281,7 @@ def edit_item(item_id):
 
 @app.route("/delete/<recipe_id>")
 def delete_recipe(recipe_id):
+    '''Delete recipe function'''
     current_recipe = mongo.db.recipes.find_one({"_id": ObjectId(recipe_id)})
     current_recipe_image = current_recipe.get('recipe_image')
     current_recipe_path = os.path.join(
@@ -319,6 +297,7 @@ def delete_recipe(recipe_id):
 
 @app.route("/delete_item/<item_id>")
 def delete_item(item_id):
+    '''Delete an item function from the list'''
     mongo.db.kitchen_tools.remove({"_id": ObjectId(item_id)})
     flash("Item Was Successfully Deleted")
     return redirect(url_for("manage_products"))
@@ -334,6 +313,7 @@ def logout():
 
 @app.route("/add_recipe", methods=["GET", "POST"])
 def add_recipe():
+    '''Function to add recipe to the collection'''
     if request.method == "POST":
         if 'recipe_image' not in request.files:
             flash('No file part')
@@ -378,6 +358,7 @@ def add_recipe():
 
 @app.route("/add_item", methods=["GET", "POST"])
 def add_item():
+    '''Add new item to the kitchen_tools collection'''
     if request.method == "POST":
         medium_date = datetime.now()
         kitchen_tools = {

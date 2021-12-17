@@ -1,7 +1,14 @@
 {% extends "base.html" %}
 {% block content %}
-
-    <h2 class="header">{{recipes.recipe_name}}</h2>
+    <nav>
+        <div class="nav-wrapper">
+          <div class="col s12">
+            <a href="{{ url_for('get_latest') }}">HOME -></a>
+            <a href="{{ url_for('get_recipe') }}" >RECIPES -></a>
+            <span >{{recipes.recipe_name}}</span>
+          </div>
+        </div>
+      </nav>
         <div class="card horizontal">
             <div class="row rm-bottom-gap valign-wrapper">
                 <div class="col m9 small-screen">
@@ -51,11 +58,9 @@
                         <img class="responsive-img" src="{{ url_for('display_image', filename=recipes.recipe_image) }}" alt="{{recipes.recipe_name}}"><br />
                     </div>
             </div>
-        </div>  
+        </div> 
         <div class="col s6 right-align">
-            <a href="{{ url_for('get_recipe') }}" class="btn-large waves-effect waves-light">
-                Go Back <i class="fas fa-file right"></i>
-            </a>
-        </div>
+            <button onclick="history.back();" class="btn-large waves-effect waves-light">Go Back <i class="fas fa-file right"></i></button>
+        </div> 
 
 {% endblock %}

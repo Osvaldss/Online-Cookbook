@@ -7,71 +7,129 @@
                 <h3>
                     <i class="fas fa-user"></i>
                     {{username.capitalize()}} Profile
-                    {% if is_admin %}
-                        <p>Hello Admin</p>
-                    {% endif %}
                 </h3>
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col s12">
-            <ul class="tabs">
-                <li class="tab col s4"><a class="active" href="#test1">Profile Overview</a></li>
-                <li class="tab col s4"><a href="#test2">Your Recipes</a></li>
-                <li class="tab col s4"><a href="#test3">Edit Your Profile</a></li>
-            </ul>
-        </div>
-        <div id="test1" class="col s12">
-            <h6>Your profile details</h6>
-            <p>username</p>
-            <p>current passwords</p>
-            {% if is_admin %}
-                <a href="{{ url_for('manage_products') }}" class="btn-large waves-effect waves-light">
-                    Mange your products here -> <i class="fas fa-file right"></i></a>
-            {% endif %}
-        </div>
-        <div id="test2" class="row rm-bottom-gap valign-wrapper">
-            <div>
-                <p>Placeholder for filter</p>
+    {% if is_admin %}
+        <p>Hello Admin</p>
+        <div class="row">
+            <div class="col s12">
+                <ul class="tabs">
+                    <li class="tab col s4"><a class="active" href="#test1">Profile Overview</a></li>
+                    <li class="tab col s4"><a href="#test2">Your Recipes</a></li>
+                    <li class="tab col s4"><a href="#test3">Mange your products</a></li>
+                </ul>
             </div>
-            <!-- <div class="row rm-bottom-gap valign-wrapper"> -->
-            {% for recipe in recipes %}
-                <div class="col s6 m3">
-                    <div class="card small responsive-size-profile hoverable">
-                        <div class="card-image">
-                            <span class="delete-btn">
-                                <a href="#modal1" class="waves-effect waves-light btn-small red darken-1 modal-trigger "><i class="fas fa-times-circle"></i> Delete</a>
-                            </span>
-                            <img class="responsive-img" src="{{ url_for('display_image', filename=recipe.recipe_image) }}">
-                            {% if recipe.recipe_image not in recipe_images %}
-                                <p>No Image Available</p>
-                            {% endif %}
+            <div id="test1" class="col s12">
+                <div style="width:50px; height:50px; background: blue;">
+                    Cia avataras
+                </div>
+                <h6>UserName</h6>
+                <p>current passwords</p>
+                <p>Item in store</p>
+            </div>
+            <div id="test2" class="row rm-bottom-gap valign-wrapper">
+                <div>
+                    <p>Placeholder for filter</p>
+                </div>
+                {% for recipe in recipes %}
+                    <div class="col s6 m3">
+                        <div class="card small responsive-size-profile hoverable">
+                                <div class="card-image">
+                                    <span class="delete-btn">
+                                        <a href="#modal1" class="waves-effect waves-light btn-small red darken-1 modal-trigger "><i class="fas fa-times-circle"></i> Delete</a>
+                                    </span>
+                                    <a href="{{ url_for('recipe_details', recipe_id=recipe._id)}}">
+                                        <img class="responsive-img" src="{{ url_for('display_image', filename=recipe.recipe_image) }}">
+                                        {% if recipe.recipe_image not in recipe_images %}
+                                            <p>No Image Available</p>
+                                        {% endif %}
+                                    </a>
+                                </div>
+                            <div class="card-content center-align recipe_edit_del_cont">
+                                <span class="truncate left-align">{{recipe.recipe_name}}</span>
+                                <strong><p class="left-align">{{recipe.recipe_add_time}}</p></strong>
+                                <div class="edit-btn">
+                                    <a href="{{ url_for('edit_recipe', recipe_id=recipe._id)}}" class="waves-effect waves-light btn-small"><i class="fas fa-edit"></i> Edit</a>
+                                </div>
+                            </div>
                         </div>
-                        <div class="card-content center-align recipe_edit_del_cont">
-                            <span class="truncate left-align">{{recipe.recipe_name}}</span>
-                            <strong><p class="left-align">{{recipe.recipe_add_time}}</p></strong>
-                            <div class="edit-btn">
-                                <a href="{{ url_for('edit_recipe', recipe_id=recipe._id)}}" class="waves-effect waves-light btn-small"><i class="fas fa-edit"></i> Edit</a>
+                        <div id="modal1" class="modal">
+                            <div class="modal-content">
+                                <h4>Modal Header</h4>
+                                <p>A bunch of text</p>
+                            </div>
+                            <div class="modal-footer">
+                                <a href="{{ url_for('delete_recipe', recipe_id=recipe._id)}}" class="modal-close waves-effect waves-green btn-flat">Yes I confirm</a>
+                                <a href="#!" class="modal-close waves-effect waves-green btn-flat">No</a>
                             </div>
                         </div>
                     </div>
-                    <div id="modal1" class="modal">
-                        <div class="modal-content">
-                            <h4>Modal Header</h4>
-                            <p>A bunch of text</p>
+                {% endfor %}
+            </div>
+            <div id="test3" class="col s12">
+                    <a href="{{ url_for('manage_products') }}" class="btn-large waves-effect waves-light">
+                        Mange your products here -> <i class="fas fa-file right"></i></a>
+            </div>
+        </div>
+    {% else %}
+        <div class="row">
+            <div class="col s12">
+                <ul class="tabs">
+                    <li class="tab col s6"><a class="active" href="#test1">Profile Overview</a></li>
+                    <li class="tab col s6"><a href="#test2">Your Recipes {{count_recip}}</a></li>
+                </ul>
+            </div>
+            <div id="test1" class="col s12">
+                <div style="width:50px; height:50px; background: blue;">
+                    Cia avataras
+                </div>
+                <h6>Username</h6>
+                <h6>You recipe library: {{count_recip}}</h6>
+                <h6>Account created</h6>
+            </div>
+            <div id="test2" class="row rm-bottom-gap valign-wrapper">
+                <div>
+                    <p>Placeholder for filter</p>
+                </div>
+                {% for recipe in recipes %}
+                    <div class="col s6 m3">
+                        <div class="card small responsive-size-profile hoverable">
+                                <div class="card-image">
+                                    <span class="delete-btn">
+                                        <a href="#modal1" class="waves-effect waves-light btn-small red darken-1 modal-trigger "><i class="fas fa-times-circle"></i> Delete</a>
+                                    </span>
+                                    <a href="{{ url_for('recipe_details', recipe_id=recipe._id)}}">
+                                        <img class="responsive-img" src="{{ url_for('display_image', filename=recipe.recipe_image) }}">
+                                        {% if recipe.recipe_image not in recipe_images %}
+                                            <p>No Image Available</p>
+                                        {% endif %}
+                                    </a>
+                                </div>
+                            <div class="card-content center-align recipe_edit_del_cont">
+                                <span class="truncate left-align">{{recipe.recipe_name}}</span>
+                                <strong><p class="left-align">{{recipe.recipe_add_time}}</p></strong>
+                                <div class="edit-btn">
+                                    <a href="{{ url_for('edit_recipe', recipe_id=recipe._id)}}" class="waves-effect waves-light btn-small"><i class="fas fa-edit"></i> Edit</a>
+                                </div>
+                            </div>
                         </div>
-                        <div class="modal-footer">
-                            <a href="{{ url_for('delete_recipe', recipe_id=recipe._id)}}" class="modal-close waves-effect waves-green btn-flat">Yes I confirm</a>
-                            <a href="#!" class="modal-close waves-effect waves-green btn-flat">No</a>
+                        <div id="modal1" class="modal">
+                            <div class="modal-content">
+                                <h4>Modal Header</h4>
+                                <p>A bunch of text</p>
+                            </div>
+                            <div class="modal-footer">
+                                <a href="{{ url_for('delete_recipe', recipe_id=recipe._id)}}" class="modal-close waves-effect waves-green btn-flat">Yes I confirm</a>
+                                <a href="#!" class="modal-close waves-effect waves-green btn-flat">No</a>
+                            </div>
                         </div>
                     </div>
-                </div>
-            {% endfor %}
-            <!-- </div> -->
+                {% endfor %}
+            </div>
         </div>
-        <div id="test3" class="col s12">Editing your profile</div>
-    </div>
+    {% endif %}
 
 
 {% endblock %}

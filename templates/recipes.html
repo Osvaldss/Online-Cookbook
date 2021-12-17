@@ -2,6 +2,14 @@
 {% block content %}
 
     <h2 class="header">All recipes</h2>
+    <nav>
+        <div class="nav-wrapper">
+            <div class="col s12">
+                <a href="{{ url_for('get_latest') }}">HOME -></a>
+                <span>All recipes</span>
+            </div>
+        </div>
+    </nav>
     {% for recipe in recipes %}
         <div class="card horizontal">
             <div class="row rm-bottom-gap valign-wrapper">

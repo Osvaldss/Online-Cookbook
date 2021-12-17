@@ -35,7 +35,9 @@
     <div class="col s6 m3">
         <div class="card small responsive-size hoverable">
             <div class="card-image">
+                <a href="{{ url_for('recipe_details', recipe_id=recipe._id)}}">
                 <img class="responsive-img" src="{{ url_for('display_image', filename=recipe.recipe_image) }}">
+            </a>
             </div>
             <div class="card-content">
                 <span class="truncate">{{recipe.recipe_name}}</span>

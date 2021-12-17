@@ -2,6 +2,14 @@
 {% block content %}
 
 <h2 class="header">All kitchen gadgets</h2>
+<nav>
+    <div class="nav-wrapper">
+        <div class="col s12">
+            <a href="{{ url_for('get_latest') }}">HOME -></a>
+            <span>All kitchen gadgets</span>
+        </div>
+    </div>
+</nav>
 <div class="row rm-bottom-gap">
     {% for item in kitchen_tools %}
     <div class="col s6 m3">
