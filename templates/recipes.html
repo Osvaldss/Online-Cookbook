@@ -15,7 +15,9 @@
                                 {% endif %}
                             </div>
                             <p class="left">
-                                <strong>{{recipe.recipe_name}}</strong>
+                                <a href="{{ url_for('recipe_details', recipe_id=recipe._id)}}">
+                                    <strong>{{recipe.recipe_name}}</strong>
+                                </a>
                             </p>
                         </div>
                         <div class="card-content short-desc">

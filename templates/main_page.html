@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block full_width %}
+{% block hero_img %}
 <div class="image-holder valign-wrapper">
     <div class="row">
         <p class="col s12 m5 grey-text text-lighten-5">
@@ -18,59 +18,58 @@
         </p>
     </div>
 </div>
-<div class="divider"></div>
-<div class="container">
-    <div class="row valign-wrapper">
-        <div class="col s6">
-            <h2 class="left-align">Latest recipies</h2>
-        </div>
-        <div class="col s6 right-align">
-            <a href="{{ url_for('get_recipe') }}" class="btn-large waves-effect waves-light">
-                Show more <i class="fas fa-file right"></i>
-            </a>
-        </div>
+{% endblock %}
+{% block content %}
+<div class="row valign-wrapper">
+    <div class="col s6">
+        <h2 class="left-align">Latest recipies</h2>
     </div>
-    <div class="row">
-        {% for recipe in recipes %}
-        <div class="col s6 m3">
-            <div class="card small responsive-size hoverable">
-                <div class="card-image">
-                    <img class="responsive-img" src="{{ url_for('display_image', filename=recipe.recipe_image) }}">
-                </div>
-                <div class="card-content">
-                    <span class="truncate">{{recipe.recipe_name}}</span>
-                    <strong>
-                        <p class="truncate">{{recipe.recipe_add_time}}</p>
-                    </strong>
-                    <span>
-                        <i class="far fa-clock"></i>
-                        <strong>{{recipe.prep_time + recipe.cook_time}}</strong>&emsp;
-                    </span>
-                    <span>
-                        <i class="fas fa-user"></i>
-                        <em> by: {{recipe.recipe_by}}</em>
-                    </span>
-                </div>
+    <div class="col s6 right-align">
+        <a href="{{ url_for('get_recipe') }}" class="btn-large waves-effect waves-light">
+            Show more <i class="fas fa-file right"></i>
+        </a>
+    </div>
+</div>
+<div class="row">
+    {% for recipe in recipes %}
+    <div class="col s6 m3">
+        <div class="card small responsive-size hoverable">
+            <div class="card-image">
+                <img class="responsive-img" src="{{ url_for('display_image', filename=recipe.recipe_image) }}">
+            </div>
+            <div class="card-content">
+                <span class="truncate">{{recipe.recipe_name}}</span>
+                <strong>
+                    <p class="truncate">{{recipe.recipe_add_time}}</p>
+                </strong>
+                <span>
+                    <i class="far fa-clock"></i>
+                    <strong>{{recipe.prep_time + recipe.cook_time}}</strong>&emsp;
+                </span>
+                <span>
+                    <i class="fas fa-user"></i>
+                    <em> by: {{recipe.recipe_by}}</em>
+                </span>
             </div>
         </div>
-        {% endfor %}
     </div>
-    <div class="divider"></div>
-    <div class="row valign-wrapper">
-        <div class="col s6">
-            <h2 class="left-align"> Top Kitchen Gadgets</h2>
-        </div>
-        <div class="col s6 right-align">
-            <a href="{{ url_for('get_product_list') }}" class="btn-large waves-effect waves-light">
-                Show more <i class="fas fa-file right"></i>
-            </a>
-        </div>
+    {% endfor %}
+</div>
+<div class="divider"></div>
+<div class="row valign-wrapper">
+    <div class="col s6">
+        <h2 class="left-align"> Top Kitchen Gadgets</h2>
     </div>
-    <div class="carousel">
-        {% for item in kitchen_tools %}
-        <a class="carousel-item" href="{{ url_for('item_details', item_id=item._id)}}"><img
-                src="{{ item.product_image }}">{{item.product_name}}</a>
-        {% endfor %}
+    <div class="col s6 right-align">
+        <a href="{{ url_for('get_product_list') }}" class="btn-large waves-effect waves-light">
+            Show more <i class="fas fa-file right"></i>
+        </a>
     </div>
+</div>
+<div class="carousel">
+    {% for item in kitchen_tools %}
+    <a class="carousel-item" href="{{ url_for('item_details', item_id=item._id)}}"><img
+            src="{{ item.product_image }}">{{item.product_name}}</a>
+    {% endfor %}
 </div>
 {% endblock %}

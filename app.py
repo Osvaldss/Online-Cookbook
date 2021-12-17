@@ -60,10 +60,18 @@ def get_product_list():
 
 @app.route("/item_details/<item_id>")
 def item_details(item_id):
-    '''Get an item by it's ID'''
+    '''Get an item by its' ID'''
     kitchen_tools = mongo.db.kitchen_tools.find_one({'_id': ObjectId(item_id)})
     return render_template(
                     "item_details.html", kitchen_tools=kitchen_tools)
+
+
+@app.route("/recipe_details/<recipe_id>")
+def recipe_details(recipe_id):
+    '''Get a recipe by its' ID'''
+    recipes = mongo.db.recipes.find_one({'_id': ObjectId(recipe_id)})
+    return render_template(
+                    "recipe_details.html", recipes=recipes )
 
 
 @app.route("/manage_products")
