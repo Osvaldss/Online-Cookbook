@@ -1,35 +1,41 @@
 {% extends "base.html" %}
 {% block hero_img %}
-<div class="image-holder valign-wrapper">
+<div class="image-holder valign-wrapper ">
     <div class="row">
-        <p class="col s12 m5 grey-text text-lighten-5">
-            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
-            industry's
-            standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it
-            to
-            make
-            a type specimen book.<br />
-            {% if not session.user %}
-            Want to add your own recipe join our community. <br />
-            <a href="{{ url_for('register')}}" class="btn-large waves-effect waves-light">
-                Create CookBook Account <i class="fas fa-times-circle right"></i>
-            </a>
-            {% endif %}
-        </p>
+        <div class="col s12 l5 offset-l1 left-align grey-text text-lighten-5 text-contrast">
+            <h2>Welcome to <span class="bolder-text-part red-text text-darken-1">Cook</span><span class="lighter-text-part ">Book</span>!</h2>
+            <p>
+                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
+                industry's
+                standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it
+                to
+                make
+                a type specimen book.<br />
+            </p>
+            <p class="create-acc">
+                {% if not session.user %}
+                    <span></span>Want to add your own recipe join our community.</span><br>
+                    <a href="{{ url_for('register')}}" class="red darken-1 waves-effect waves-light btn-red btn-large">
+                        Create CookBook Account</i>
+                    </a>
+                {% endif %}
+            </p>
+        </div>
     </div>
 </div>
 {% endblock %}
 {% block content %}
 <div class="row valign-wrapper">
     <div class="col s6">
-        <h2 class="left-align">Latest recipies</h2>
+        <h4 class="left-align"><span class="bolder-text-part red-text text-darken-1">Latest</span> <span>Recipes</span></h4>
     </div>
     <div class="col s6 right-align">
-        <a href="{{ url_for('get_recipe') }}" class="btn-large waves-effect waves-light">
-            Show more <i class="fas fa-file right"></i>
+        <a href="{{ url_for('get_recipe') }}" class="btn-large red darken-1 btn-red waves-effect waves-light">
+            Show more
         </a>
     </div>
 </div>
+<div class="divider"></div>
 <div class="row">
     {% for recipe in recipes %}
     <div class="col s6 m3">
@@ -57,21 +63,33 @@
     </div>
     {% endfor %}
 </div>
-<div class="divider"></div>
 <div class="row valign-wrapper">
     <div class="col s6">
-        <h2 class="left-align"> Top Kitchen Gadgets</h2>
+        <h4 class="left-align"><span class="bolder-text-part red-text text-darken-1">Kitchen</span> <span>Gadgets</span></h4>
     </div>
     <div class="col s6 right-align">
-        <a href="{{ url_for('get_product_list') }}" class="btn-large waves-effect waves-light">
-            Show more <i class="fas fa-file right"></i>
+        <a href="{{ url_for('get_product_list') }}" class="btn-large red darken-1 btn-red waves-effect waves-light">
+            Show more
         </a>
     </div>
 </div>
-<div class="carousel">
+<div class="divider"></div>
+<div class="row">
     {% for item in kitchen_tools %}
-    <a class="carousel-item" href="{{ url_for('item_details', item_id=item._id)}}"><img
-            src="{{ item.product_image }}">{{item.product_name}}</a>
+        <div class="col s6 m3">
+            <div class="card small">
+                <div class="card-image">
+                    <img class="responsive-img" src="{{ item.product_image }}">
+                </div>
+                <div class="card-content">
+                    <p>{{item.product_name}}</p>
+                    <p>{{item.price}}</p>
+                </div>
+                <div class="card-action">
+                    <a href="#">Buy</a>
+                </div>
+            </div>
+        </div>
     {% endfor %}
-</div>
+  </div>
 {% endblock %}

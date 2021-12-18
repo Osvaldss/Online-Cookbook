@@ -1,3 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Alata&family=Fuzzy+Bubbles:wght@400;700&family=Righteous&display=swap');
+
+/* font-family: 'Alata', sans-serif; */
+/* font-family: 'Fuzzy Bubbles', cursive; */
+/* font-family: 'Righteous', cursive; */
+
 * {
     margin:0;
     padding:0;  
@@ -5,9 +11,45 @@
 
 body {
     position: relative;
+    font-family: Alata, sans-serif;
     min-height: 100vh;
     padding-bottom: 240px;
     background: url("../images/stripes-light.png") repeat center fixed;
+}
+
+nav {
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.bolder-text-part {
+    font-family: Righteous, cursive;
+}
+
+.lighter-text-part {
+    font-family: Fuzzy Bubbles, cursive;
+}
+
+.col.text-contrast {
+    padding: 15px;
+    background-color: rgba(122, 3, 3, 0.3);
+    border-radius: 5px;
+}
+
+.col.text-contrast h2 {
+    margin: 0 0 30px;
+}
+
+.col.text-contrast .create-acc {
+    margin-top: 20px;
+}
+
+a.btn-large.btn-red:hover {
+    background-color: #ff8a80 !important;
+}
+
+a.btn-large.btn-red {
+    margin: 10px;
 }
 
 .image-holder {
