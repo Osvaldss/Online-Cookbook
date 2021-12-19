@@ -1,9 +1,25 @@
 {% extends "base.html" %}
 {% block hero_img %}
-<div class="image-holder valign-wrapper ">
+<div class="image-holder valign-wrapper">
+    <div class="row search-bar hide-on-med-and-down ">
+        <form action="{{ url_for('search')}}" method="post" class="col s12 ">
+            <div class="row valign-wrapper">
+                <div class="input-field col s12 m7 l9">
+                    <input type="text" name="requests" id="requests" minlength="3" class="validate search-bg" required>
+                    <label for="requests" class="white-text"></label>
+                </div>
+                <div class="col s12 m5 l3 center-search-btn">
+                    <button type="submit" class="red darken-1 btn-red btn waves-effect waves-light search-btn">
+                        <i class="fas fa-search search-btn"></i> Search
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
     <div class="row">
         <div class="col s12 l5 offset-l1 left-align grey-text text-lighten-5 text-contrast">
-            <h2>Welcome to <span class="bolder-text-part red-text text-darken-1">Cook</span><span class="lighter-text-part ">Book</span>!</h2>
+            <h2>Welcome to <span class="bolder-text-part red-text text-darken-1">Cook</span><span
+                    class="lighter-text-part ">Book</span>!</h2>
             <p>
                 Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
                 industry's
@@ -14,10 +30,10 @@
             </p>
             <p class="create-acc">
                 {% if not session.user %}
-                    <span></span>Want to add your own recipe join our community.</span><br>
-                    <a href="{{ url_for('register')}}" class="red darken-1 waves-effect waves-light btn-red btn-large">
-                        Create CookBook Account</i>
-                    </a>
+                <span></span>Want to add your own recipe join our community.</span><br>
+                <a href="{{ url_for('register')}}" class="red darken-1 waves-effect waves-light btn-red btn-large">
+                    Create CookBook Account
+                </a>
                 {% endif %}
             </p>
         </div>
@@ -25,71 +41,85 @@
 </div>
 {% endblock %}
 {% block content %}
-<div class="row valign-wrapper">
+<div class="row main-section-margins valign-wrapper">
     <div class="col s6">
-        <h4 class="left-align"><span class="bolder-text-part red-text text-darken-1">Latest</span> <span>Recipes</span></h4>
+        <h4 class="left-align section-hmargin"><span class="bolder-text-part red-text text-darken-1">Latest</span>
+            <span>Recipes</span></h4>
     </div>
     <div class="col s6 right-align">
-        <a href="{{ url_for('get_recipe') }}" class="btn-large red darken-1 btn-red waves-effect waves-light">
-            Show more
+        <a href="{{ url_for('get_recipe') }}" class="btn red darken-1 btn-red waves-effect waves-light">
+            Show All
         </a>
     </div>
 </div>
 <div class="divider"></div>
-<div class="row">
+<div class="row main-section-margins">
     {% for recipe in recipes %}
-    <div class="col s6 m3">
+    <div class="col s12 m6 l4 xl3">
         <div class="card small responsive-size hoverable">
             <div class="card-image">
                 <a href="{{ url_for('recipe_details', recipe_id=recipe._id)}}">
-                <img class="responsive-img" src="{{ url_for('display_image', filename=recipe.recipe_image) }}">
-            </a>
+                    <img class="responsive-img" src="{{ url_for('display_image', filename=recipe.recipe_image) }}">
+                </a>
             </div>
-            <div class="card-content">
-                <span class="truncate">{{recipe.recipe_name}}</span>
-                <strong>
-                    <p class="truncate">{{recipe.recipe_add_time}}</p>
-                </strong>
-                <span>
-                    <i class="far fa-clock"></i>
-                    <strong>{{recipe.prep_time + recipe.cook_time}}</strong>&emsp;
+            <div class="card-content center-align">
+                <span class="title-font truncate">{{recipe.recipe_name}}</span>
+            </div>
+            <div class="card-action">
+                <div class="divider"></div>
+                <span class="left col s6">
+                    <i class="fas fa-utensils"></i>
+                    <strong>{{recipe.category_name}}</strong>
                 </span>
-                <span>
-                    <i class="fas fa-user"></i>
-                    <em> by: {{recipe.recipe_by}}</em>
+                <span class="right col s6">
+                    <i class="far fa-clock"></i>
+                    <strong>{{recipe.prep_time + recipe.cook_time}} min</strong>
                 </span>
             </div>
         </div>
     </div>
     {% endfor %}
 </div>
-<div class="row valign-wrapper">
+<div class="row main-section-margins valign-wrapper">
     <div class="col s6">
-        <h4 class="left-align"><span class="bolder-text-part red-text text-darken-1">Kitchen</span> <span>Gadgets</span></h4>
+        <h4 class="left-align section-hmargin"><span class="bolder-text-part red-text text-darken-1">Kitchen</span>
+            <span>Tools</span></h4>
     </div>
     <div class="col s6 right-align">
-        <a href="{{ url_for('get_product_list') }}" class="btn-large red darken-1 btn-red waves-effect waves-light">
-            Show more
+        <a href="{{ url_for('get_product_list') }}" class="btn red darken-1 btn-red waves-effect waves-light">
+            Show All
         </a>
     </div>
 </div>
 <div class="divider"></div>
-<div class="row">
+<div class="row main-section-margins">
     {% for item in kitchen_tools %}
-        <div class="col s6 m3">
-            <div class="card small">
+    <div class="col s12 m6 l4 xl3">
+        <div class="card small responsive-size kitchen_tool-card hoverable">
+            <a href="{{ url_for('item_details', item_id=item._id)}}">
                 <div class="card-image">
                     <img class="responsive-img" src="{{ item.product_image }}">
                 </div>
-                <div class="card-content">
-                    <p>{{item.product_name}}</p>
-                    <p>{{item.price}}</p>
+            </a>
+            <p class=" title-font truncate">{{item.product_name}}</p>
+            <div class="divider"></div>
+            <div class="card-content valign-wrapper">
+                <div class="col s8">
+                    <p class="left-align price-tag">
+                        <i class="fas fa-tag red-text"></i>
+                        {{item.price}}&#8364
+                    </p>
                 </div>
-                <div class="card-action">
-                    <a href="#">Buy</a>
+                <div class="col s4 right-align">
+                    <a href="#" class="btn-small red darken-1 btn-red waves-effect waves-light">
+                        Buy
+                    </a>
                 </div>
             </div>
+            <div class="card-action hide">
+            </div>
         </div>
+    </div>
     {% endfor %}
-  </div>
+</div>
 {% endblock %}

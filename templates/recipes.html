@@ -2,6 +2,23 @@
 {% block content %}
 
     <h2 class="header">All recipes</h2>
+    <div class="row hide-on-med-and-down ">
+        <form action="{{ url_for('search')}}" method="post" class="col s12">
+            <div class="row valign-wrapper center-align">
+                <div class="input-field col s12 l8">
+                    <i class="fas fa-search prefix"></i>
+                    <input type="text" id="requests" name="requests" minlength="3" class="validate" required>
+                    <label for="requests"></label>
+                </div>
+                <div class="col s12 l4">
+                    <a href="{{ url_for('get_latest')}}" class="red btn text-shadow">Reset</a>
+                    <button type="submit" class="light-blue darken-1 btn text-shadow">
+                        <i class="fas fa-search left"></i> Search
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
     <nav>
         <div class="nav-wrapper">
             <div class="col s12">
@@ -19,7 +36,7 @@
                             <div class="image-container small-screen center-align">
                                 <img class="responsive-img" src="{{ url_for('display_image', filename=recipe.recipe_image) }}" alt="{{recipe.recipe_image}}"><br />
                                 {% if recipe.recipe_image not in recipe_images %}
-                                <p>Nera tokio paveiksliuko</p>
+                                <p>Image Not Found</p>
                                 {% endif %}
                             </div>
                             <p class="left">
@@ -44,7 +61,7 @@
                     <div class="image-container-medium col m3 small-screen center-align">
                         <img class="responsive-img" src="{{ url_for('display_image', filename=recipe.recipe_image) }}" alt="{{recipe.recipe_image}}">
                         {% if recipe.recipe_image not in recipe_images %}
-                            <p>Nera tokio paveiksliuko</p>
+                            <p>Image Not Found</p>
                         {% endif %}
                     </div>
             </div>

@@ -37,9 +37,20 @@ def get_latest():
     '''Find recent added recipes and display then on home page.'''
     recipes = mongo.db.recipes.find().sort("recipe_add_time", -1).limit(8)
     kitchen_tools = mongo.db.kitchen_tools.find().sort(
-        "item_add_time", -1).limit(8)
+        "item_add_time", -1).limit(4)
     return render_template(
         "main_page.html", recipes=recipes, kitchen_tools=kitchen_tools)
+
+
+@app.route('/search', methods=["GET", "POST"])
+def search():
+    '''Search function between recipes and kitchen_tools collection on mongodb'''
+    query = request.form.get("requests")
+    recipes = list(mongo.db.recipes.find({"$text": {"$search": query}}))
+    recipe_images = os.listdir('static/uploads')
+    kitchen_tools = list(mongo.db.kitchen_tools.find({"$text": {"$search": query}}))
+    return render_template(
+        "search_results.html", recipes=recipes, kitchen_tools=kitchen_tools, query=query)
 
 
 @app.route("/get_recipe")
@@ -313,7 +324,7 @@ def logout():
 
 @app.route("/add_recipe", methods=["GET", "POST"])
 def add_recipe():
-    '''Function to add recipe to the collection'''
+    '''Function to add recipe to the recipes collection'''
     if request.method == "POST":
         if 'recipe_image' not in request.files:
             flash('No file part')

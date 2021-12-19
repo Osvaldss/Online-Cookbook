@@ -13,13 +13,69 @@ body {
     position: relative;
     font-family: Alata, sans-serif;
     min-height: 100vh;
-    padding-bottom: 240px;
+    padding-bottom: 220px;
     background: url("../images/stripes-light.png") repeat center fixed;
+}
+
+.input-field,
+ input, 
+ .select-wrapper,
+ textarea {
+    font-family: Alata, sans-serif;;
 }
 
 nav {
     font-weight: bold;
     text-transform: uppercase;
+}
+
+nav .nav-wrapper a.icon-line-height{
+    line-height: 55px;
+}
+
+.opacity-sidenav {
+    opacity: 0.95;
+}
+
+.btn, .btn-latge {
+    font-family:  Alata, sans-serif;
+}
+
+.search-bg {
+    background-color: rgba(41, 41, 41, 0.514) !important;
+    font-family: Alata, sans-serif;
+    color: white;
+}
+
+.search-bar {
+    width: 45%;
+    position: absolute;
+    right: 3%;
+    top: 0;
+}
+
+.col.center-search-btn{
+    padding-bottom: 10px;
+}
+
+.search-btn {
+    font-size: 0.8rem !important;
+}
+
+.row.mobile-search-bar {
+    margin-bottom: 0;
+}
+
+.row.main-section-margins {
+    margin: 15px 0;
+}
+
+h4.section-hmargin {
+    margin: 0;
+}
+
+.row.main-section-headin-margins {
+    margin: 15px 0;
 }
 
 .bolder-text-part {
@@ -44,12 +100,22 @@ nav {
     margin-top: 20px;
 }
 
-a.btn-large.btn-red:hover {
+.btn-large.btn-red:hover,
+.btn-large.btn-red:focus,
+.btn.btn-red:hover,
+.btn.btn-red:focus,
+.btn-small.btn-red:hover,
+.btn-small.btn-red:focus {
     background-color: #ff8a80 !important;
 }
 
 a.btn-large.btn-red {
     margin: 10px;
+}
+
+p.price-tag {
+    font-size: 16px;
+    font-weight: bold;
 }
 
 .image-holder {
@@ -71,12 +137,50 @@ footer {
     bottom: 0;
 }
 
+ul.follow-us-list {
+    padding-top: 15px;
+    text-align: center;
+}
+
+ul.follow-us-list li {
+    display: inline;
+    font-size: 30px;
+    padding-right: 10px;
+}
+
+ul.follow-us-list li i {
+    transition: .2s ease-in-out 0s
+}
+
+ul.follow-us-list li i:hover,
+ul.follow-us-list li i:focus {
+    transform: scale(1.25);
+}
+
+.footer-join {
+    min-height: 30px;
+    background-color: #f44336;
+    justify-content: center;
+}
+
+.footer-join a:hover,
+.footer-join a:focus {
+    text-decoration: underline;
+    font-weight: 600;
+}
+
 .m0 {
     margin: 0;
 }
 
 .mb0 {
     margin-bottom: 0;
+}
+
+.title-font {
+    font-size: 16px;
+    text-transform: uppercase;
+    padding: 0px 15px 0;
 }
 
 .recipe_edit_del_cont{
@@ -86,7 +190,20 @@ footer {
 .card .card-action {
     border-bottom: 1px solid rgba(51, 105, 30, 0.5);
     border-top: none;
+    padding: 5px 0;
 }
+
+.card.small .card-image {
+    max-height: 70%;
+}
+
+.card.small.kitchen_tool-card .card-image {
+    max-height: 65%;
+}
+
+/* .card.small .card-image+.card-content {
+    max-height: 45%;
+} */
 
 .card.horizontal {
     padding: 5px;
@@ -103,8 +220,9 @@ footer {
 }
 
 .card.small.responsive-size {
-    height: 250px;
+    height:200px;
 }
+
 
 .card.small.responsive-size-profile {
     height: 280px;
@@ -112,7 +230,7 @@ footer {
 
 .card.small.responsive-size .card-content,
 .card.small.responsive-size-profile .card-content {
-    padding: 10px;
+    padding: 5px;
 }
 
 .delete-btn {
@@ -149,6 +267,36 @@ footer {
 
 
 @media only screen and (max-width: 600px) and (orientation: portrait) {
+    body {
+        padding-bottom: 460px;
+    }
+
+    /* .card.small.responsive-size {
+        height:220px;
+    }
+
+    .card.small.responsive-size-profile {
+        height: 280px;
+    }
+    
+    .card.small.responsive-size .card-content,
+    .card.small.responsive-size-profile .card-content {
+        padding: 5px;
+    } */
+
+    .section-hmargin {
+        font-size: 18px;
+    }
+
+    .search-bar {
+        width: 100%;
+        right: 0;
+    }
+
+    .image-holder {
+        height: 100vh;
+    }
+
     .col.small-screen {
         padding: 0;
     }
@@ -158,9 +306,9 @@ footer {
         overflow-y: hidden;
     }
 
-    .card .card-action {
-        padding: 12px;
-    }
+    /* .card.small .card-image {
+        max-height: 70%;
+    } */
 
     .image-container img {
         width: 100%;
@@ -177,7 +325,42 @@ footer {
     }
 }
 
+@media only screen and (min-width: 601px) and (max-width: 993px) and (orientation: portrait) {
+    body {
+        padding-bottom: 425px;
+    }
+
+    /* .card.small .card-image {
+        max-height: 70%;
+    } */
+}
+
+@media only screen and (max-width: 993px) and (orientation: landscape) {
+    body {
+        padding-bottom: 390px;
+    }
+
+    .image-holder {
+        height: 100vh;
+    }
+
+    .search-bar {
+        width: 100%;
+    }
+
+    /* .card.small .card-image {
+        max-height: 70%;
+    } */
+
+}
+
 @media only screen and (min-width: 600px){
+    .image-container {
+        display: none;
+    }
+}
+
+@media only screen and (min-width: 993px){
     .image-container {
         display: none;
     }

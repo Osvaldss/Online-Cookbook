@@ -7,12 +7,7 @@ $(document).ready(function () {
     'dismissible': false,
     'startingTop': '0%'
   });
-  $('.carousel').carousel({
-    'indicators': true,
-    'padding': 150
-  });
   $('.collapsible').collapsible();
-  // $(window).resize(checkWidth);
   addIngList();
   removeIngrInput();
   // count_chr_recipe_desc();

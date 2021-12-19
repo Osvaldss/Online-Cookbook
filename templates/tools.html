@@ -2,6 +2,23 @@
 {% block content %}
 
 <h2 class="header">All kitchen gadgets</h2>
+<div class="row hide-on-med-and-down ">
+    <form action="{{ url_for('search')}}" method="post" class="col s12 left-align ">
+        <div class="row valign-wrapper center-align">
+            <div class="input-field col s12 l8">
+                <i class="fas fa-search prefix"></i>
+                <input type="text" name="requests" id="requests" minlength="3" class="validate search-bg" required>
+                <label for="requests" class="white-text"></label>
+            </div>
+            <div class="col s12 l4">
+                <a href="{{ url_for('get_latest')}}" class="red btn text-shadow">Reset</a>
+                <button type="submit" class="light-blue darken-1 btn text-shadow">
+                    <i class="fas fa-search left"></i> Search
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
 <nav>
     <div class="nav-wrapper">
         <div class="col s12">
