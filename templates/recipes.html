@@ -1,71 +1,119 @@
 {% extends "base.html" %}
-{% block content %}
-
-    <h2 class="header">All recipes</h2>
-    <div class="row hide-on-med-and-down ">
-        <form action="{{ url_for('search')}}" method="post" class="col s12">
-            <div class="row valign-wrapper center-align">
-                <div class="input-field col s12 l8">
-                    <i class="fas fa-search prefix"></i>
-                    <input type="text" id="requests" name="requests" minlength="3" class="validate" required>
-                    <label for="requests"></label>
-                </div>
-                <div class="col s12 l4">
-                    <a href="{{ url_for('get_latest')}}" class="red btn text-shadow">Reset</a>
-                    <button type="submit" class="light-blue darken-1 btn text-shadow">
-                        <i class="fas fa-search left"></i> Search
-                    </button>
-                </div>
-            </div>
-        </form>
+{% block title_img %}
+<div class="image-title-holder recipes">
+    <div class="row">
+        <div class="col s5">
+            <h2 class="section-hmargin">
+                <span class="bolder-text-part red-text text-darken-1">Recipes</span>
+                <span class="white-text">List</span>
+            </h2>
+        </div>
     </div>
-    <nav>
-        <div class="nav-wrapper">
-            <div class="col s12">
-                <a href="{{ url_for('get_latest') }}">HOME -></a>
-                <span>All recipes</span>
+</div>
+{% endblock %}
+{% block content %}
+<div class="row hide-on-med-and-down mb0">
+    <form action="{{ url_for('search_recipes')}}" method="post" class="col s12">
+        <div class="row valign-wrapper center-align mb0">
+            <div class="input-field col l8">
+                <i class="fas fa-search prefix"></i>
+                <input type="text" id="requests" name="requests" minlength="3" class="validate" required>
+                <label for="requests"></label>
+            </div>
+            <div class="col l4 left-align">
+                <button type="submit" class="red darken-1 btn-red btn search-btn">
+                    Search
+                </button>
+                <a href="{{ url_for('get_recipe')}}" class="red btn search-btn">Show All ({{all_recipes}})</a>
             </div>
         </div>
-    </nav>
-    {% for recipe in recipes %}
-        <div class="card horizontal">
-            <div class="row rm-bottom-gap valign-wrapper">
-                <div class="col m9 small-screen">
-                    <div class="card-stacked">
-                        <div class="card-action">
-                            <div class="image-container small-screen center-align">
-                                <img class="responsive-img" src="{{ url_for('display_image', filename=recipe.recipe_image) }}" alt="{{recipe.recipe_image}}"><br />
-                                {% if recipe.recipe_image not in recipe_images %}
-                                <p>Image Not Found</p>
-                                {% endif %}
-                            </div>
-                            <p class="left">
-                                <a href="{{ url_for('recipe_details', recipe_id=recipe._id)}}">
-                                    <strong>{{recipe.recipe_name}}</strong>
-                                </a>
-                            </p>
-                        </div>
-                        <div class="card-content short-desc">
-                            {{recipe.recipe_description}}
-                        </div>
-                        <div class="card-content card-footer">
-                            <i class="far fa-clock"></i>
-                            <strong>{{recipe.prep_time + recipe.cook_time}}</strong>&emsp;
-                            <i class="fas fa-utensil-spoon"></i>
-                            <strong>{{recipe.category_name}}</strong>&emsp;
-                            <i class="fas fa-user"></i>
-                            <em> by: {{recipe.recipe_by}}</em>
-                        </div>
-                    </div>
-                </div>
-                    <div class="image-container-medium col m3 small-screen center-align">
-                        <img class="responsive-img" src="{{ url_for('display_image', filename=recipe.recipe_image) }}" alt="{{recipe.recipe_image}}">
-                        {% if recipe.recipe_image not in recipe_images %}
-                            <p>Image Not Found</p>
-                        {% endif %}
-                    </div>
+    </form>
+</div>
+<div class="row show-on-medium-and-down hide-on-med-and-up mb0">
+    <form action="{{ url_for('search_recipes')}}" method="post" class="col s12">
+        <div class="row valign-wrapper center-align mb0">
+            <div class="input-field col s6 m8">
+                <input type="text" id="requests" name="requests" minlength="3" class="validate" required>
+                <label for="requests"></label>
             </div>
-        </div>  
+            <div class="col s6m4 left-align">
+                <button type="submit" class="red darken-1 btn-red btn search-btn">
+                    <i class="fas fa-search"></i>
+                </button>
+                <a href="{{ url_for('get_recipe')}}" class="red btn search-btn">All ({{all_recipes}})</a>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="divider"></div>
+<div class="nav-wrapper bcrumbs">
+    <div class="col s12">
+        <a href="{{ url_for('get_latest') }}" class="black-text">HOME <i class="fas fa-caret-right red-text"></i></a>
+        <a href="{{ url_for('get_recipe')}}" class="black-text">RECIPE LIST</a>
+        <a onclick="history.back();" href="#!" class=" waves-effect waves-light right black-text"> <i class="fas fa-caret-left red-text"></i> GO BACK</a>
+    </div>
+</div>
+<div class="divider"></div>
+<div class="row mb1">
+{% for category in categories %}
+    <div class="col category-btn-padding">
+        <form action="{{ url_for('filter_category')}}" method="post">
+            <input type="text" class="hide" name="category_filter" id="category_filter" value="{{category.category_name}}">
+            <button type="submit" class="red darken-1 btn-red btn waves-effect waves-light search-btn">
+                {{category.category_name}}
+                {% for key, value in new_dict.items() %}
+                <span>
+                    {% if category.category_name == key %}
+                    ({{value}})
+                    {% endif %}
+                </span>
+                {% endfor %}
+            </button>
+        </form>
+    </div>
+{% endfor %}
+</div>
+{% if recipes.count() > 0 %}
+<div class="divider"></div>
+ 
+<div class="row main-section-margins">
+    {% for recipe in recipes %}
+    <div class="col s12 m6 l4 xl3">
+        <div class="card small responsive-size hoverable">
+            <div class="card-image">
+                <a href="{{ url_for('recipe_details', recipe_id=recipe._id)}}">
+                    <img class="responsive-img" src="{{ url_for('display_image', filename=recipe.recipe_image) }}">
+                </a>
+            </div>
+            <div class="card-content center-align">
+                <span class="title-font truncate">{{recipe.recipe_name}}</span>
+            </div>
+            <div class="card-action">
+                <div class="divider"></div>
+                <span class="left col s6">
+                    <i class="fas fa-utensils"></i>
+                    <strong>{{recipe.category_name}}</strong>
+                </span>
+                <span class="right col s6">
+                    <i class="far fa-clock"></i>
+                    <strong>{{recipe.prep_time + recipe.cook_time}} min</strong>
+                </span>
+            </div>
+        </div>
+    </div>
     {% endfor %}
+</div>
+
+
+{% else %}
+<div class="row main-section-margins valign-wrapper">
+    <div class="col s12">
+        <h4 class="left-align section-hmargin">
+            <span class="bolder-text-part red-text text-darken-1">No Recipes</span>
+            <span> Found </span>
+        </h4>
+    </div>
+</div>
+{% endif %}
 
 {% endblock %}

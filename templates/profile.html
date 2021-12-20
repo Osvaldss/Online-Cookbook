@@ -1,16 +1,25 @@
 {% extends "base.html" %}
 {% block content %}
 
-    <div class="row">
-        <div class="col s12 m8 offset-m2">
-            <div class="card-panel">
-                <h3>
-                    <i class="fas fa-user"></i>
-                    {{username.capitalize()}} Profile
-                </h3>
-            </div>
+    {% if is_admin %}
+    <div class="row mb1">
+        <div class="col s4">
+                <img class="responsive-img" src="../static/images/avatar-bg.png"
+                    alt="avatar-image"><br />
+        </div>
+        <div class="col s8">
+            <h4>Personal information</h4>
+            <p>Username : {{username.capitalize()}} <span class="red-text">ADMIN</span></p>
         </div>
     </div>
+    {% endif %}
+
+
+
+
+
+
+
     {% if is_admin %}
         <p>Hello Admin</p>
         <div class="row">

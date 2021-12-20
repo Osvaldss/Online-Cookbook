@@ -47,19 +47,208 @@ def search():
     '''Search function between recipes and kitchen_tools collection on mongodb'''
     query = request.form.get("requests")
     recipes = list(mongo.db.recipes.find({"$text": {"$search": query}}))
-    recipe_images = os.listdir('static/uploads')
     kitchen_tools = list(mongo.db.kitchen_tools.find({"$text": {"$search": query}}))
     return render_template(
         "search_results.html", recipes=recipes, kitchen_tools=kitchen_tools, query=query)
+
+
+@app.route('/search_recipes', methods=["GET", "POST"])
+def search_recipes():
+    '''Search function only on recipes page'''
+    query = request.form.get("requests")
+    recipes = mongo.db.recipes.find({"$text": {"$search": query}})
+    recipe_images = os.listdir('static/uploads')
+    all_recipes = len(list(mongo.db.recipes.find()))
+    return render_template(
+        "recipes.html", recipes=recipes, all_recipes=all_recipes,
+         recipe_images=recipe_images, query=query)
+
+
+@app.route('/search_items', methods=["GET", "POST"])
+def search_items():
+    '''Search function only on kitchen tools page'''
+    query = request.form.get("requests")
+    kitchen_tools = mongo.db.kitchen_tools.find({"$text": {"$search": query}})
+    return render_template(
+        "tools.html", kitchen_tools=kitchen_tools, query=query)
+
+
+@app.route('/filter_category', methods=["GET", "POST"])
+def filter_category():
+    '''Search function only on kitchen tools page'''
+    categ = request.form.get("category_filter")
+    recipes_list = list(mongo.db.recipes.find())
+    recipes = mongo.db.recipes.find({'category_name': categ}).sort("recipe_name", 1)
+    categories = mongo.db.categories.find().sort("category_name", 1)
+    categories_list = list(mongo.db.categories.find())
+    all_recipes = len(list(mongo.db.recipes.find()))
+    recipe_images = os.listdir('static/uploads')
+
+    recipe_dict = []
+    for recipe in recipes_list:
+        for key, value in recipe.items():
+            if key == "category_name":
+                recipe_dict.append(value)
+        print(recipe_dict)
+
+    category_it_list = []
+    for dic in categories_list:
+        for key, value in dic.items():
+            if key == 'category_name':
+                if value not in category_it_list:
+                    category_it_list.append(value)
+        print('mano sarasas', category_it_list)
+
+    new_dict = {}
+    for item in category_it_list:
+        if item not in new_dict:
+            new_dict[item] = 0
+    print('Neeeeeeeeeeeeeeeeeeeew_dict', new_dict)
+    for recipe in recipe_dict:
+        if recipe not in new_dict:
+            new_dict[recipe] = 0
+        new_dict[recipe] += 1
+    print('Neeeeeeeeeeeeeeeeeeeew', new_dict)
+
+    return render_template(
+        "recipes.html", recipes=recipes,
+        categories=categories, recipe_images=recipe_images,
+        new_dict=new_dict, all_recipes=all_recipes)
 
 
 @app.route("/get_recipe")
 def get_recipe():
     '''Page with a list of all added recipes.'''
     recipes = mongo.db.recipes.find().sort("category_name", 1)
+    recipes_list = list(mongo.db.recipes.find())
+    all_recipes = len(list(mongo.db.recipes.find()))
+    categories = mongo.db.categories.find().sort("category_name", 1)
+    categories_list = list(mongo.db.categories.find())
+    # dishes_count = len(list(mongo.db.recipes.find({'category_name': 'Dishes'})))
+    # soup_count = len(list(mongo.db.recipes.find({'category_name': 'Soup'})))
+    # easy_count = len(list(mongo.db.recipes.find({'category_name': 'Easy'})))
+    # vegan_count = len(list(mongo.db.recipes.find({'category_name': 'Vegan'})))
+    # vegetarian_count = len(list(mongo.db.recipes.find({'category_name': 'Vegetarian'})))
+    # print('skaiciuoju sarasa -------------> ', dishes_count, soup_count, easy_count, vegan_count, vegetarian_count)
+    # categ = request.form.get("category_filter")
+    recipe_dict = []
+    for recipe in recipes_list:
+        for key, value in recipe.items():
+            if key == "category_name":
+                recipe_dict.append(value)
+        print(recipe_dict)
+
+    category_it_list = []
+    for dic in categories_list:
+        for key, value in dic.items():
+            if key == 'category_name':
+                if value not in category_it_list:
+                    category_it_list.append(value)
+        print('mano sarasas', category_it_list)
+    
+    new_dict = {}
+    for item in category_it_list:
+        if item not in new_dict:
+            new_dict[item] = 0
+    print('Neeeeeeeeeeeeeeeeeeeew_dict', new_dict)
+    for recipe in recipe_dict:
+        if recipe not in new_dict:
+            new_dict[recipe] = 0
+        new_dict[recipe] += 1
+    print('Neeeeeeeeeeeeeeeeeeeew', new_dict)
+
+
+
+#  for letter in word:
+# ...     if letter not in counter:
+# ...         counter[letter] = 0
+# ...     counter[letter] += 1
+
+
+    # count_recip = len(list(mongo.db.recipes.find({'category_name': categ})))
+
+
+    # sarasas = {}
+    # for dic in categories_list:
+    #     print('loooooooooooooooopinam tarp kategoriju')
+    #     for key, value in dic.items():
+    #         if key == 'category_name':
+    #             if value not in sarasas:
+    #                 sarasas[value] = int(0)
+    #                 print('mano sarasas', sarasas)
+
+    # new_sarasas = {}
+    # for key_cat, value_cat in sarasas.items():
+    #     print(key_cat, value_cat)
+    #     for recipe in recipes_list:
+    #         print('ieksom receptu')
+    #         print()
+    #         for key, value in recipe.items():
+    #             if key == 'category_name':
+    #                 if value == key_cat:
+    #                     print('Lyginu ------------->', value, 'SU', key_cat)
+    #                     print('value_cat - reiksme -------------------->', key_cat)
+    #                     value_cat = value_cat + 1
+    #                     new_sarasas[key_cat] = value_cat
+    # print('Naujai kurtas sarasas -------------------------------------> ', new_sarasas)
+
+
+
+                        # for keyc, valuec in sarasas.items():
+                        #     if  == keyc:
+                        #         sarasas[keyc] += 1
+                            # print(sarasas)
+# dictionary1 = {"a": 1, "b": 2}
+# dictionary2 = {"a": 3, "b": 2}
+# common_pairs = dict()
+# for key in dictionary1:
+#     if (key in dictionary2 and dictionary1[key] == dictionary2[key]):
+#         common_pairs[key] = dictionary1[key]
+# print(common_pairs)
+
+
+    # category_counter_dic = {}
+    # for dic in categories_list:
+    #     print('looooooooooooooopinam')
+    #     for key, value in dic.items():
+    #         if key == 'category_name':
+    #             if key not in category_counter_dic:
+    #                 category_counter_dic[key] = value
+    #             print(key, '->', value)
+    #             for rec_dic in recipes_list:
+    #                 print('loooooooooooooooopinam tarp receptu')
+    #                 for keyr, valuer in rec_dic.items():
+    #                     if keyr == 'category_name':
+    #                         print('Recepto indeksas- ', keyr, 'Reiksme- ', valuer)
+    #                         if value == valuer:
+    #                             number = number + 1
+    #         print('skaicius kiek atitiko : ', number)
+    # print('cia kategoriju sarasas ', category_counter_dic)
+                #         print('receopto indeksas', keyr, '->', 'recepto value', valuer)
+
+    # cat = []
+    # for category in categories_list:
+    #     cat.append(category)
+    # categ = categories_list.get('category_name')
     recipe_images = os.listdir('static/uploads')
+    # recip_count = 0
+    # print('cia yra kategorijus listas nekurtas')
+    # print()
+    # print(categories_list)
+    # print('cia  yra receptu listas')
+    # print()
+    # print(recipes_list)
+    # print("kiek yra yrasu recipe liste")
+    # print(len(recipes_list))
+    # for category_name in categories_list:
+    #     for recipe in recipes:
+    #         if categories_list.category_name == recipe.category_name:
+    #             recip_count = recip_count + 1
+    #             print(recip_count)
     return render_template(
-        "recipes.html", recipes=recipes, recipe_images=recipe_images)
+        "recipes.html", recipes=recipes,
+        recipe_images=recipe_images, all_recipes=all_recipes,
+        categories=categories, new_dict=new_dict)
 
 
 @app.route("/product_list")

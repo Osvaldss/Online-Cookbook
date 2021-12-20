@@ -1,66 +1,77 @@
 {% extends "base.html" %}
 {% block content %}
-    <nav>
-        <div class="nav-wrapper">
-          <div class="col s12">
-            <a href="{{ url_for('get_latest') }}">HOME -></a>
-            <a href="{{ url_for('get_recipe') }}" >RECIPES -></a>
-            <span >{{recipes.recipe_name}}</span>
-          </div>
-        </div>
-      </nav>
-        <div class="card horizontal">
-            <div class="row rm-bottom-gap valign-wrapper">
-                <div class="col m9 small-screen">
-                    <div class="card-stacked">
-                        <div class="card-action">
-                            <div class="image-container small-screen center-align">
-                                <img class="responsive-img" src="{{ url_for('display_image', filename=recipes.recipe_image) }}" alt="{{recipes.recipe_name}}"><br />
-                            </div>
-                            <p class="left">
-                                <strong>{{recipes.recipe_name}}</strong>
-                            </p>
-                            <p class="right">
-                                <strong>
-                                    <i class="fas fa-utensil-spoon"></i>
-                                    {{recipes.category_name}}
-                                </strong>
-                            </p>
-                        </div>
-                        <div class="card-content short-desc">
-                            {{recipes.recipe_description}}
-                        </div>
-                        {% for ingredient in recipes.ingredients %}
-                            <div class="card-content short-desc">
-                                {{ingredient}}
-                            </div>
-                        {% endfor %}
-                        {% for method in recipes.methods %}
-                            <div class="card-content short-desc">
-                                {{method}}
-                            </div>
-                        {% endfor %}
-                        <div class="card-content card-footer">
-                            <i class="far fa-clock"></i>
-                            <strong>{{recipes.cook_time}}</strong>&emsp;
-                            <i class="far fa-clock"></i>
-                            <strong>{{recipes.prep_time}}</strong>&emsp;
-                            <i class="fas fa-utensil-spoon"></i>
-                            <strong>{{recipes.category_name}}</strong>&emsp;
-                            <i class="fas fa-utensil-spoon"></i>
-                            <strong>{{recipes.recipe_by}}</strong>&emsp;
-                            <i class="fas fa-utensil-spoon"></i>
-                            <strong>{{recipes.recipe_add_time}}</strong>&emsp;
-                        </div>
-                    </div>
-                </div>
-                    <div class="image-container-medium col m3 small-screen center-align">
-                        <img class="responsive-img" src="{{ url_for('display_image', filename=recipes.recipe_image) }}" alt="{{recipes.recipe_name}}"><br />
-                    </div>
-            </div>
-        </div> 
-        <div class="col s6 right-align">
-            <button onclick="history.back();" class="btn-large waves-effect waves-light">Go Back <i class="fas fa-file right"></i></button>
-        </div> 
+<div class="row">
+    <div class="col s12">
+        <h4>{{recipes.recipe_name}}</h4>
+    </div>
+</div>
+<div class="divider"></div>
+<div class="nav-wrapper bcrumbs">
+    <div class="col s12">
+        <a href="{{ url_for('get_latest') }}" class="black-text">HOME</a>
+        <i class="fas fa-caret-right red-text"></i>
+        <a href="{{ url_for('get_recipe')}}"  class="black-text">RECIPE LIST</a>
+        <i class="fas fa-caret-right red-text"></i>
+        <span>{{recipes.recipe_name.upper()}}</span>
+        <a onclick="history.back();" href="#!" class=" waves-effect waves-light right black-text"> <i class="fas fa-caret-left red-text"></i> GO BACK</a>
+    </div>
+</div>
 
+<div class="divider"></div>
+<div class="row rm-bottom-gap">
+    <div class="col s12 m4">
+        <img class="responsive-img recipe_details" src="{{ url_for('display_image', filename=recipes.recipe_image) }}"
+            alt="{{recipes.recipe_name}}"><br />
+    </div>
+    <div class="col s12 m8">
+        <div class="card-content">
+            <p class="recipe-title">{{recipes.recipe_name}}</p>
+            <span>Recipe by <em class="red-text">{{recipes.recipe_by.capitalize()}}</em></span>
+            <div class="row mb1">
+                <div class="col">
+                    <p><i class="fas fa-utensil-spoon"></i> {{recipes.category_name}}</p>
+                </div>
+                <div class="col">
+                    <em class="red-text">Prep Time: </em>
+                    <strong>{{recipes.prep_time}} min</strong>&emsp;
+                    <em class="red-text">Cook Time: </em>
+                    <strong>{{recipes.cook_time}} min</strong>&emsp;
+                </div>
+            </div>
+            <div class="row mb1">
+                <div class="col">
+                    <span>{{recipes.recipe_description}}</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <span>Recipe creation date: </span><em>{{ recipes.recipe_add_time}}</em>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col s12 m4">
+        <h5>Ingredients</h5>
+        <div class="divider"></div>
+        <ul>
+            {% for ingredient in recipes.ingredients %}
+            <li class="ingredient-list"><i class="fas fa-asterisk red-text"></i> {{ingredient}}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="col s12 m8">
+        <h5>Method</h5>
+        <div class="divider"></div>
+        <ol>
+            {% for method in recipes.methods %}
+                {% if method|length > 0 %}
+                <li class="method-list">{{method}}</li>
+                {% endif %}
+            {% endfor %}
+        </ol>
+
+    </div>
+</div>
 {% endblock %}

@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="row hide-on-med-and-down">
+<div class="row hide-on-med-and-down mb0">
     <form action="{{ url_for('search')}}" method="post" class="col s12">
-        <div class="row valign-wrapper center-align">
+        <div class="row valign-wrapper center-align mb0">
             <div class="input-field col l10">
                 <i class="fas fa-search prefix"></i>
                 <input type="text" id="requests" name="requests" minlength="3" class="validate" required>
@@ -107,7 +107,7 @@
                         {{item.price}}&#8364
                     </p>
                 </div>
-                <div class="col s4 right-align">
+                <div class="col">
                     <a href="#" class="btn-small red darken-1 btn-red waves-effect waves-light">
                         Buy
                     </a>

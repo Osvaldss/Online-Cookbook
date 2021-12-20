@@ -130,6 +130,36 @@ p.price-tag {
     background-size: cover;
 }
 
+.responsive-img.recipe_details {
+    padding: 20px 0;
+}
+
+
+.image-title-holder.tools {
+    background-image: url("../images/kitchen_bg.jpg");
+}
+
+.image-title-holder.recipes {
+    background-image: url("../images/recipe_bg.jpg");
+}
+
+.image-title-holder {
+    height: 150px;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+.card.categories {
+    padding: 5px;
+    margin: 5px 0;
+}
+
+
 footer {
     /* padding: 25px 0 0; */
     width: 100%;
@@ -169,6 +199,11 @@ ul.follow-us-list li i:focus {
     font-weight: 600;
 }
 
+.nav-wrapper.bcrumbs a:hover,
+.nav-wrapper.bcrumbs a:focus {
+    text-decoration: underline;
+}
+
 .m0 {
     margin: 0;
 }
@@ -177,10 +212,28 @@ ul.follow-us-list li i:focus {
     margin-bottom: 0;
 }
 
-.title-font {
+.mb1 {
+    margin:10px 0;
+}
+
+.col.category-btn-padding {
+    padding: 3px 3px;
+}
+
+.title-font,
+.recipe-title {
     font-size: 16px;
     text-transform: uppercase;
     padding: 0px 15px 0;
+}
+
+li.ingredient-list,
+li.method-list {
+    padding: 0 0 5px;
+}
+
+.recipe-title {
+    padding: 20px 0;
 }
 
 .recipe_edit_del_cont{
@@ -271,6 +324,10 @@ ul.follow-us-list li i:focus {
         padding-bottom: 460px;
     }
 
+    .image-title-holder {
+        height: 75px;
+    }
+
     /* .card.small.responsive-size {
         height:220px;
     }
@@ -285,7 +342,7 @@ ul.follow-us-list li i:focus {
     } */
 
     .section-hmargin {
-        font-size: 18px;
+        font-size: 20px;
     }
 
     .search-bar {

@@ -1,54 +1,99 @@
 {% extends "base.html" %}
+{% block title_img %}
+<div class="image-title-holder tools">
+    <div class="row">
+        <div class="col s5">
+            <h2 class="section-hmargin">
+                <span class="bolder-text-part red-text text-darken-1">Kitchen</span>
+                <span class="white-text">Tools</span>
+            </h2>
+        </div>
+    </div>
+</div>
+{% endblock %}
 {% block content %}
-
-<h2 class="header">All kitchen gadgets</h2>
-<div class="row hide-on-med-and-down ">
-    <form action="{{ url_for('search')}}" method="post" class="col s12 left-align ">
-        <div class="row valign-wrapper center-align">
-            <div class="input-field col s12 l8">
+<div class="row hide-on-med-and-down mb0">
+    <form action="{{ url_for('search_items')}}" method="post" class="col s12">
+        <div class="row valign-wrapper center-align mb0">
+            <div class="input-field col l9">
                 <i class="fas fa-search prefix"></i>
-                <input type="text" name="requests" id="requests" minlength="3" class="validate search-bg" required>
-                <label for="requests" class="white-text"></label>
+                <input type="text" id="requests" name="requests" minlength="3" class="validate" required>
+                <label for="requests"></label>
             </div>
-            <div class="col s12 l4">
-                <a href="{{ url_for('get_latest')}}" class="red btn text-shadow">Reset</a>
-                <button type="submit" class="light-blue darken-1 btn text-shadow">
-                    <i class="fas fa-search left"></i> Search
+            <div class="col l3 left-align">
+                <a href="{{ url_for('get_product_list')}}" class="red btn search-btn">Reset</a>
+                <button type="submit" class="red darken-1 btn-red btn search-btn">
+                    Search
                 </button>
             </div>
         </div>
     </form>
 </div>
-<nav>
-    <div class="nav-wrapper">
-        <div class="col s12">
-            <a href="{{ url_for('get_latest') }}">HOME -></a>
-            <span>All kitchen gadgets</span>
+<div class="row show-on-medium-and-down hide-on-med-and-up mb0">
+    <form action="{{ url_for('search_items')}}" method="post" class="col s12">
+        <div class="row valign-wrapper center-align mb0">
+            <div class="input-field col s7 m9">
+                <input type="text" id="requests" name="requests" minlength="3" class="validate" required>
+                <label for="requests"></label>
+            </div>
+            <div class="col s5 m3 left-align">
+                <a href="{{ url_for('get_product_list')}}" class="red btn search-btn"><i class="fas fa-times"></i></a>
+                <button type="submit" class="red darken-1 btn-red btn search-btn">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
         </div>
+    </form>
+</div>
+<div class="divider"></div>
+<div class="nav-wrapper bcrumbs">
+    <div class="col s12">
+        <a href="{{ url_for('get_latest') }}" class="black-text">HOME <i class="fas fa-caret-right red-text"></i></a>
+        <a href="{{ url_for('get_product_list')}}" class="black-text">KITCHEN TOOLS</a>
+        <a onclick="history.back();" href="#!" class=" waves-effect waves-light right black-text"> <i class="fas fa-caret-left red-text"></i> GO BACK</a>
     </div>
-</nav>
-<div class="row rm-bottom-gap">
+</div>
+<div class="divider"></div>
+{% if kitchen_tools.count() > 0 %}
+<div class="row main-section-margins">
     {% for item in kitchen_tools %}
-    <div class="col s6 m3">
-        <a href="{{ url_for('item_details', item_id=item._id)}}">
-            <div class="card small responsive-size-profile hoverable">
+    <div class="col s12 m6 l4 xl3">
+        <div class="card small responsive-size kitchen_tool-card hoverable">
+            <a href="{{ url_for('item_details', item_id=item._id)}}">
                 <div class="card-image">
-                    <img class="responsive-img" src="{{item.product_image }} alt=" {{item.product_name}}">
+                    <img class="responsive-img" src="{{ item.product_image }}">
                 </div>
-                <div class="card-content center-align recipe_edit_del_cont">
-                    <span class="truncate left-align">{{item.product_name}}</span>
-                    <strong>
-                        <p class="left-align">{{item.price}}</p>
-                    </strong>
-                    <div class="edit-btn">
-                        <a href="#" class="waves-effect orange waves-light btn-small"><i class="fas fa-edit"></i>
-                            Buy</a>
-                    </div>
+            </a>
+            <p class=" title-font truncate">{{item.product_name}}</p>
+            <div class="divider"></div>
+            <div class="card-content valign-wrapper">
+                <div class="col s8">
+                    <p class="left-align price-tag">
+                        <i class="fas fa-tag red-text"></i>
+                        {{item.price}}&#8364
+                    </p>
+                </div>
+                <div class="col">
+                    <a href="#" class="btn-small red darken-1 btn-red waves-effect waves-light">
+                        Buy
+                    </a>
                 </div>
             </div>
-        </a>
+            <div class="card-action hide"></div>
+        </div>
     </div>
     {% endfor %}
 </div>
+{% else %}
+    <div class="row main-section-margins valign-wrapper">
+        <div class="col s12">
+            <h4 class="left-align section-hmargin">
+                <span class="bolder-text-part red-text text-darken-1">No Kitchen</span>
+                <span> tools found on "{{query}}"</span>
+            </h4>
+        </div>
+    </div>
+    <div class="divider"></div>
+{% endif %}
 
 {% endblock %}
