@@ -8,7 +8,7 @@
         <form class="" method="POST" action="{{ url_for('edit_recipe', recipe_id=recipe._id)}}" enctype="multipart/form-data">
             <div class="row">
                 <div class="input-field col s12">
-                    <i class="fas fa-book amber-text text-lighten-1 prefix"></i>
+                    <i class="fas fa-book red-text prefix"></i>
                     <select id="category_name" name="category_name" class="validate" required>
                         <option value="" disabled>Choose recipe category</option>
                         {% for category in categories %}
@@ -24,14 +24,14 @@
             </div>
             <div class="row">
                 <div class="input-field col s12">
-                    <i class="fas fa-utensils amber-text text-lighten-1 prefix"></i>
+                    <i class="fas fa-utensils red-text prefix"></i>
                     <input id="recipe_name" name="recipe_name" type="text" class="validate" value="{{ recipe.recipe_name}}" required>
                     <label for="recipe_name">Recipe Name</label>
                 </div>
             </div>
             <div class="row">
                 <div class="input-field col s12">
-                    <i class="fas fa-scroll amber-text text-lighten-1 prefix"></i>
+                    <i class="fas fa-scroll red-text prefix"></i>
                     <textarea id="recipe_description" name="recipe_description" class="materialize-textarea validate" minlength="150" maxlength="500" data-length="500" required>
                         {{- recipe.recipe_description -}}
                     </textarea>
@@ -41,7 +41,7 @@
             <div class="row">
                 <h4>Ingredients</h4>
                 <div class="ingr_input_cont input-field col s12 l10">
-                    <i class="fas fa-list-alt amber-text text-lighten-1 prefix"></i>
+                    <i class="fas fa-list-alt red-text prefix"></i>
                     <input id="ingredients_add" name="ingredients_add" type="text" value="" class="validate">
                     <label for="ingredients_add">Add ingredient</label>
                     {% for ingredient in recipe.ingredients %}
@@ -49,12 +49,12 @@
                         <input type="text" name="ingredients" class="validate ingr-items" value="{{ingredient}}" required>
                     </div>
                     <div class="input-field s12 right">
-                        <button id="remove_ingr_input" type="button" class="btn-floating move-btn-up right">X</button>
+                        <button id="remove_ingr_input" type="button" class="btn-floating waves-effect waves-light btn-red red darken-1 move-btn-up right">X</button>
                     </div>
                     {% endfor %}
                 </div>
                 <div class="input-field col s12 l2 right">
-                    <button class="btn add_list_item waves-effect waves-light" type="button">
+                    <button class="btn add_list_item waves-effect waves-light btn-red red darken-1" type="button">
                         Add Ingredient
                     </button>
                 </div>
@@ -62,7 +62,7 @@
             <div class="row">
                 <h4>Method</h4>
                 <div class="input-field col s12">
-                    <i class="fas fa-list-ol amber-text text-lighten-1 prefix"></i>
+                    <i class="fas fa-list-ol red-text prefix"></i>
                     <textarea id="step_one" name="methods" class="materialize-textarea validate" required>
                         {{- recipe.methods[0] -}}
                     </textarea>
@@ -85,13 +85,13 @@
             </div>
             <div class="row">
                 <div class="input-field col s12 l6">
-                    <i class="fas fa-clock amber-text text-lighten-1 prefix"></i>
+                    <i class="fas fa-clock red-text prefix"></i>
                     <input id="prep_time" name="prep_time" type="number" min="1" max="600" class="validate" value="{{recipe.prep_time}}" required>
                     <label for="prep_time">Preparation Time / Minutes</label>
                 </div>
                 <div class="input-field col s12 l6">
                     <i class="prefix"></i>
-                    <input id="cook_time" name="cook_time" type="number" min="1" max="600" class="validate" value="{{recipe.cook_time}}" required>
+                    <input id="cook_time" name="cook_time" type="number" min="0" max="600" class="validate" value="{{recipe.cook_time}}" required>
                     <label for="cook_time">Cook Time / Minutes</label>
                 </div>
             </div>
@@ -120,22 +120,23 @@
                     <img class="responsive-img" src="{{ url_for('display_image', filename=recipe.recipe_image) }}" alt="{{image}}">
                 </div>
                 <div class="file-field new_img_to_upload input-field col s12 m8">
-                    <div id="image_upload_btn" class="btn right">
+                    <div id="image_upload_btn" class="btn waves-effect waves-light btn-red red darken-1 right">
                         <span>Upload Image</span>
                         <input type="file" name="recipe_image">
                     </div>
                     <div class="file-path-wrapper">
-                        <i class="fas fa-image amber-text text-lighten-1 prefix"></i>
+                        <i class="fas fa-image red-text prefix"></i>
                         <input id="image_upload_input" name="image_upload_input" class="file-path validate" type="text" value="{{recipe.recipe_image}}" placeholder="Upload your image">
                     </div>
                 </div>
             </div>
             <div class="row">
-                <div class="col s12 l10 center-align">
-                    <a href="{{ url_for('profile', username=session['user']) }}" class="btn-large waves-effect waves-light">
+
+                <div class="col s12 center-align">
+                    <a onclick="history.back();" href="#!" class="btn waves-effect waves-light btn-red red darken-1">
                         Cancel <i class="fas fa-times-circle right"></i>
                     </a>
-                    <button class="btn-large waves-effect waves-light" type="submit">
+                    <button class="btn waves-effect waves-light red darken-1 btn-red" type="submit">
                         Edit Recipe <i class="fas fa-edit right"></i>
                     </button>
                 </div>

@@ -8,28 +8,28 @@
             </div>
             <div class="row">
                 <div class="input-field col s12">
-                    <i class="fas fa-utensils amber-text text-lighten-1 prefix"></i>
+                    <i class="fas fa-utensils red-text prefix"></i>
                     <input id="product_name" name="product_name" type="text" value="{{ item.product_name}}" class="validate" required>
                     <label for="product_name">Item Name</label>
                 </div>
             </div>
             <div class="row">
                 <div class="input-field col s12">
-                    <i class="fas fa-utensils amber-text text-lighten-1 prefix"></i>
+                    <i class="fas fa-utensils red-text prefix"></i>
                     <input id="product_category" name="product_category" type="text" value="{{ item.product_category}}" class="validate" required>
                     <label for="product_category">Item Category</label>
                 </div>
             </div>
             <div class="row">
                 <div class="input-field col s12">
-                    <i class="fas fa-utensils amber-text text-lighten-1 prefix"></i>
+                    <i class="fas fa-utensils red-text prefix"></i>
                     <input id="product_image" name="product_image" type="text" value="{{ item.product_image}} class="validate" required>
                     <label for="product_image">Item Image URL</label>
                 </div>
             </div>
             <div class="row">
                 <div class="input-field col s12">
-                    <i class="fas fa-scroll amber-text text-lighten-1 prefix"></i>
+                    <i class="fas fa-scroll red-text prefix"></i>
                     <textarea id="description" name="description" class="materialize-textarea validate" required>
                         {{- item.description -}}
                     </textarea>
@@ -38,17 +38,17 @@
             </div>
             <div class="row">
                 <div class="input-field col s12 l6">
-                    <i class="fas fa-clock amber-text text-lighten-1 prefix"></i>
+                    <i class="fas fa-clock red-text prefix"></i>
                     <input id="price" name="price" type="number" min="0" step="0.01" value="{{ item.price}}" class="validate" required>
                     <label for="price">Item Price</label>
                 </div>
             </div>
             <div class="row">
                 <div class="col s12 center-align">
-                    <a href="{{ url_for('manage_products') }}" class="btn-large waves-effect waves-light">
+                    <a href="{{ url_for('profile', username=session['user']) }}" class="btn waves-effect waves-light btn-red red darken-1">
                         Cancel <i class="fas fa-times-circle right"></i>
                     </a>
-                    <button class="btn-large waves-effect waves-light" type="submit">
+                    <button class="btn waves-effect waves-light red darken-1 btn-red" type="submit">
                         Edit Item <i class="fas fa-file right"></i>
                     </button>
                 </div>

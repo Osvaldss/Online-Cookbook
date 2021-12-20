@@ -1,144 +1,119 @@
 {% extends "base.html" %}
 {% block content %}
-
-    {% if is_admin %}
-    <div class="row mb1">
-        <div class="col s4">
-                <img class="responsive-img" src="../static/images/avatar-bg.png"
-                    alt="avatar-image"><br />
-        </div>
-        <div class="col s8">
-            <h4>Personal information</h4>
-            <p>Username : {{username.capitalize()}} <span class="red-text">ADMIN</span></p>
-        </div>
+<div class="row mb1">
+    <div class="col s4 m3">
+        <img class="responsive-img" src="../static/images/avatar-bg.png" alt="avatar-image"><br />
     </div>
-    {% endif %}
-
-
-
-
-
-
-
-    {% if is_admin %}
-        <p>Hello Admin</p>
-        <div class="row">
-            <div class="col s12">
-                <ul class="tabs">
-                    <li class="tab col s4"><a class="active" href="#test1">Profile Overview</a></li>
-                    <li class="tab col s4"><a href="#test2">Your Recipes</a></li>
-                    <li class="tab col s4"><a href="#test3">Mange your products</a></li>
-                </ul>
+    <div class="col s8 m9">
+        <h4 class="section-hmargin">Personal information</h4>
+        <p>Username : {{username.capitalize()}}
+            {% if is_admin %}
+            <span class="red-text">ADMIN</span>
+            {% endif %}
+        </p>
+        <p>Account created on: {{creation_date}}</p>
+        {% if is_admin %}
+        <p>Items in the shop: {{count_items}}</p>
+        {% endif %}
+        <p>Total recipes on the page: {{count_recipes}}</p>
+        <p>Recipes created by you: {{count_recip}}</p>
+    </div>
+</div>
+<div class="row mb1 bcrumbs">
+    <h5 class="section-hmargin">Your total recipes: {{count_recip}}
+        <a href="{{ url_for('add_recipe') }}" class="right black-text"> <i class="fas fa-plus red-text"></i></i> ADD
+            RECIPE</a>
+    </h5>
+    <ul class="collapsible">
+        {% for recipe in recipes %}
+        <li>
+            <div class="collapsible-header">
+                <span class="left-align">{{recipe.recipe_name}} / Recipe category -- {{recipe.category_name}}</span>
             </div>
-            <div id="test1" class="col s12">
-                <div style="width:50px; height:50px; background: blue;">
-                    Cia avataras
+            <div class="row collapsible-body">
+                <div class="col s12 m3">
+                    <img class="responsive-img" src="{{ url_for('display_image', filename=recipe.recipe_image) }}"
+                        alt="{{recipe.recipe_name}}">
                 </div>
-                <h6>UserName</h6>
-                <p>current passwords</p>
-                <p>Item in store</p>
-            </div>
-            <div id="test2" class="row rm-bottom-gap valign-wrapper">
-                <div>
-                    <p>Placeholder for filter</p>
-                </div>
-                {% for recipe in recipes %}
-                    <div class="col s6 m3">
-                        <div class="card small responsive-size-profile hoverable">
-                                <div class="card-image">
-                                    <span class="delete-btn">
-                                        <a href="#modal1" class="waves-effect waves-light btn-small red darken-1 modal-trigger "><i class="fas fa-times-circle"></i> Delete</a>
-                                    </span>
-                                    <a href="{{ url_for('recipe_details', recipe_id=recipe._id)}}">
-                                        <img class="responsive-img" src="{{ url_for('display_image', filename=recipe.recipe_image) }}">
-                                        {% if recipe.recipe_image not in recipe_images %}
-                                            <p>No Image Available</p>
-                                        {% endif %}
-                                    </a>
-                                </div>
-                            <div class="card-content center-align recipe_edit_del_cont">
-                                <span class="truncate left-align">{{recipe.recipe_name}}</span>
-                                <strong><p class="left-align">{{recipe.recipe_add_time}}</p></strong>
-                                <div class="edit-btn">
-                                    <a href="{{ url_for('edit_recipe', recipe_id=recipe._id)}}" class="waves-effect waves-light btn-small"><i class="fas fa-edit"></i> Edit</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div id="modal1" class="modal">
-                            <div class="modal-content">
-                                <h4>Modal Header</h4>
-                                <p>A bunch of text</p>
-                            </div>
-                            <div class="modal-footer">
-                                <a href="{{ url_for('delete_recipe', recipe_id=recipe._id)}}" class="modal-close waves-effect waves-green btn-flat">Yes I confirm</a>
-                                <a href="#!" class="modal-close waves-effect waves-green btn-flat">No</a>
-                            </div>
-                        </div>
+                <div class="col s12 m9">
+                    <p class="left-align">{{recipe.recipe_description}}</p>
+                    <div>
+                        <span class="edit-btn">
+                            <a href="{{ url_for('edit_recipe', recipe_id=recipe._id)}}"
+                                class="red waves-effect waves-light btn-red darken-1 btn-small"><i class="fas fa-edit"></i> EDIT</a>
+                        </span>
+                        <span>
+                            <a href="#modal1" class="btn-small waves-effect waves-light btn-red red darken-1 modal-trigger "><i
+                                    class="fas fa-times-circle"></i> DELETE</a>
+                        </span>
                     </div>
-                {% endfor %}
+                </div>
             </div>
-            <div id="test3" class="col s12">
-                    <a href="{{ url_for('manage_products') }}" class="btn-large waves-effect waves-light">
-                        Mange your products here -> <i class="fas fa-file right"></i></a>
+        </li>
+        <div id="modal1" class="modal">
+            <div class="modal-content">
+                <h4>Modal Header</h4>
+                <p>A bunch of text</p>
+            </div>
+            <div class="modal-footer">
+                <a href="{{ url_for('delete_recipe', recipe_id=recipe._id)}}"
+                    class="modal-close waves-effect waves-green btn-flat">Yes remove this Item</a>
+                <a href="#!" class="modal-close waves-effect waves-green btn-flat">No</a>
             </div>
         </div>
-    {% else %}
-        <div class="row">
-            <div class="col s12">
-                <ul class="tabs">
-                    <li class="tab col s6"><a class="active" href="#test1">Profile Overview</a></li>
-                    <li class="tab col s6"><a href="#test2">Your Recipes {{count_recip}}</a></li>
-                </ul>
+        {% endfor %}
+    </ul>
+</div>
+{% if is_admin %}
+<div class="row mb1 bcrumbs">
+    <h5 class="section-hmargin">
+        Total Items: {{count_items}}  
+        <a href="{{ url_for('add_item') }}" class="right black-text"> <i class="fas fa-plus red-text"></i> ADD ITEM</a>
+    </h5>
+    <ul class="collapsible">
+        {% for item in kitchen_tools %}
+        <li>
+            <div class="collapsible-header">
+                <span class="left-align">{{item.product_name}} -<strong> {{item.price}} euro</strong></span>
             </div>
-            <div id="test1" class="col s12">
-                <div style="width:50px; height:50px; background: blue;">
-                    Cia avataras
+            <div class="row collapsible-body">
+                <div class="col s3">
+                    <img class="responsive-img" src="{{item.product_image }}" alt="{{item.product_name}}">
                 </div>
-                <h6>Username</h6>
-                <h6>You recipe library: {{count_recip}}</h6>
-                <h6>Account created</h6>
-            </div>
-            <div id="test2" class="row rm-bottom-gap valign-wrapper">
-                <div>
-                    <p>Placeholder for filter</p>
-                </div>
-                {% for recipe in recipes %}
-                    <div class="col s6 m3">
-                        <div class="card small responsive-size-profile hoverable">
-                                <div class="card-image">
-                                    <span class="delete-btn">
-                                        <a href="#modal1" class="waves-effect waves-light btn-small red darken-1 modal-trigger "><i class="fas fa-times-circle"></i> Delete</a>
-                                    </span>
-                                    <a href="{{ url_for('recipe_details', recipe_id=recipe._id)}}">
-                                        <img class="responsive-img" src="{{ url_for('display_image', filename=recipe.recipe_image) }}">
-                                        {% if recipe.recipe_image not in recipe_images %}
-                                            <p>No Image Available</p>
-                                        {% endif %}
-                                    </a>
-                                </div>
-                            <div class="card-content center-align recipe_edit_del_cont">
-                                <span class="truncate left-align">{{recipe.recipe_name}}</span>
-                                <strong><p class="left-align">{{recipe.recipe_add_time}}</p></strong>
-                                <div class="edit-btn">
-                                    <a href="{{ url_for('edit_recipe', recipe_id=recipe._id)}}" class="waves-effect waves-light btn-small"><i class="fas fa-edit"></i> Edit</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div id="modal1" class="modal">
-                            <div class="modal-content">
-                                <h4>Modal Header</h4>
-                                <p>A bunch of text</p>
-                            </div>
-                            <div class="modal-footer">
-                                <a href="{{ url_for('delete_recipe', recipe_id=recipe._id)}}" class="modal-close waves-effect waves-green btn-flat">Yes I confirm</a>
-                                <a href="#!" class="modal-close waves-effect waves-green btn-flat">No</a>
-                            </div>
-                        </div>
+                <div class="col s9">
+                    <p class="left-align">{{item.description}}</p>
+                    <div> 
+                        <span class="edit-btn">
+                            <a href="{{ url_for('edit_item', item_id=item._id)}}"
+                                class="btn-small waves-effect waves-light btn-red red darken-1"><i class="fas fa-edit"></i> Edit</a>
+                        </span>
+                        <span>
+                            <a href="#modal1" class="btn-small waves-effect waves-light btn-red red darken-1 modal-trigger "><i
+                                    class="fas fa-times-circle"></i> Delete</a>
+                        </span>
                     </div>
-                {% endfor %}
+                </div>
+            </div>
+        </li>
+        <div id="modal1" class="modal">
+            <div class="modal-content">
+                <h4>Modal Header</h4>
+                <p>A bunch of text</p>
+            </div>
+            <div class="modal-footer">
+                <a href="{{ url_for('delete_item', item_id=item._id)}}"
+                    class="modal-close waves-effect waves-green btn-flat">Yes remove this Item</a>
+                <a href="#!" class="modal-close waves-effect waves-green btn-flat">No</a>
             </div>
         </div>
-    {% endif %}
+
+        {% endfor %}
+    </ul>
+</div>
+
+{% endif %}
+
+
 
 
 {% endblock %}

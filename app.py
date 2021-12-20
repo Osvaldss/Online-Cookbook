@@ -124,13 +124,6 @@ def get_recipe():
     all_recipes = len(list(mongo.db.recipes.find()))
     categories = mongo.db.categories.find().sort("category_name", 1)
     categories_list = list(mongo.db.categories.find())
-    # dishes_count = len(list(mongo.db.recipes.find({'category_name': 'Dishes'})))
-    # soup_count = len(list(mongo.db.recipes.find({'category_name': 'Soup'})))
-    # easy_count = len(list(mongo.db.recipes.find({'category_name': 'Easy'})))
-    # vegan_count = len(list(mongo.db.recipes.find({'category_name': 'Vegan'})))
-    # vegetarian_count = len(list(mongo.db.recipes.find({'category_name': 'Vegetarian'})))
-    # print('skaiciuoju sarasa -------------> ', dishes_count, soup_count, easy_count, vegan_count, vegetarian_count)
-    # categ = request.form.get("category_filter")
     recipe_dict = []
     for recipe in recipes_list:
         for key, value in recipe.items():
@@ -156,95 +149,7 @@ def get_recipe():
             new_dict[recipe] = 0
         new_dict[recipe] += 1
     print('Neeeeeeeeeeeeeeeeeeeew', new_dict)
-
-
-
-#  for letter in word:
-# ...     if letter not in counter:
-# ...         counter[letter] = 0
-# ...     counter[letter] += 1
-
-
-    # count_recip = len(list(mongo.db.recipes.find({'category_name': categ})))
-
-
-    # sarasas = {}
-    # for dic in categories_list:
-    #     print('loooooooooooooooopinam tarp kategoriju')
-    #     for key, value in dic.items():
-    #         if key == 'category_name':
-    #             if value not in sarasas:
-    #                 sarasas[value] = int(0)
-    #                 print('mano sarasas', sarasas)
-
-    # new_sarasas = {}
-    # for key_cat, value_cat in sarasas.items():
-    #     print(key_cat, value_cat)
-    #     for recipe in recipes_list:
-    #         print('ieksom receptu')
-    #         print()
-    #         for key, value in recipe.items():
-    #             if key == 'category_name':
-    #                 if value == key_cat:
-    #                     print('Lyginu ------------->', value, 'SU', key_cat)
-    #                     print('value_cat - reiksme -------------------->', key_cat)
-    #                     value_cat = value_cat + 1
-    #                     new_sarasas[key_cat] = value_cat
-    # print('Naujai kurtas sarasas -------------------------------------> ', new_sarasas)
-
-
-
-                        # for keyc, valuec in sarasas.items():
-                        #     if  == keyc:
-                        #         sarasas[keyc] += 1
-                            # print(sarasas)
-# dictionary1 = {"a": 1, "b": 2}
-# dictionary2 = {"a": 3, "b": 2}
-# common_pairs = dict()
-# for key in dictionary1:
-#     if (key in dictionary2 and dictionary1[key] == dictionary2[key]):
-#         common_pairs[key] = dictionary1[key]
-# print(common_pairs)
-
-
-    # category_counter_dic = {}
-    # for dic in categories_list:
-    #     print('looooooooooooooopinam')
-    #     for key, value in dic.items():
-    #         if key == 'category_name':
-    #             if key not in category_counter_dic:
-    #                 category_counter_dic[key] = value
-    #             print(key, '->', value)
-    #             for rec_dic in recipes_list:
-    #                 print('loooooooooooooooopinam tarp receptu')
-    #                 for keyr, valuer in rec_dic.items():
-    #                     if keyr == 'category_name':
-    #                         print('Recepto indeksas- ', keyr, 'Reiksme- ', valuer)
-    #                         if value == valuer:
-    #                             number = number + 1
-    #         print('skaicius kiek atitiko : ', number)
-    # print('cia kategoriju sarasas ', category_counter_dic)
-                #         print('receopto indeksas', keyr, '->', 'recepto value', valuer)
-
-    # cat = []
-    # for category in categories_list:
-    #     cat.append(category)
-    # categ = categories_list.get('category_name')
     recipe_images = os.listdir('static/uploads')
-    # recip_count = 0
-    # print('cia yra kategorijus listas nekurtas')
-    # print()
-    # print(categories_list)
-    # print('cia  yra receptu listas')
-    # print()
-    # print(recipes_list)
-    # print("kiek yra yrasu recipe liste")
-    # print(len(recipes_list))
-    # for category_name in categories_list:
-    #     for recipe in recipes:
-    #         if categories_list.category_name == recipe.category_name:
-    #             recip_count = recip_count + 1
-    #             print(recip_count)
     return render_template(
         "recipes.html", recipes=recipes,
         recipe_images=recipe_images, all_recipes=all_recipes,
@@ -271,8 +176,11 @@ def item_details(item_id):
 def recipe_details(recipe_id):
     '''Get a recipe by its' ID'''
     recipes = mongo.db.recipes.find_one({'_id': ObjectId(recipe_id)})
+    current_user = mongo.db.users.find_one(
+                {"username": session['user']})
+    is_admin = current_user.get("isAdmin")
     return render_template(
-                    "recipe_details.html", recipes=recipes)
+                    "recipe_details.html", recipes=recipes, is_admin=is_admin)
 
 
 @app.route("/manage_products")
@@ -309,10 +217,12 @@ def register():
             flash("Your password didn't match")
             return redirect(url_for("register"))
 
+        medium_date = datetime.now()
         new_user = {
             "username": request.form.get("username").lower(),
             "password": generate_password_hash(request.form.get('password')),
-            "isAdmin": False
+            "isAdmin": False,
+            "acc_created": medium_date.strftime('%m/%d/%Y %H:%M')
         }
         mongo.db.users.insert_one(new_user)
 
@@ -361,12 +271,16 @@ def profile(username):
                 {"recipe_by": session['user']}).sort('recipe_add_time', -1)
             count_recip = len(list(mongo.db.recipes.find(
                 {"recipe_by": session['user']})))
+            count_items = len(list(mongo.db.kitchen_tools.find()))
+            count_recipes = len(list(mongo.db.recipes.find()))
             print(count_recip)
             kitchen_tools = mongo.db.kitchen_tools.find()
             recipe_images = os.listdir('static/uploads')
             current_user = mongo.db.users.find_one(
                 {"username": session['user']})
             is_admin = current_user.get("isAdmin")
+            creation_date = current_user.get("acc_created")
+            print(creation_date)
             if is_admin:
                 print(f'Prisijunge Adminas {username}')
             else:
@@ -374,7 +288,9 @@ def profile(username):
             return render_template(
                 "profile.html", username=username, recipes=recipes,
                 recipe_images=recipe_images, count_recip=count_recip,
-                kitchen_tools=kitchen_tools, is_admin=is_admin)
+                kitchen_tools=kitchen_tools, is_admin=is_admin,
+                count_items=count_items, count_recipes= count_recipes,
+                 creation_date=creation_date)
     except:
         return redirect(url_for("login"))
     return redirect(url_for("login"))
@@ -473,7 +389,7 @@ def edit_item(item_id):
         mongo.db.kitchen_tools.update_one(
             {"_id": ObjectId(item_id)}, {"$set": update_item})
         flash("Item Was Successfully Updated")
-        return redirect(url_for("manage_products"))
+        return redirect(url_for("profile", username=session["user"]))
     item = mongo.db.kitchen_tools.find_one({"_id": ObjectId(item_id)})
     return render_template(
             "edit_item.html", item=item)
@@ -500,7 +416,7 @@ def delete_item(item_id):
     '''Delete an item function from the list'''
     mongo.db.kitchen_tools.remove({"_id": ObjectId(item_id)})
     flash("Item Was Successfully Deleted")
-    return redirect(url_for("manage_products"))
+    return redirect(url_for("profile", username=session["user"]))
 
 
 @app.route("/logout")
@@ -571,7 +487,7 @@ def add_item():
         }
         mongo.db.kitchen_tools.insert_one(kitchen_tools)
         flash("Item Was Successfully Added")
-        return redirect(url_for("manage_products"))
+        return redirect(url_for("profile", username=session["user"]))
     kitchen_tools = mongo.db.kitchen_tools.find().sort("product_name", 1)
     return render_template("add_item.html", kitchen_tools=kitchen_tools)
 

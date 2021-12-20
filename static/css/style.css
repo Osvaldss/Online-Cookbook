@@ -199,6 +199,10 @@ ul.follow-us-list li i:focus {
     font-weight: 600;
 }
 
+.bcrumbs a:hover,
+.bcrumbs a:focus {
+    text-decoration: underline;  
+}
 .nav-wrapper.bcrumbs a:hover,
 .nav-wrapper.bcrumbs a:focus {
     text-decoration: underline;
@@ -225,6 +229,10 @@ ul.follow-us-list li i:focus {
     font-size: 16px;
     text-transform: uppercase;
     padding: 0px 15px 0;
+}
+
+.ingr_input_cont > .input-field {
+    margin: 0;
 }
 
 li.ingredient-list,
@@ -311,7 +319,7 @@ li.method-list {
 }
 
 .move-btn-up {
-    margin-top: -80px;
+    margin-top: -55px;
 }
 
 .page-footer {

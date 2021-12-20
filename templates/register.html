@@ -8,7 +8,7 @@
         <div class="card-panel">
             <div class="row">
                 <div class="input-field col s12">
-                    <i class="fas fa-utensils amber-text text-lighten-1 prefix"></i>
+                    <i class="fas fa-utensils red-text prefix"></i>
                     <input id="username" minlength="5" maxlength="15" name="username" type="text" class="validate"
                         pattern="^[a-zA-Z0-9]{5,20}$" title="Username has to be between 5 - 20 characters long"
                         required>
@@ -17,7 +17,7 @@
             </div>
             <div class="row">
                 <div class="input-field col s12">
-                    <i class="fas fa-key amber-text text-lighten-1 prefix"></i>
+                    <i class="fas fa-key red-text prefix"></i>
                     <input id="password" minlength="5" name="password" type="password" class="validate"
                         pattern="^[a-zA-Z0-9]{6,}$" title="Must contain at least 6 or more characters" required>
                     <label for="password">Password</label>
@@ -25,14 +25,14 @@
             </div>
             <div class="row">
                 <div class="input-field col s12">
-                    <i class="fas fa-key amber-text text-lighten-1 prefix"></i>
+                    <i class="fas fa-key red-text prefix"></i>
                     <input id="repeat-password" minlength="5" name="repeat-password" type="password" class="validate"
                         pattern="^[a-zA-Z0-9]{6,}$" title="Must contain at least 6 or more characters" required>
                     <label for="repeat-password">Repeat Password</label>
                 </div>
             </div>
             <div class="row">
-                <button type="submit" class=" col s12 btn-large light-green">
+                <button type="submit" class=" col s12 btn-large  red darken-1 btn-red waves-effect waves-light">
                     Create Account
                 </button>
             </div>
@@ -40,7 +40,7 @@
 </div>
 <div class="row">
     <div class="col s12">
-        <p class="center-align">
+        <p class="center-align bcrumbs">
             Already Have Account? <a href="{{ url_for('login')}}" class="grey-text text-darken-4">Log In</a>
         </p>
     </div>

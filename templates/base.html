@@ -92,12 +92,14 @@
         {% endblock %}
     </main>
     <footer class="red darken-1">
-        <div class="valign-wrapper footer-join">
-            <a href="{{ url_for('register')}}" class="white-text">
-                <i class="fas fa-heart"></i>
-                Join Us Now By Creating Your Account
-            </a>
-        </div>
+        {% if not session.user %}
+            <div class="valign-wrapper footer-join">
+                <a href="{{ url_for('register')}}" class="white-text">
+                    <i class="fas fa-heart"></i>
+                    Join Us Now By Creating Your Account
+                </a>
+            </div>
+        {% endif %}
         <div class="container">
             <div class="row">
                 <div class="col l4 s12">

@@ -66,7 +66,7 @@ function addIngList() {
     input_html += '<input type="text" name="ingredients" class="validate ingr-items" value="' + ingredients_val + '" required>';
     input_html += '</div>'
     input_html += '<div class="input-field s12 right">'
-    input_html += '<button id="remove_ingr_input" type="button" class="btn-floating move-btn-up right">X</button>';
+    input_html += '<button id="remove_ingr_input" type="button" class="btn-floating move-btn-up waves-effect waves-light btn-red red darken-1 right">X</button>';
     input_html += '</div>'
     if ($('#ingredients_add').val() != "" && ingrd_input_count.length <= 20) {
       $('.ingr_input_cont').append(input_html);
