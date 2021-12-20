@@ -175,12 +175,18 @@ def item_details(item_id):
 @app.route("/recipe_details/<recipe_id>")
 def recipe_details(recipe_id):
     '''Get a recipe by its' ID'''
-    recipes = mongo.db.recipes.find_one({'_id': ObjectId(recipe_id)})
-    current_user = mongo.db.users.find_one(
-                {"username": session['user']})
-    is_admin = current_user.get("isAdmin")
-    return render_template(
+    try:
+        recipes = mongo.db.recipes.find_one({'_id': ObjectId(recipe_id)})
+        if session['user']:
+            username = mongo.db.users.find_one(
+                {"username": session["user"]})["username"]
+            current_user = mongo.db.users.find_one({"username": session['user']})
+            is_admin = current_user.get("isAdmin")
+        return render_template(
                     "recipe_details.html", recipes=recipes, is_admin=is_admin)
+    except:
+        return render_template(
+                    "recipe_details.html", recipes=recipes)
 
 
 @app.route("/manage_products")
