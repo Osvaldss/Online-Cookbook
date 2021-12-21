@@ -47,19 +47,19 @@
         <div class="card small responsive-size hoverable">
             <a href="{{ url_for('recipe_details', recipe_id=recipe._id)}}">
                 <div class="card-image">
-                    <img class="responsive-img" src="{{ url_for('display_image', filename=recipe.recipe_image) }}">
+                    <img class="responsive-img" src="{{ recipe.recipe_image}}">
                 </div>
             </a>
             <div class="card-content center-align">
                 <span class="title-font truncate">{{recipe.recipe_name}}</span>
             </div>
-            <div class="card-action">
+            <div class="card-action small-padding">
                 <div class="divider"></div>
-                <span class="left col s6 l12 xl6">
+                <span class="left">
                     <i class="fas fa-utensils"></i>
                     <strong>{{recipe.category_name}}</strong>
                 </span>
-                <span class="right col s6 l12 xl6">
+                <span class="right">
                     <i class="far fa-clock"></i>
                     <strong>{{recipe.prep_time + recipe.cook_time}} min</strong>
                 </span>

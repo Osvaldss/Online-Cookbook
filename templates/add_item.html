@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
     {% if session.user %}
-    <h2 class="header">Add New Product</h2>
+    <h3 class="left-align section-hmargin">New Item</h3>
 
     <div class="row card-panel">
         <form class="" method="POST" action="{{ url_for('add_item')}}">
@@ -55,8 +55,8 @@
         </form>
     </div>
     {% else %}
-    <div>
-        <strong>You need to be Log In</strong>
+    <div class="center-align valign-wrapper">
+        <h4 class="red-text">You Have To Be Logged-In To Perform This Task</h4>
     </div>
     {% endif%}
 

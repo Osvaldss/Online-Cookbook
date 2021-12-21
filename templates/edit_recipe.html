@@ -2,7 +2,8 @@
 {% block content %}
 
     {% if session.user %}
-    <h2 class="header">Editing Your Recipe</h2>
+    <h3 class="left-align section-hmargin"><span class="bolder-text-part red-text text-darken-1">Editing</span>
+        <span>{{recipe.recipe_name}}</span></h3>
 
     <div class="row card-panel">
         <form class="" method="POST" action="{{ url_for('edit_recipe', recipe_id=recipe._id)}}" enctype="multipart/form-data">
@@ -95,43 +96,25 @@
                     <label for="cook_time">Cook Time / Minutes</label>
                 </div>
             </div>
-            <!-- <div class="row">
-                <div class="file-field input-field col s6">
-                    <label>
-                        <input id="check_to_upload_image" name="check_to_upload_image" type="checkbox" />
-                        <span>Use same image</span>
-                    </label>
-                </div>
-            </div> -->
             <div  class="row">
                 <div class="col s12 m4">
                     <label>
                         <input id="check_to_upload_image" name="check_to_upload_image" type="checkbox" />
-                        <span>Use same image</span>
+                        <span class="black-text">Use same image</span>
                     </label>
-                    <!-- <div class="current_img center-align ">
-                        <img class="responsive-img" src="{{ url_for('display_image', filename=recipe.recipe_image) }}" alt="{{image}}">
-                    </div> -->
                 </div>
-                <!-- <div class="current_img center-align col s12 m4">
-                    <img class="responsive-img" src="{{ url_for('display_image', filename=recipe.recipe_image) }}" alt="{{image}}">
-                </div> -->
                 <div class="current_img center-align col s12 m8">
-                    <img class="responsive-img" src="{{ url_for('display_image', filename=recipe.recipe_image) }}" alt="{{image}}">
+                    <img class="responsive-img" src="{{recipe.recipe_image}}" alt="{{recipe.recipe_name}}">
                 </div>
-                <div class="file-field new_img_to_upload input-field col s12 m8">
-                    <div id="image_upload_btn" class="btn waves-effect waves-light btn-red red darken-1 right">
-                        <span>Upload Image</span>
-                        <input type="file" name="recipe_image">
-                    </div>
-                    <div class="file-path-wrapper">
+                <div class="row m0">
+                    <div class="input-field col s12">
                         <i class="fas fa-image red-text prefix"></i>
-                        <input id="image_upload_input" name="image_upload_input" class="file-path validate" type="text" value="{{recipe.recipe_image}}" placeholder="Upload your image">
+                        <input id="recipe_image" name="recipe_image" type="text" value="{{recipe.recipe_image}}" class="validate" required>
+                        <label for="recipe_image">Recipe Image URL</label>
                     </div>
                 </div>
             </div>
             <div class="row">
-
                 <div class="col s12 center-align">
                     <a onclick="history.back();" href="#!" class="btn waves-effect waves-light btn-red red darken-1">
                         Cancel <i class="fas fa-times-circle right"></i>
@@ -144,8 +127,8 @@
         </form>
     </div>
     {% else %}
-        <div>
-            <strong>You need to Log In</strong>
+        <div class="center-align valign-wrapper">
+            <h4 class="red-text">You Have To Be Logged-In To Perform This Task</h4>
         </div>
     {% endif %}
 

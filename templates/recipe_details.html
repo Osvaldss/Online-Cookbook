@@ -20,7 +20,7 @@
 <div class="divider"></div>
 <div class="row rm-bottom-gap">
     <div class="col s12 m4">
-        <img class="responsive-img recipe_details" src="{{ url_for('display_image', filename=recipes.recipe_image) }}"
+        <img class="responsive-img recipe_details" src="{{ recipes.recipe_image }}"
             alt="{{recipes.recipe_name}}"><br />
     </div>
     <div class="col s12 m8">
@@ -36,13 +36,13 @@
             </div>
             <div id="modal1" class="modal">
                 <div class="modal-content">
-                    <h4>Modal Header</h4>
-                    <p>A bunch of text</p>
+                    <h5>Are you sure you want to delete "{{recipes.recipe_name}}"?</h5>
+                    <p>This item will be deleted immediately. You can not undo this action.</p>
                 </div>
                 <div class="modal-footer">
                     <a href="{{ url_for('delete_recipe', recipe_id=recipes._id)}}"
-                        class="modal-close waves-effect waves-green btn-flat">Yes remove this Item</a>
-                    <a href="#!" class="modal-close waves-effect waves-green btn-flat">No</a>
+                        class="modal-close waves-effect waves-light btn-red red darken-1 btn-small">Yes, Delete It</a>
+                    <a href="#!" class="modal-close waves-effect waves-light btn-red green darken-1 btn-small">No</a>
                 </div>
             </div>
             {% elif session.user == recipes.recipe_by %}
@@ -56,13 +56,13 @@
             </div>
             <div id="modal1" class="modal">
                 <div class="modal-content">
-                    <h4>Modal Header</h4>
-                    <p>A bunch of text</p>
+                    <h5>Are you sure you want to delete "{{recipes.recipe_name}}"?</h5>
+                    <p>This item will be deleted immediately. You can not undo this action.</p>
                 </div>
                 <div class="modal-footer">
                     <a href="{{ url_for('delete_recipe', recipe_id=recipes._id)}}"
-                        class="modal-close waves-effect waves-green btn-flat">Yes remove this Item</a>
-                    <a href="#!" class="modal-close waves-effect waves-green btn-flat">No</a>
+                        class="modal-close waves-effect waves-light btn-red red darken-1 btn-small">Yes, Delete It</a>
+                    <a href="#!" class="modal-close waves-effect waves-light btn-red green darken-1 btn-small">No</a>
                 </div>
             </div>
             {% endif %}

@@ -70,6 +70,10 @@ nav .nav-wrapper a.icon-line-height{
     margin: 15px 0;
 }
 
+.profile-hmargin {
+    margin: 0 0 15px;
+}
+
 h4.section-hmargin {
     margin: 0;
 }
@@ -88,12 +92,17 @@ h4.section-hmargin {
 
 .col.text-contrast {
     padding: 15px;
-    background-color: rgba(122, 3, 3, 0.3);
+    background-color: rgba(0, 0, 0, 0.41);
     border-radius: 5px;
+    margin-top: 6vh;
+}
+
+p.big-text {
+    font-size: 1.2rem;
 }
 
 .col.text-contrast h2 {
-    margin: 0 0 30px;
+    margin: 0 0 20px;
 }
 
 .col.text-contrast .create-acc {
@@ -192,7 +201,8 @@ ul.follow-us-list li i:focus {
     background-color: #f44336;
     justify-content: center;
 }
-
+.email-link a:hover,
+.email-link a:focus,
 .footer-join a:hover,
 .footer-join a:focus {
     text-decoration: underline;
@@ -252,6 +262,10 @@ li.method-list {
     border-bottom: 1px solid rgba(51, 105, 30, 0.5);
     border-top: none;
     padding: 5px 0;
+}
+
+.card-action.small-padding {
+    padding: 5px 10px;
 }
 
 .card.small .card-image {
@@ -398,6 +412,18 @@ li.method-list {
     /* .card.small .card-image {
         max-height: 70%;
     } */
+}
+
+@media only screen and (max-width: 600px) and (orientation: landscape) {
+    p.big-text {
+        font-size: 1rem;
+    }
+    
+    .col.text-contrast h2 {
+        margin: 0 0 10px;
+        font-size: 2rem;
+    }
+
 }
 
 @media only screen and (max-width: 993px) and (orientation: landscape) {

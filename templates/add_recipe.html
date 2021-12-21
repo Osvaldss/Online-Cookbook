@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
     {% if session.user %}
-    <h2 class="header">Add Your Recipe here</h2>
+    <h3 class="left-align section-hmargin">New Recipe Form</h3>
 
     <div class="row card-panel">
         <form class="" method="POST" action="{{ url_for('add_recipe')}}" enctype="multipart/form-data">
@@ -75,15 +75,10 @@
                 </div>
             </div>
             <div class="row m0">
-                <div class="file-field input-field col s12">
-                    <div class="btn waves-effect waves-light btn-red red darken-1 right">
-                        <span>Upload Image</span>
-                        <input type="file" name="recipe_image" required>
-                    </div>
-                    <div class="file-path-wrapper">
-                        <i class="fas fa-image red-text prefix"></i>
-                        <input class="file-path validate" type="text" placeholder="Upload your image">
-                    </div>
+                <div class="input-field col s12">
+                    <i class="fas fa-image red-text prefix"></i>
+                    <input id="recipe_image" name="recipe_image" type="text" class="validate" required>
+                    <label for="recipe_image">Recipe Image URL</label>
                 </div>
             </div>
             <div class="row m0">
@@ -99,9 +94,9 @@
         </form>
     </div>
     {% else %}
-        <div>
-            <strong>You need to Log In</strong>
-        </div>
+    <div class="center-align valign-wrapper">
+        <h4 class="red-text">You Have To Be Logged-In To Perform This Task</h4>
+    </div>
     {% endif %}
 
 

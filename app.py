@@ -1,31 +1,20 @@
 import os
 from datetime import datetime
 from flask import (
-    Flask, flash, render_template, send_from_directory,
-    redirect, request, session, url_for)
+    Flask, flash, render_template, redirect,
+    request, session, url_for)
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
 from werkzeug.security import generate_password_hash, check_password_hash
-from werkzeug.utils import secure_filename
 if os.path.exists('env.py'):
     import env
 
 
 app = Flask(__name__)
-UPLOAD_FOLDER = 'static/uploads'
-ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 
 app.config["MONGO_DBNAME"] = os.environ.get("MONGO_DBNAME")
 app.config["MONGO_URI"] = os.environ.get("MONGO_URI")
-app.config['MAX_CONTENT_LENGTH'] = 16 * 1000 * 1000
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.secret_key = os.environ.get("SECRET_KEY")
-
-
-def allowed_file(filename):
-    '''Check if uploaded image extension is in Allowed_xtensions list'''
-    return '.' in filename and filename.rsplit(
-        '.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
 mongo = PyMongo(app)
@@ -57,11 +46,10 @@ def search_recipes():
     '''Search function only on recipes page'''
     query = request.form.get("requests")
     recipes = mongo.db.recipes.find({"$text": {"$search": query}})
-    recipe_images = os.listdir('static/uploads')
     all_recipes = len(list(mongo.db.recipes.find()))
     return render_template(
-        "recipes.html", recipes=recipes, all_recipes=all_recipes,
-         recipe_images=recipe_images, query=query)
+        "recipes.html", recipes=recipes,
+         all_recipes=all_recipes, query=query)
 
 
 @app.route('/search_items', methods=["GET", "POST"])
@@ -82,8 +70,8 @@ def filter_category():
     categories = mongo.db.categories.find().sort("category_name", 1)
     categories_list = list(mongo.db.categories.find())
     all_recipes = len(list(mongo.db.recipes.find()))
-    recipe_images = os.listdir('static/uploads')
 
+    # Create a list of recipe collection only from category_name
     recipe_dict = []
     for recipe in recipes_list:
         for key, value in recipe.items():
@@ -91,6 +79,7 @@ def filter_category():
                 recipe_dict.append(value)
         print(recipe_dict)
 
+    # Create a list form category collection using only category_name
     category_it_list = []
     for dic in categories_list:
         for key, value in dic.items():
@@ -99,20 +88,23 @@ def filter_category():
                     category_it_list.append(value)
         print('mano sarasas', category_it_list)
 
+    # Create a dict 
+    # dict kyes will be category_it_list items
+    # dict value will count how many same categroy recipes we have
+    # in recipe collection.
+
     new_dict = {}
     for item in category_it_list:
         if item not in new_dict:
             new_dict[item] = 0
-    print('Neeeeeeeeeeeeeeeeeeeew_dict', new_dict)
     for recipe in recipe_dict:
         if recipe not in new_dict:
             new_dict[recipe] = 0
         new_dict[recipe] += 1
-    print('Neeeeeeeeeeeeeeeeeeeew', new_dict)
 
     return render_template(
         "recipes.html", recipes=recipes,
-        categories=categories, recipe_images=recipe_images,
+        categories=categories, 
         new_dict=new_dict, all_recipes=all_recipes)
 
 
@@ -124,6 +116,8 @@ def get_recipe():
     all_recipes = len(list(mongo.db.recipes.find()))
     categories = mongo.db.categories.find().sort("category_name", 1)
     categories_list = list(mongo.db.categories.find())
+    
+    # Create a list of recipe collection only from category_name
     recipe_dict = []
     for recipe in recipes_list:
         for key, value in recipe.items():
@@ -131,6 +125,7 @@ def get_recipe():
                 recipe_dict.append(value)
         print(recipe_dict)
 
+    # Create a list form category collection using only category_name
     category_it_list = []
     for dic in categories_list:
         for key, value in dic.items():
@@ -138,21 +133,22 @@ def get_recipe():
                 if value not in category_it_list:
                     category_it_list.append(value)
         print('mano sarasas', category_it_list)
-    
+
+    # Create a dict 
+    # dict kyes will be category_it_list items
+    # dict value will count how many same categroy recipes we have
+    # in recipe collection
     new_dict = {}
     for item in category_it_list:
         if item not in new_dict:
             new_dict[item] = 0
-    print('Neeeeeeeeeeeeeeeeeeeew_dict', new_dict)
     for recipe in recipe_dict:
         if recipe not in new_dict:
             new_dict[recipe] = 0
         new_dict[recipe] += 1
-    print('Neeeeeeeeeeeeeeeeeeeew', new_dict)
-    recipe_images = os.listdir('static/uploads')
+
     return render_template(
-        "recipes.html", recipes=recipes,
-        recipe_images=recipe_images, all_recipes=all_recipes,
+        "recipes.html", recipes=recipes, all_recipes=all_recipes,
         categories=categories, new_dict=new_dict)
 
 
@@ -178,8 +174,7 @@ def recipe_details(recipe_id):
     try:
         recipes = mongo.db.recipes.find_one({'_id': ObjectId(recipe_id)})
         if session['user']:
-            username = mongo.db.users.find_one(
-                {"username": session["user"]})["username"]
+            # username = mongo.db.users.find_one({"username": session["user"]})["username"]
             current_user = mongo.db.users.find_one({"username": session['user']})
             is_admin = current_user.get("isAdmin")
         return render_template(
@@ -187,23 +182,6 @@ def recipe_details(recipe_id):
     except:
         return render_template(
                     "recipe_details.html", recipes=recipes)
-
-
-@app.route("/manage_products")
-def manage_products():
-    '''Page with a list of all products to manage(add/edit/delete).'''
-    kitchen_tools = mongo.db.kitchen_tools.find().sort("product_name", 1)
-    return render_template(
-                    "manage_products.html", kitchen_tools=kitchen_tools)
-
-
-@app.route("/display_image/<filename>")
-def display_image(filename):
-    # cia testuoju kaip vaizduojamas ikeltas image
-    '''Page with a uploaded images.'''
-    # return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
-    return redirect(url_for(
-        'static', filename='uploads/' + filename), code=301)
 
 
 @app.route("/register", methods=["GET", "POST"])
@@ -279,24 +257,15 @@ def profile(username):
                 {"recipe_by": session['user']})))
             count_items = len(list(mongo.db.kitchen_tools.find()))
             count_recipes = len(list(mongo.db.recipes.find()))
-            print(count_recip)
             kitchen_tools = mongo.db.kitchen_tools.find()
-            recipe_images = os.listdir('static/uploads')
             current_user = mongo.db.users.find_one(
                 {"username": session['user']})
             is_admin = current_user.get("isAdmin")
             creation_date = current_user.get("acc_created")
-            print(creation_date)
-            if is_admin:
-                print(f'Prisijunge Adminas {username}')
-            else:
-                print("Prisijunge neAdminas")
             return render_template(
                 "profile.html", username=username, recipes=recipes,
-                recipe_images=recipe_images, count_recip=count_recip,
-                kitchen_tools=kitchen_tools, is_admin=is_admin,
-                count_items=count_items, count_recipes= count_recipes,
-                 creation_date=creation_date)
+                count_recip=count_recip, kitchen_tools=kitchen_tools,
+                is_admin=is_admin, count_items=count_items, count_recipes=count_recipes, creation_date=creation_date)
     except:
         return redirect(url_for("login"))
     return redirect(url_for("login"))
@@ -306,39 +275,7 @@ def profile(username):
 def edit_recipe(recipe_id):
     '''Edit recipe by it ID'''
     if request.method == "POST":
-        print('pries check box')
         if request.form.get('check_to_upload_image') is None:
-            print('NePazymeta')
-            current_recipe = mongo.db.recipes.find_one(
-                {"_id": ObjectId(recipe_id)})
-            current_recipe_image = current_recipe.get('recipe_image')
-            current_recipe_path = os.path.join(
-                app.config['UPLOAD_FOLDER'], current_recipe_image)
-            print(current_recipe_image)
-            print(current_recipe_path)
-            recipe_image = request.files['recipe_image']
-            if recipe_image and allowed_file(recipe_image.filename):
-                if os.path.exists(current_recipe_path):
-                    os.remove(os.path.join(
-                        app.config['UPLOAD_FOLDER'], current_recipe_image))
-                    print('Turejo istrinti: ' + current_recipe_image)
-                else:
-                    print("The file does not exist")
-                # create unique image filename
-                filename = secure_filename(recipe_image.filename)
-                splited_filename = filename.split(".")
-                print('That\'s the filename parts: ' + str(splited_filename))
-                suffix = datetime.now().strftime("%y%m%d_%H%M%S")
-                new_filename = "_".join(
-                            [splited_filename[0], suffix])
-                filename = ".".join([new_filename, splited_filename[-1]])
-                print("New filename is: " + filename)
-                recipe_image.save(os.path.join(
-                    app.config['UPLOAD_FOLDER'], filename))
-                flash('Image was successfully uploaded')
-            else:
-                flash('Allowed image types are: png, jpg, jpeg, gif')
-                return redirect(url_for('edit_recipe', recipe_id=recipe_id))
             medium_date = datetime.now()
             update_recipe = {
                 "category_name": request.form.get("category_name"),
@@ -349,7 +286,7 @@ def edit_recipe(recipe_id):
                 "cook_time": int(request.form.get("cook_time")),
                 "prep_time": int(request.form.get("prep_time")),
                 "recipe_by": session['user'],
-                "recipe_image": filename,
+                "recipe_image": request.form.get("recipe_image"),
                 "recipe_add_time": medium_date.strftime('%m/%d/%Y %H:%M')
             }
             mongo.db.recipes.update_one(
@@ -357,24 +294,24 @@ def edit_recipe(recipe_id):
             flash("Recipe Was Successfully Updated")
             return redirect(url_for("profile", username=session["user"]))
         else:
-            print('Pazymeta')
-        print('po check box')
-        medium_date = datetime.now()
-        update_recipe = {
-            "category_name": request.form.get("category_name"),
-            "recipe_name": request.form.get("recipe_name"),
-            "recipe_description": request.form.get("recipe_description"),
-            "ingredients": request.form.getlist("ingredients"),
-            "methods": request.form.getlist("methods"),
-            "cook_time": int(request.form.get("cook_time")),
-            "prep_time": int(request.form.get("prep_time")),
-            "recipe_by": session['user'],
-            "recipe_add_time": medium_date.strftime('%m/%d/%Y %H:%M')
-        }
-        mongo.db.recipes.update_one(
+            print('Checked')
+            print('po check box')
+            medium_date = datetime.now()
+            update_recipe = {
+                "category_name": request.form.get("category_name"),
+                "recipe_name": request.form.get("recipe_name"),
+                "recipe_description": request.form.get("recipe_description"),
+                "ingredients": request.form.getlist("ingredients"),
+                "methods": request.form.getlist("methods"),
+                "cook_time": int(request.form.get("cook_time")),
+                "prep_time": int(request.form.get("prep_time")),
+                "recipe_by": session['user'],
+                "recipe_add_time": medium_date.strftime('%m/%d/%Y %H:%M')
+            }
+            mongo.db.recipes.update_one(
             {"_id": ObjectId(recipe_id)}, {"$set": update_recipe})
-        flash("Recipe Was Successfully Updated")
-        return redirect(url_for("profile", username=session["user"]))
+            flash("Recipe Was Successfully Updated")
+            return redirect(url_for("profile", username=session["user"]))
     recipe = mongo.db.recipes.find_one({"_id": ObjectId(recipe_id)})
     categories = mongo.db.categories.find().sort("category_name", 1)
     return render_template(
@@ -404,14 +341,6 @@ def edit_item(item_id):
 @app.route("/delete/<recipe_id>")
 def delete_recipe(recipe_id):
     '''Delete recipe function'''
-    current_recipe = mongo.db.recipes.find_one({"_id": ObjectId(recipe_id)})
-    current_recipe_image = current_recipe.get('recipe_image')
-    current_recipe_path = os.path.join(
-        app.config['UPLOAD_FOLDER'], current_recipe_image)
-    print(current_recipe_image)
-    print(current_recipe_path)
-    os.remove(os.path.join(
-        app.config['UPLOAD_FOLDER'], current_recipe_image))
     mongo.db.recipes.remove({"_id": ObjectId(recipe_id)})
     flash("Recipe Successfully Deleted")
     return redirect(url_for("profile", username=session["user"]))
@@ -437,27 +366,6 @@ def logout():
 def add_recipe():
     '''Function to add recipe to the recipes collection'''
     if request.method == "POST":
-        if 'recipe_image' not in request.files:
-            flash('No file part')
-            return redirect(url_for('add_recipe'))
-        recipe_image = request.files['recipe_image']
-        if recipe_image.filename == "":
-            flash('No image selected for uploading')
-            return redirect(url_for('add_recipe'))
-        if recipe_image and allowed_file(recipe_image.filename):
-            filename = secure_filename(recipe_image.filename)
-            splited_filename = filename.split(".")
-            print('That\'s the filename parts: ' + str(splited_filename))
-            suffix = datetime.now().strftime("%y%m%d_%H%M%S")
-            new_filename = "_".join(
-                [splited_filename[0], suffix])
-            filename = ".".join([new_filename, splited_filename[-1]])
-            recipe_image.save(os.path.join(
-                app.config['UPLOAD_FOLDER'], filename))
-            flash('Image was successfully uploaded')
-        else:
-            flash('Allowed image types are: png, jpg, jpeg, gif')
-            return redirect(url_for('add_recipe'))
         medium_date = datetime.now()
         recipes = {
             "category_name": request.form.get("category_name"),
@@ -468,7 +376,7 @@ def add_recipe():
             "cook_time": int(request.form.get("cook_time")),
             "prep_time": int(request.form.get("prep_time")),
             "recipe_by": session['user'],
-            "recipe_image": filename,
+            "recipe_image": request.form.get("recipe_image"),
             "recipe_add_time": medium_date.strftime('%m/%d/%Y %H:%M')
         }
         mongo.db.recipes.insert_one(recipes)

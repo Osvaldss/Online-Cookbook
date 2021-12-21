@@ -17,18 +17,14 @@
         </form>
     </div>
     <div class="row">
-        <div class="col s12 l5 offset-l1 left-align grey-text text-lighten-5 text-contrast">
-            <h2>Welcome to <span class="bolder-text-part red-text text-darken-1">Cook</span><span
+        <div class="col s12 l10 offset-l1 white-text text-contrast .mt-hero-img">
+            <h2 class="mb0 center">Welcome to <span class="bolder-text-part red-text text-darken-1">Cook</span><span
                     class="lighter-text-part ">Book</span>!</h2>
-            <p>
-                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
-                industry's
-                standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it
-                to
-                make
-                a type specimen book.<br />
+            <p class="white-text big-text">
+                Explore our collection of delicious recipe ideas including: Easy made recipes,
+                Vegan and Vegetarian ideas, Soup recipes, Salads and much more...
             </p>
-            <p class="create-acc">
+            <p class="create-acc white-text big-text">
                 {% if not session.user %}
                 <span></span>Want to add your own recipe join our community.</span><br>
                 <a href="{{ url_for('register')}}" class="red darken-1 waves-effect waves-light btn-red btn-large">
@@ -59,19 +55,19 @@
         <div class="card small responsive-size hoverable">
             <div class="card-image">
                 <a href="{{ url_for('recipe_details', recipe_id=recipe._id)}}">
-                    <img class="responsive-img" src="{{ url_for('display_image', filename=recipe.recipe_image) }}">
+                    <img class="responsive-img" src="{{recipe.recipe_image}}">
                 </a>
             </div>
             <div class="card-content center-align">
                 <span class="title-font truncate">{{recipe.recipe_name}}</span>
             </div>
-            <div class="card-action">
+            <div class="card-action small-padding">
                 <div class="divider"></div>
-                <span class="left col s6">
+                <span class="left">
                     <i class="fas fa-utensils"></i>
                     <strong>{{recipe.category_name}}</strong>
                 </span>
-                <span class="right col s6">
+                <span class="right">
                     <i class="far fa-clock"></i>
                     <strong>{{recipe.prep_time + recipe.cook_time}} min</strong>
                 </span>

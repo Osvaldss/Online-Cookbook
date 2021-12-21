@@ -1,7 +1,6 @@
 $(document).ready(function () {
   $('.sidenav').sidenav();
   $('select').formSelect();
-  $('.tabs').tabs();
   $('textarea#recipe_description').characterCounter();
   $('.modal').modal({
     'dismissible': false,
@@ -10,10 +9,9 @@ $(document).ready(function () {
   $('.collapsible').collapsible();
   addIngList();
   removeIngrInput();
-  // count_chr_recipe_desc();
   check_image_checkbox();
   
-
+// Fix for materializecss selection require bug
   validateMaterializeSelect();
 
   function validateMaterializeSelect() {
@@ -93,31 +91,11 @@ function removeIngrInput() {
 // checks if user wants to use current image or add new image while editing recipe 
 function check_image_checkbox() {
   $('#check_to_upload_image').on('click', function(){                  
-     $('#image_upload_btn, #image_upload_input').attr('disabled', $(this).is(':checked'));
+     $('#recipe_image').attr('disabled', $(this).is(':checked'));
      if ($(this).prop('checked')) {
       $('.current_img').css('display', 'block');
-      $('.new_img_to_upload').css('display', 'none');
   } else {
       $('.current_img').css('display', 'none');
-      $('.new_img_to_upload').css('display', 'block');
   };     
 });
 }
-
-// function count_chr_recipe_desc() {
-//   $('#submit_recipe').click(function () {
-//     var minLength = 150;
-//     var $textarea = $('#recipe_description');
-//     if($textarea.text().length < minLength) {
-//       M.toast({
-//         html: 'Your recipe description too short it should be least 150 characters'
-//       })
-//     }
-//   })
-// }
-
-// function count_list_item(){
-//   $(".ingr-items").each(function(index) {
-//     list_number = $(this).prepend(index + 1);
-//  })
-// }
