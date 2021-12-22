@@ -1,9 +1,11 @@
 {% extends "base.html" %}
 {% block content %}
+<!-------------Profile page----------------->
 <div class="row mb1">
     <div class="col s4 m3">
         <img class="responsive-img" src="../static/images/avatar-bg.png" alt="avatar-image"><br />
     </div>
+    <!--------------Profile information----------------->
     <div class="col s8 m9">
         <h4 class="profile-hmargin">Personal information</h4>
         <p>Username : {{username.capitalize()}}
@@ -24,6 +26,7 @@
         <a href="{{ url_for('add_recipe') }}" class="right black-text"> <i class="fas fa-plus red-text"></i></i> ADD
             RECIPE</a>
     </h5>
+    <!--------------------------List of all recipes creted by current user------------------------------------->
     <ul class="collapsible">
         {% for recipe in recipes %}
         <li>
@@ -32,18 +35,19 @@
             </div>
             <div class="row collapsible-body">
                 <div class="col s12 m3">
-                    <img class="responsive-img" src="{{recipe.recipe_image}}"
-                        alt="{{recipe.recipe_name}}">
+                    <img class="responsive-img" src="{{recipe.recipe_image}}" alt="{{recipe.recipe_name}}">
                 </div>
                 <div class="col s12 m9">
                     <p class="left-align">{{recipe.recipe_description}}</p>
                     <div>
                         <span class="edit-btn">
                             <a href="{{ url_for('edit_recipe', recipe_id=recipe._id)}}"
-                                class="red waves-effect waves-light btn-red darken-1 btn-small"><i class="fas fa-edit"></i> EDIT</a>
+                                class="red waves-effect waves-light btn-red darken-1 btn-small"><i
+                                    class="fas fa-edit"></i> EDIT</a>
                         </span>
                         <span>
-                            <a href="#{{recipe}}" class="btn-small waves-effect waves-light btn-red red darken-1 modal-trigger "><i
+                            <a href="#{{recipe}}"
+                                class="btn-small waves-effect waves-light btn-red red darken-1 modal-trigger "><i
                                     class="fas fa-times-circle"></i> DELETE</a>
                         </span>
                     </div>
@@ -57,17 +61,18 @@
             </div>
             <div class="modal-footer">
                 <a href="{{ url_for('delete_recipe', recipe_id=recipe._id)}}"
-                class="modal-close waves-effect waves-light btn-red red darken-1 btn-small">Yes, Delete It</a>
+                    class="modal-close waves-effect waves-light btn-red red darken-1 btn-small">Yes, Delete It</a>
                 <a href="#!" class="modal-close waves-effect waves-light btn-red green darken-1 btn-small">No</a>
             </div>
         </div>
         {% endfor %}
     </ul>
 </div>
+<!----------------------If user is Admin Show all kitchen_tools with option to deleete/edit it--------------------------------------->
 {% if is_admin %}
 <div class="row mb1 bcrumbs">
     <h5 class="section-hmargin">
-        Total Items: {{count_items}}  
+        Total Items: {{count_items}}
         <a href="{{ url_for('add_item') }}" class="right black-text"> <i class="fas fa-plus red-text"></i> ADD ITEM</a>
     </h5>
     <ul class="collapsible">
@@ -82,13 +87,15 @@
                 </div>
                 <div class="col s9">
                     <p class="left-align">{{item.description}}</p>
-                    <div> 
+                    <div>
                         <span class="edit-btn">
                             <a href="{{ url_for('edit_item', item_id=item._id)}}"
-                                class="btn-small waves-effect waves-light btn-red red darken-1"><i class="fas fa-edit"></i> Edit</a>
+                                class="btn-small waves-effect waves-light btn-red red darken-1"><i
+                                    class="fas fa-edit"></i> Edit</a>
                         </span>
                         <span>
-                            <a href="#{{item}}" class="btn-small waves-effect waves-light btn-red red darken-1 modal-trigger "><i
+                            <a href="#{{item}}"
+                                class="btn-small waves-effect waves-light btn-red red darken-1 modal-trigger "><i
                                     class="fas fa-times-circle"></i> Delete</a>
                         </span>
                     </div>
@@ -103,17 +110,12 @@
             <div class="modal-footer">
                 <a href="{{ url_for('delete_item', item_id=item._id)}}"
                     class="modal-close waves-effect waves-light btn-red red darken-1 btn-small">Yes, Delete It</a>
-                    <a href="#!" class="modal-close waves-effect waves-light btn-red green darken-1 btn-small">No</a>
+                <a href="#!" class="modal-close waves-effect waves-light btn-red green darken-1 btn-small">No</a>
             </div>
         </div>
 
         {% endfor %}
     </ul>
 </div>
-
 {% endif %}
-
-
-
-
 {% endblock %}

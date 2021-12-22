@@ -20,10 +20,69 @@ body {
 .input-field,
  input, 
  .select-wrapper,
- textarea {
+ textarea, 
+ .btn,
+ .btn-large,
+ .btn-small {
     font-family: Alata, sans-serif;;
 }
 
+/*-------------------Margin and padding styling-----------------*/
+
+.profile-hmargin {
+    margin: 0 0 15px;
+}
+
+h4.section-hmargin {
+    margin: 0;
+}
+
+.row.main-section-headin-margins {
+    margin: 15px 0;
+}
+
+.m0 {
+    margin: 0;
+}
+
+.mb0 {
+    margin-bottom: 0;
+}
+
+.mb1 {
+    margin:10px 0;
+}
+
+.row.rm-bottom-gap {
+    margin-bottom: 0px;
+}
+
+/*--------------------------all btn--------------------*/
+
+.btn-large.btn-red:hover,
+.btn-large.btn-red:focus,
+.btn.btn-red:hover,
+.btn.btn-red:focus,
+.btn-small.btn-red:hover,
+.btn-small.btn-red:focus {
+    background-color: #ff8a80 !important;
+}
+
+a.btn-large.btn-red {
+    margin: 10px;
+}
+
+.delete-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.edit-btn {
+    padding-top: 10px;
+}
+
+/* ---------------- Navigation menu styling ------------- */
 nav {
     font-weight: bold;
     text-transform: uppercase;
@@ -37,14 +96,23 @@ nav .nav-wrapper a.icon-line-height{
     opacity: 0.95;
 }
 
-.btn, .btn-latge {
-    font-family:  Alata, sans-serif;
+/*-----------------Logo text styles--------------*/
+
+.bolder-text-part {
+    font-family: Righteous, cursive;
 }
 
+.lighter-text-part {
+    font-family: Fuzzy Bubbles, cursive;
+}
+
+
+/* ------------------------- Search bar ---------------*/
+
 .search-bg {
-    background-color: rgba(41, 41, 41, 0.514) !important;
+    background-color: rgba(255, 255, 255, 0.9) !important;
     font-family: Alata, sans-serif;
-    color: white;
+    color: rgb(0, 0, 0);
 }
 
 .search-bar {
@@ -52,6 +120,10 @@ nav .nav-wrapper a.icon-line-height{
     position: absolute;
     right: 3%;
     top: 0;
+}
+
+.search-input-bar {
+    border-radius: 5px !important;
 }
 
 .col.center-search-btn{
@@ -70,26 +142,6 @@ nav .nav-wrapper a.icon-line-height{
     margin: 15px 0;
 }
 
-.profile-hmargin {
-    margin: 0 0 15px;
-}
-
-h4.section-hmargin {
-    margin: 0;
-}
-
-.row.main-section-headin-margins {
-    margin: 15px 0;
-}
-
-.bolder-text-part {
-    font-family: Righteous, cursive;
-}
-
-.lighter-text-part {
-    font-family: Fuzzy Bubbles, cursive;
-}
-
 .col.text-contrast {
     padding: 15px;
     background-color: rgba(0, 0, 0, 0.41);
@@ -97,6 +149,7 @@ h4.section-hmargin {
     margin-top: 6vh;
 }
 
+/*---------------------------Hero-section------------------*/
 p.big-text {
     font-size: 1.2rem;
 }
@@ -109,19 +162,14 @@ p.big-text {
     margin-top: 20px;
 }
 
-.btn-large.btn-red:hover,
-.btn-large.btn-red:focus,
-.btn.btn-red:hover,
-.btn.btn-red:focus,
-.btn-small.btn-red:hover,
-.btn-small.btn-red:focus {
-    background-color: #ff8a80 !important;
+.title-font,
+.recipe-title {
+    font-size: 16px;
+    text-transform: uppercase;
+    padding: 0px 15px 0;
 }
 
-a.btn-large.btn-red {
-    margin: 10px;
-}
-
+/*---------------------------------------------------------------------------------------------------------------------price*/
 p.price-tag {
     font-size: 16px;
     font-weight: bold;
@@ -163,14 +211,99 @@ p.price-tag {
     background-size: cover;
 }
 
+
+/*-----------------------------Category Filter cards-------------------*/
 .card.categories {
     padding: 5px;
     margin: 5px 0;
 }
 
+.col.category-btn-padding {
+    padding: 3px 3px;
+}
 
+/*--------------------------------------Breadcrumbs-------------------*/
+
+.bcrumbs a:hover,
+.bcrumbs a:focus {
+    text-decoration: underline;  
+}
+.nav-wrapper.bcrumbs a:hover,
+.nav-wrapper.bcrumbs a:focus {
+    text-decoration: underline;
+}
+
+/*-----------------------------------------Add or edit forms ----------------------*/
+.ingr_input_cont > .input-field {
+    margin: 0;
+}
+
+li.ingredient-list,
+li.method-list {
+    padding: 0 0 5px;
+}
+
+.recipe-title {
+    padding: 20px 0;
+}
+
+.recipe_edit_del_cont{
+    padding-bottom: 10px;
+}
+
+/*------------------------Recipe / Kirchen tool cards -------------------------------------*/
+
+.card .card-action {
+    border-bottom: 1px solid rgba(51, 105, 30, 0.5);
+    border-top: none;
+    padding: 5px 0;
+}
+
+.card-action.small-padding {
+    padding: 5px 10px;
+}
+
+.card.small .card-image {
+    max-height: 70%;
+}
+
+.card.small.kitchen_tool-card .card-image {
+    max-height: 65%;
+}
+
+.card.horizontal {
+    padding: 5px;
+    height: auto;
+}
+
+.card.small.responsive-size {
+    height:200px;
+}
+
+.card.small.responsive-size .card-content {
+    padding: 5px;
+}
+
+.card-content.short-desc {
+    padding: 10px 24px 0px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+}
+
+.current_img {
+    display: none;
+    max-width: 150px;
+    height: auto;
+}
+
+.move-btn-up {
+    margin-top: -55px;
+}
+
+/*--------------------------------------Footer--------------------*/
 footer {
-    /* padding: 25px 0 0; */
     width: 100%;
     position: absolute;
     bottom: 0;
@@ -209,137 +342,6 @@ ul.follow-us-list li i:focus {
     font-weight: 600;
 }
 
-.bcrumbs a:hover,
-.bcrumbs a:focus {
-    text-decoration: underline;  
-}
-.nav-wrapper.bcrumbs a:hover,
-.nav-wrapper.bcrumbs a:focus {
-    text-decoration: underline;
-}
-
-.m0 {
-    margin: 0;
-}
-
-.mb0 {
-    margin-bottom: 0;
-}
-
-.mb1 {
-    margin:10px 0;
-}
-
-.col.category-btn-padding {
-    padding: 3px 3px;
-}
-
-.title-font,
-.recipe-title {
-    font-size: 16px;
-    text-transform: uppercase;
-    padding: 0px 15px 0;
-}
-
-.ingr_input_cont > .input-field {
-    margin: 0;
-}
-
-li.ingredient-list,
-li.method-list {
-    padding: 0 0 5px;
-}
-
-.recipe-title {
-    padding: 20px 0;
-}
-
-.recipe_edit_del_cont{
-    padding-bottom: 10px;
-}
-
-.card .card-action {
-    border-bottom: 1px solid rgba(51, 105, 30, 0.5);
-    border-top: none;
-    padding: 5px 0;
-}
-
-.card-action.small-padding {
-    padding: 5px 10px;
-}
-
-.card.small .card-image {
-    max-height: 70%;
-}
-
-.card.small.kitchen_tool-card .card-image {
-    max-height: 65%;
-}
-
-/* .card.small .card-image+.card-content {
-    max-height: 45%;
-} */
-
-.card.horizontal {
-    padding: 5px;
-    height: auto;
-}
-
-.row.rm-bottom-gap {
-    margin-bottom: 0px;
-}
-
-
-.card-content.card-footer {
-    padding: 10px 24px;
-}
-
-.card.small.responsive-size {
-    height:200px;
-}
-
-
-.card.small.responsive-size-profile {
-    height: 280px;
-}
-
-.card.small.responsive-size .card-content,
-.card.small.responsive-size-profile .card-content {
-    padding: 5px;
-}
-
-.delete-btn {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-}
-
-.edit-btn {
-    padding-top: 10px;
-}
-
-.card-content.short-desc {
-    padding: 10px 24px 0px;
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-}
-
-.current_img {
-    display: none;
-    max-width: 150px;
-    height: auto;
-}
-
-.move-btn-up {
-    margin-top: -55px;
-}
-
-.page-footer {
-    padding-top: 0px;
-}
-
 
 @media only screen and (max-width: 600px) and (orientation: portrait) {
     body {
@@ -349,20 +351,6 @@ li.method-list {
     .image-title-holder {
         height: 75px;
     }
-
-    /* .card.small.responsive-size {
-        height:220px;
-    }
-
-    .card.small.responsive-size-profile {
-        height: 280px;
-    }
-    
-    .card.small.responsive-size .card-content,
-    .card.small.responsive-size-profile .card-content {
-        padding: 5px;
-    } */
-
     .section-hmargin {
         font-size: 20px;
     }
@@ -385,10 +373,6 @@ li.method-list {
         overflow-y: hidden;
     }
 
-    /* .card.small .card-image {
-        max-height: 70%;
-    } */
-
     .image-container img {
         width: 100%;
         height: auto;
@@ -408,10 +392,6 @@ li.method-list {
     body {
         padding-bottom: 425px;
     }
-
-    /* .card.small .card-image {
-        max-height: 70%;
-    } */
 }
 
 @media only screen and (max-width: 600px) and (orientation: landscape) {
@@ -438,11 +418,6 @@ li.method-list {
     .search-bar {
         width: 100%;
     }
-
-    /* .card.small .card-image {
-        max-height: 70%;
-    } */
-
 }
 
 @media only screen and (min-width: 600px){

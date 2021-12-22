@@ -20,9 +20,39 @@ app.secret_key = os.environ.get("SECRET_KEY")
 mongo = PyMongo(app)
 
 
+def is_logged_in():
+    '''Checks if user is logged in'''
+    if session and session['user']:
+        return True
+    else:
+        return False
+
+
+def is_user_admin():
+    '''Chekcks if admin is logged in'''
+    if session and session['user']:
+        current_user = mongo.db.users.find_one(
+            {"username": session['user']})
+        is_admin = current_user.get("isAdmin")
+        if is_admin:
+            return True
+        else:
+            return False
+    else:
+        return False
+
+
+def did_user_create_recipe(recipe):
+    '''Checks if recipe is creted by current user'''
+    if session and session['user'] and recipe['recipe_by'] == session['user']:
+        return True
+    else:
+        return False
+
+
 @app.route("/")
-@app.route("/get_latest")
-def get_latest():
+@app.route("/home")
+def home():
     '''Find recent added recipes and display then on home page.'''
     recipes = mongo.db.recipes.find().sort("recipe_add_time", -1).limit(8)
     kitchen_tools = mongo.db.kitchen_tools.find().sort(
@@ -31,28 +61,32 @@ def get_latest():
         "main_page.html", recipes=recipes, kitchen_tools=kitchen_tools)
 
 
-@app.route('/search', methods=["GET", "POST"])
+@app.route('/search', methods=["POST"])
 def search():
-    '''Search function between recipes and kitchen_tools collection on mongodb'''
+    '''
+    Search function between recipes and
+    kitchen_tools collection on mongodb
+    '''
     query = request.form.get("requests")
     recipes = list(mongo.db.recipes.find({"$text": {"$search": query}}))
-    kitchen_tools = list(mongo.db.kitchen_tools.find({"$text": {"$search": query}}))
+    kitchen_tools = list(mongo.db.kitchen_tools.find(
+        {"$text": {"$search": query}}))
     return render_template(
-        "search_results.html", recipes=recipes, kitchen_tools=kitchen_tools, query=query)
+        "search_results.html", recipes=recipes,
+        kitchen_tools=kitchen_tools, query=query)
 
 
-@app.route('/search_recipes', methods=["GET", "POST"])
+@app.route('/search/recipes', methods=["POST"])
 def search_recipes():
     '''Search function only on recipes page'''
     query = request.form.get("requests")
-    recipes = mongo.db.recipes.find({"$text": {"$search": query}})
-    all_recipes = len(list(mongo.db.recipes.find()))
+    recipes = list(mongo.db.recipes.find({"$text": {"$search": query}}))
+    all_recipes = list(mongo.db.recipes.find())
     return render_template(
-        "recipes.html", recipes=recipes,
-         all_recipes=all_recipes, query=query)
+        "recipes.html", recipes=recipes, all_recipes=all_recipes, query=query)
 
 
-@app.route('/search_items', methods=["GET", "POST"])
+@app.route('/search/items', methods=["POST"])
 def search_items():
     '''Search function only on kitchen tools page'''
     query = request.form.get("requests")
@@ -61,98 +95,45 @@ def search_items():
         "tools.html", kitchen_tools=kitchen_tools, query=query)
 
 
-@app.route('/filter_category', methods=["GET", "POST"])
-def filter_category():
-    '''Search function only on kitchen tools page'''
-    categ = request.form.get("category_filter")
-    recipes_list = list(mongo.db.recipes.find())
-    recipes = mongo.db.recipes.find({'category_name': categ}).sort("recipe_name", 1)
-    categories = mongo.db.categories.find().sort("category_name", 1)
-    categories_list = list(mongo.db.categories.find())
-    all_recipes = len(list(mongo.db.recipes.find()))
-
-    # Create a list of recipe collection only from category_name
-    recipe_dict = []
-    for recipe in recipes_list:
-        for key, value in recipe.items():
-            if key == "category_name":
-                recipe_dict.append(value)
-        print(recipe_dict)
-
-    # Create a list form category collection using only category_name
-    category_it_list = []
-    for dic in categories_list:
-        for key, value in dic.items():
-            if key == 'category_name':
-                if value not in category_it_list:
-                    category_it_list.append(value)
-        print('mano sarasas', category_it_list)
-
-    # Create a dict 
-    # dict kyes will be category_it_list items
-    # dict value will count how many same categroy recipes we have
-    # in recipe collection.
-
-    new_dict = {}
-    for item in category_it_list:
-        if item not in new_dict:
-            new_dict[item] = 0
-    for recipe in recipe_dict:
-        if recipe not in new_dict:
-            new_dict[recipe] = 0
-        new_dict[recipe] += 1
-
-    return render_template(
-        "recipes.html", recipes=recipes,
-        categories=categories, 
-        new_dict=new_dict, all_recipes=all_recipes)
-
-
-@app.route("/get_recipe")
+@app.route('/recipes', methods=["GET", "POST"])
 def get_recipe():
-    '''Page with a list of all added recipes.'''
-    recipes = mongo.db.recipes.find().sort("category_name", 1)
-    recipes_list = list(mongo.db.recipes.find())
-    all_recipes = len(list(mongo.db.recipes.find()))
-    categories = mongo.db.categories.find().sort("category_name", 1)
-    categories_list = list(mongo.db.categories.find())
-    
-    # Create a list of recipe collection only from category_name
-    recipe_dict = []
-    for recipe in recipes_list:
-        for key, value in recipe.items():
-            if key == "category_name":
-                recipe_dict.append(value)
-        print(recipe_dict)
+    '''Recipe page with category filter'''
+    category_filter = request.form.get("category_filter")
+    all_recipes_list = list(mongo.db.recipes.find())
+    recipes_by_category_list = []
 
-    # Create a list form category collection using only category_name
-    category_it_list = []
-    for dic in categories_list:
-        for key, value in dic.items():
-            if key == 'category_name':
-                if value not in category_it_list:
-                    category_it_list.append(value)
-        print('mano sarasas', category_it_list)
+    # If 'category_filter' was passed and we need to filter by category name
+    if category_filter:
+        recipes_by_category_list = list(mongo.db.recipes.find(
+            {'category_name': category_filter}).sort("recipe_name", 1))
+    else:
+        recipes_by_category_list = all_recipes_list
 
-    # Create a dict 
-    # dict kyes will be category_it_list items
-    # dict value will count how many same categroy recipes we have
-    # in recipe collection
-    new_dict = {}
-    for item in category_it_list:
-        if item not in new_dict:
-            new_dict[item] = 0
-    for recipe in recipe_dict:
-        if recipe not in new_dict:
-            new_dict[recipe] = 0
-        new_dict[recipe] += 1
+    all_categories_list = list(
+        mongo.db.categories.find().sort("category_name", 1))
+
+    recipe_count_by_category_name = {}
+    for category in all_categories_list:
+        category_name = category['category_name']
+        recipe_count_by_category_name[category_name] = 0
+    print('Kas cia dabar toks?', recipe_count_by_category_name)
+
+    for recipe in all_recipes_list:
+        recipe_category = recipe['category_name']
+        recipe_count_by_category_name[recipe_category] += 1
+
+    print('antras kas cia toks?', recipe_count_by_category_name)
 
     return render_template(
-        "recipes.html", recipes=recipes, all_recipes=all_recipes,
-        categories=categories, new_dict=new_dict)
+        "recipes.html",
+        recipes=recipes_by_category_list,
+        categories=all_categories_list,
+        recipe_count_by_category_name=recipe_count_by_category_name,
+        all_recipes=all_recipes_list
+    )
 
 
-@app.route("/product_list")
+@app.route("/tools")
 def get_product_list():
     '''Page with a list of all added products.'''
     kitchen_tools = mongo.db.kitchen_tools.find().sort("product_name", 1)
@@ -160,7 +141,7 @@ def get_product_list():
                     "tools.html", kitchen_tools=kitchen_tools)
 
 
-@app.route("/item_details/<item_id>")
+@app.route("/tool/<item_id>/view")
 def item_details(item_id):
     '''Get an item by its' ID'''
     kitchen_tools = mongo.db.kitchen_tools.find_one({'_id': ObjectId(item_id)})
@@ -168,14 +149,14 @@ def item_details(item_id):
                     "item_details.html", kitchen_tools=kitchen_tools)
 
 
-@app.route("/recipe_details/<recipe_id>")
+@app.route("/recipe/<recipe_id>/view")
 def recipe_details(recipe_id):
     '''Get a recipe by its' ID'''
     try:
         recipes = mongo.db.recipes.find_one({'_id': ObjectId(recipe_id)})
         if session['user']:
-            # username = mongo.db.users.find_one({"username": session["user"]})["username"]
-            current_user = mongo.db.users.find_one({"username": session['user']})
+            current_user = mongo.db.users.find_one(
+                {"username": session['user']})
             is_admin = current_user.get("isAdmin")
         return render_template(
                     "recipe_details.html", recipes=recipes, is_admin=is_admin)
@@ -240,12 +221,11 @@ def login():
             # if user inputs wrong username
             flash("Incorrect Cook Name and/or Password")
             return redirect(url_for('login'))
-
     return render_template("login.html")
 
 
-@app.route("/profile/<username>", methods=["GET", "POST"])
-def profile(username):
+@app.route("/profile/", methods=["GET", "POST"])
+def profile():
     ''' User profile page method'''
     try:
         username = mongo.db.users.find_one(
@@ -265,77 +245,128 @@ def profile(username):
             return render_template(
                 "profile.html", username=username, recipes=recipes,
                 count_recip=count_recip, kitchen_tools=kitchen_tools,
-                is_admin=is_admin, count_items=count_items, count_recipes=count_recipes, creation_date=creation_date)
+                is_admin=is_admin, count_items=count_items,
+                count_recipes=count_recipes, creation_date=creation_date)
     except:
         return redirect(url_for("login"))
-    return redirect(url_for("login"))
 
 
-@app.route("/edit_recipe/<recipe_id>", methods=["GET", "POST"])
+@app.route("/recipe/<recipe_id>/edit", methods=["GET", "POST"])
 def edit_recipe(recipe_id):
     '''Edit recipe by it ID'''
-    if request.method == "POST":
-        if request.form.get('check_to_upload_image') is None:
-            medium_date = datetime.now()
-            update_recipe = {
-                "category_name": request.form.get("category_name"),
-                "recipe_name": request.form.get("recipe_name"),
-                "recipe_description": request.form.get("recipe_description"),
-                "ingredients": request.form.getlist("ingredients"),
-                "methods": request.form.getlist("methods"),
-                "cook_time": int(request.form.get("cook_time")),
-                "prep_time": int(request.form.get("prep_time")),
-                "recipe_by": session['user'],
-                "recipe_image": request.form.get("recipe_image"),
-                "recipe_add_time": medium_date.strftime('%m/%d/%Y %H:%M')
-            }
-            mongo.db.recipes.update_one(
-                {"_id": ObjectId(recipe_id)}, {"$set": update_recipe})
-            flash("Recipe Was Successfully Updated")
-            return redirect(url_for("profile", username=session["user"]))
-        else:
-            print('Checked')
-            print('po check box')
-            medium_date = datetime.now()
-            update_recipe = {
-                "category_name": request.form.get("category_name"),
-                "recipe_name": request.form.get("recipe_name"),
-                "recipe_description": request.form.get("recipe_description"),
-                "ingredients": request.form.getlist("ingredients"),
-                "methods": request.form.getlist("methods"),
-                "cook_time": int(request.form.get("cook_time")),
-                "prep_time": int(request.form.get("prep_time")),
-                "recipe_by": session['user'],
-                "recipe_add_time": medium_date.strftime('%m/%d/%Y %H:%M')
-            }
-            mongo.db.recipes.update_one(
-            {"_id": ObjectId(recipe_id)}, {"$set": update_recipe})
-            flash("Recipe Was Successfully Updated")
-            return redirect(url_for("profile", username=session["user"]))
     recipe = mongo.db.recipes.find_one({"_id": ObjectId(recipe_id)})
-    categories = mongo.db.categories.find().sort("category_name", 1)
-    return render_template(
-            "edit_recipe.html", recipe=recipe, categories=categories)
+    if is_user_admin():
+        if request.method == "POST":
+            if request.form.get('check_to_upload_image') is None:
+                medium_date = datetime.now()
+                update_recipe = {
+                    "category_name": request.form.get("category_name"),
+                    "recipe_name": request.form.get(
+                        "recipe_name"),
+                    "recipe_description": request.form.get(
+                        "recipe_description"),
+                    "ingredients": request.form.getlist("ingredients"),
+                    "methods": request.form.getlist("methods"),
+                    "cook_time": int(request.form.get("cook_time")),
+                    "prep_time": int(request.form.get("prep_time")),
+                    "recipe_by": session['user'],
+                    "recipe_image": request.form.get("recipe_image"),
+                    "recipe_add_time": medium_date.strftime('%m/%d/%Y %H:%M')
+                }
+                mongo.db.recipes.update_one(
+                    {"_id": ObjectId(recipe_id)}, {"$set": update_recipe})
+                flash("Recipe Was Successfully Updated")
+                return redirect(url_for("profile", username=session["user"]))
+            else:
+                medium_date = datetime.now()
+                update_recipe = {
+                    "category_name": request.form.get(
+                        "category_name"),
+                    "recipe_name": request.form.get(
+                        "recipe_name"),
+                    "recipe_description": request.form.get(
+                        "recipe_description"),
+                    "ingredients": request.form.getlist("ingredients"),
+                    "methods": request.form.getlist("methods"),
+                    "cook_time": int(request.form.get("cook_time")),
+                    "prep_time": int(request.form.get("prep_time")),
+                    "recipe_by": session['user'],
+                    "recipe_add_time": medium_date.strftime('%m/%d/%Y %H:%M')
+                }
+                mongo.db.recipes.update_one(
+                    {"_id": ObjectId(recipe_id)}, {"$set": update_recipe})
+                flash("Recipe Was Successfully Updated")
+                return redirect(url_for("profile", username=session["user"]))
+        recipe = mongo.db.recipes.find_one({"_id": ObjectId(recipe_id)})
+        categories = mongo.db.categories.find().sort("category_name", 1)
+        return render_template(
+                "edit_recipe.html", recipe=recipe, categories=categories)
+    elif did_user_create_recipe(recipe):
+        if request.method == "POST":
+            if request.form.get('check_to_upload_image') is None:
+                medium_date = datetime.now()
+                update_recipe = {
+                    "category_name": request.form.get("category_name"),
+                    "recipe_name": request.form.get("recipe_name"),
+                    "recipe_description": request.form.get(
+                        "recipe_description"),
+                    "ingredients": request.form.getlist("ingredients"),
+                    "methods": request.form.getlist("methods"),
+                    "cook_time": int(request.form.get("cook_time")),
+                    "prep_time": int(request.form.get("prep_time")),
+                    "recipe_by": session['user'],
+                    "recipe_image": request.form.get("recipe_image"),
+                    "recipe_add_time": medium_date.strftime('%m/%d/%Y %H:%M')
+                }
+                mongo.db.recipes.update_one(
+                    {"_id": ObjectId(recipe_id)}, {"$set": update_recipe})
+                flash("Recipe Was Successfully Updated")
+                return redirect(url_for("profile", username=session["user"]))
+            else:
+                medium_date = datetime.now()
+                update_recipe = {
+                    "category_name": request.form.get("category_name"),
+                    "recipe_name": request.form.get("recipe_name"),
+                    "recipe_description": request.form.get(
+                        "recipe_description"),
+                    "ingredients": request.form.getlist("ingredients"),
+                    "methods": request.form.getlist("methods"),
+                    "cook_time": int(request.form.get("cook_time")),
+                    "prep_time": int(request.form.get("prep_time")),
+                    "recipe_by": session['user'],
+                    "recipe_add_time": medium_date.strftime('%m/%d/%Y %H:%M')
+                }
+                mongo.db.recipes.update_one(
+                    {"_id": ObjectId(recipe_id)}, {"$set": update_recipe})
+                flash("Recipe Was Successfully Updated")
+                return redirect(url_for("profile", username=session["user"]))
+        recipe = mongo.db.recipes.find_one({"_id": ObjectId(recipe_id)})
+        categories = mongo.db.categories.find().sort("category_name", 1)
+        return render_template(
+                "edit_recipe.html", recipe=recipe, categories=categories)
+    return redirect(url_for('home'))
 
 
-@app.route("/edit_item/<item_id>", methods=["GET", "POST"])
+@app.route("/item/<item_id>/edit", methods=["GET", "POST"])
 def edit_item(item_id):
     '''Edit item by it ID'''
-    if request.method == "POST":
-        update_item = {
-            "product_name": request.form.get("product_name"),
-            "product_category": request.form.get("product_category"),
-            "product_image": request.form.get("product_image"),
-            "description": request.form.get("description"),
-            "price": float(request.form.get("price"))
-        }
-        mongo.db.kitchen_tools.update_one(
-            {"_id": ObjectId(item_id)}, {"$set": update_item})
-        flash("Item Was Successfully Updated")
-        return redirect(url_for("profile", username=session["user"]))
-    item = mongo.db.kitchen_tools.find_one({"_id": ObjectId(item_id)})
-    return render_template(
-            "edit_item.html", item=item)
+    if is_user_admin():
+        if request.method == "POST":
+            update_item = {
+                "product_name": request.form.get("product_name"),
+                "product_category": request.form.get("product_category"),
+                "product_image": request.form.get("product_image"),
+                "description": request.form.get("description"),
+                "price": float(request.form.get("price"))
+            }
+            mongo.db.kitchen_tools.update_one(
+                {"_id": ObjectId(item_id)}, {"$set": update_item})
+            flash("Item Was Successfully Updated")
+            return redirect(url_for("profile", username=session["user"]))
+        item = mongo.db.kitchen_tools.find_one({"_id": ObjectId(item_id)})
+        return render_template(
+                "edit_item.html", item=item)
+    return redirect(url_for('home'))
 
 
 @app.route("/delete/<recipe_id>")
@@ -359,51 +390,55 @@ def logout():
     '''Logout the user from his profile'''
     flash("You have been successfully logged out")
     session.pop("user")
-    return redirect(url_for("get_latest"))
+    return redirect(url_for("home"))
 
 
-@app.route("/add_recipe", methods=["GET", "POST"])
+@app.route("/recipe/add", methods=["GET", "POST"])
 def add_recipe():
     '''Function to add recipe to the recipes collection'''
-    if request.method == "POST":
-        medium_date = datetime.now()
-        recipes = {
-            "category_name": request.form.get("category_name"),
-            "recipe_name": request.form.get("recipe_name"),
-            "recipe_description": request.form.get("recipe_description"),
-            "ingredients": request.form.getlist("ingredients"),
-            "methods": request.form.getlist("methods"),
-            "cook_time": int(request.form.get("cook_time")),
-            "prep_time": int(request.form.get("prep_time")),
-            "recipe_by": session['user'],
-            "recipe_image": request.form.get("recipe_image"),
-            "recipe_add_time": medium_date.strftime('%m/%d/%Y %H:%M')
-        }
-        mongo.db.recipes.insert_one(recipes)
-        flash("Recipe Was Successfully Added")
-        return redirect(url_for("get_recipe"))
-    categories = mongo.db.categories.find().sort("category_name", 1)
-    return render_template("add_recipe.html", categories=categories)
+    if is_logged_in():
+        if request.method == "POST":
+            medium_date = datetime.now()
+            recipes = {
+                "category_name": request.form.get("category_name"),
+                "recipe_name": request.form.get("recipe_name"),
+                "recipe_description": request.form.get("recipe_description"),
+                "ingredients": request.form.getlist("ingredients"),
+                "methods": request.form.getlist("methods"),
+                "cook_time": int(request.form.get("cook_time")),
+                "prep_time": int(request.form.get("prep_time")),
+                "recipe_by": session['user'],
+                "recipe_image": request.form.get("recipe_image"),
+                "recipe_add_time": medium_date.strftime('%m/%d/%Y %H:%M')
+            }
+            mongo.db.recipes.insert_one(recipes)
+            flash("Recipe Was Successfully Added")
+            return redirect(url_for("get_recipe"))
+        categories = mongo.db.categories.find().sort("category_name", 1)
+        return render_template("add_recipe.html", categories=categories)
+    return redirect(url_for("home"))
 
 
-@app.route("/add_item", methods=["GET", "POST"])
+@app.route("/add/item", methods=["GET", "POST"])
 def add_item():
     '''Add new item to the kitchen_tools collection'''
-    if request.method == "POST":
-        medium_date = datetime.now()
-        kitchen_tools = {
-            "product_name": request.form.get("product_name"),
-            "product_category": request.form.get("product_category"),
-            "product_image": request.form.get("product_image"),
-            "description": request.form.get("description"),
-            "price": float(request.form.get("price")),
-            "item_add_time": medium_date.strftime('%m/%d/%Y %H:%M')
-        }
-        mongo.db.kitchen_tools.insert_one(kitchen_tools)
-        flash("Item Was Successfully Added")
-        return redirect(url_for("profile", username=session["user"]))
-    kitchen_tools = mongo.db.kitchen_tools.find().sort("product_name", 1)
-    return render_template("add_item.html", kitchen_tools=kitchen_tools)
+    if is_user_admin():
+        if request.method == "POST":
+            medium_date = datetime.now()
+            kitchen_tools = {
+                "product_name": request.form.get("product_name"),
+                "product_category": request.form.get("product_category"),
+                "product_image": request.form.get("product_image"),
+                "description": request.form.get("description"),
+                "price": float(request.form.get("price")),
+                "item_add_time": medium_date.strftime('%m/%d/%Y %H:%M')
+            }
+            mongo.db.kitchen_tools.insert_one(kitchen_tools)
+            flash("Item Was Successfully Added")
+            return redirect(url_for("profile", username=session["user"]))
+        kitchen_tools = mongo.db.kitchen_tools.find().sort("product_name", 1)
+        return render_template("add_item.html", kitchen_tools=kitchen_tools)
+    return redirect(url_for("home"))
 
 
 if __name__ == "__main__":

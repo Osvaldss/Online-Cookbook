@@ -1,135 +1,144 @@
 {% extends "base.html" %}
 {% block content %}
-
-    {% if session.user %}
-    <h3 class="left-align section-hmargin"><span class="bolder-text-part red-text text-darken-1">Editing</span>
-        <span>{{recipe.recipe_name}}</span></h3>
-
-    <div class="row card-panel">
-        <form class="" method="POST" action="{{ url_for('edit_recipe', recipe_id=recipe._id)}}" enctype="multipart/form-data">
-            <div class="row">
-                <div class="input-field col s12">
-                    <i class="fas fa-book red-text prefix"></i>
-                    <select id="category_name" name="category_name" class="validate" required>
-                        <option value="" disabled>Choose recipe category</option>
-                        {% for category in categories %}
-                            {% if category.category_name == recipe.category_name %}
-                                <option value="{{category.category_name}}"selected>{{category.category_name}}</option>
-                            {% else %}
-                                <option value="{{category.category_name}}">{{category.category_name}}</option>
-                            {% endif %}
-                        {% endfor %}
-                    </select>
-                    <label for="category_name">Recipe category</label>
-                </div>
+<!--Form to edit existing recipe-->
+{% if session.user %}
+<h3 class="left-align section-hmargin">
+    <span class="bolder-text-part red-text text-darken-1">Editing</span>
+    <span>{{recipe.recipe_name}}</span>
+</h3>
+<div class="row card-panel">
+    <form class="" method="POST" action="{{ url_for('edit_recipe', recipe_id=recipe._id)}}"
+        enctype="multipart/form-data">
+        <div class="row">
+            <div class="input-field col s12">
+                <i class="fas fa-book red-text prefix"></i>
+                <select id="category_name" name="category_name" class="validate" required>
+                    <option value="" disabled>Choose recipe category</option>
+                    {% for category in categories %}
+                    {% if category.category_name == recipe.category_name %}
+                    <option value="{{category.category_name}}" selected>{{category.category_name}}</option>
+                    {% else %}
+                    <option value="{{category.category_name}}">{{category.category_name}}</option>
+                    {% endif %}
+                    {% endfor %}
+                </select>
+                <label for="category_name">Recipe category</label>
             </div>
-            <div class="row">
-                <div class="input-field col s12">
-                    <i class="fas fa-utensils red-text prefix"></i>
-                    <input id="recipe_name" name="recipe_name" type="text" class="validate" value="{{ recipe.recipe_name}}" required>
-                    <label for="recipe_name">Recipe Name</label>
-                </div>
+        </div>
+        <div class="row">
+            <div class="input-field col s12">
+                <i class="fas fa-utensils red-text prefix"></i>
+                <input id="recipe_name" name="recipe_name" type="text" class="validate" value="{{ recipe.recipe_name}}"
+                    required>
+                <label for="recipe_name">Recipe Name</label>
             </div>
-            <div class="row">
-                <div class="input-field col s12">
-                    <i class="fas fa-scroll red-text prefix"></i>
-                    <textarea id="recipe_description" name="recipe_description" class="materialize-textarea validate" minlength="150" maxlength="500" data-length="500" required>
+        </div>
+        <div class="row">
+            <div class="input-field col s12">
+                <i class="fas fa-scroll red-text prefix"></i>
+                <textarea id="recipe_description" name="recipe_description" class="materialize-textarea validate"
+                    minlength="150" maxlength="500" data-length="500" required>
                         {{- recipe.recipe_description -}}
                     </textarea>
-                    <label for="recipe_description">Short Description Of A Recipe</label>
-                </div>
+                <label for="recipe_description">Short Description Of A Recipe</label>
             </div>
-            <div class="row">
-                <h4>Ingredients</h4>
-                <div class="ingr_input_cont input-field col s12 l10">
-                    <i class="fas fa-list-alt red-text prefix"></i>
-                    <input id="ingredients_add" name="ingredients_add" type="text" value="" class="validate">
-                    <label for="ingredients_add">Add ingredient</label>
-                    {% for ingredient in recipe.ingredients %}
-                    <div class="input-field s12">
-                        <input type="text" name="ingredients" class="validate ingr-items" value="{{ingredient}}" required>
-                    </div>
-                    <div class="input-field s12 right">
-                        <button id="remove_ingr_input" type="button" class="btn-floating waves-effect waves-light btn-red red darken-1 move-btn-up right">X</button>
-                    </div>
-                    {% endfor %}
+        </div>
+        <div class="row">
+            <h4>Ingredients</h4>
+            <div class="ingr_input_cont input-field col s12 l10">
+                <i class="fas fa-list-alt red-text prefix"></i>
+                <input id="ingredients_add" name="ingredients_add" type="text" value="" class="validate">
+                <label for="ingredients_add">Add ingredient</label>
+                {% for ingredient in recipe.ingredients %}
+                <div class="input-field s12">
+                    <input type="text" name="ingredients" class="validate ingr-items" value="{{ingredient}}" required>
                 </div>
-                <div class="input-field col s12 l2 right">
-                    <button class="btn add_list_item waves-effect waves-light btn-red red darken-1" type="button">
-                        Add Ingredient
-                    </button>
+                <div class="input-field s12 right">
+                    <button id="remove_ingr_input" type="button"
+                        class="btn-floating waves-effect waves-light btn-red red darken-1 move-btn-up right">X</button>
                 </div>
+                {% endfor %}
             </div>
-            <div class="row">
-                <h4>Method</h4>
-                <div class="input-field col s12">
-                    <i class="fas fa-list-ol red-text prefix"></i>
-                    <textarea id="step_one" name="methods" class="materialize-textarea validate" required>
+            <div class="input-field col s12 l2 right">
+                <button class="btn add_list_item waves-effect waves-light btn-red red darken-1" type="button">
+                    Add Ingredient
+                </button>
+            </div>
+        </div>
+        <div class="row">
+            <h4>Method</h4>
+            <div class="input-field col s12">
+                <i class="fas fa-list-ol red-text prefix"></i>
+                <textarea id="step_one" name="methods" class="materialize-textarea validate" required>
                         {{- recipe.methods[0] -}}
                     </textarea>
-                    <label for="step_one">Step One</label>
-                </div>
-                <div class="input-field col s12">
-                    <i class="prefix"></i>
-                    <textarea id="step_two" name="methods" class="materialize-textarea validate" required>
+                <label for="step_one">Step One</label>
+            </div>
+            <div class="input-field col s12">
+                <i class="prefix"></i>
+                <textarea id="step_two" name="methods" class="materialize-textarea validate" required>
                         {{- recipe.methods[1] -}}
                     </textarea>
-                    <label for="step_two">Step Two</label>
-                </div>
-                <div class="input-field col s12">
-                    <i class="prefix"></i>
-                    <textarea id="step_three" name="methods" class="materialize-textarea validate">
+                <label for="step_two">Step Two</label>
+            </div>
+            <div class="input-field col s12">
+                <i class="prefix"></i>
+                <textarea id="step_three" name="methods" class="materialize-textarea validate">
                         {{- recipe.methods[2] -}}
                     </textarea>
-                    <label for="step_three">Step Three</label>
-                </div>
+                <label for="step_three">Step Three</label>
             </div>
-            <div class="row">
-                <div class="input-field col s12 l6">
-                    <i class="fas fa-clock red-text prefix"></i>
-                    <input id="prep_time" name="prep_time" type="number" min="1" max="600" class="validate" value="{{recipe.prep_time}}" required>
-                    <label for="prep_time">Preparation Time / Minutes</label>
-                </div>
-                <div class="input-field col s12 l6">
-                    <i class="prefix"></i>
-                    <input id="cook_time" name="cook_time" type="number" min="0" max="600" class="validate" value="{{recipe.cook_time}}" required>
-                    <label for="cook_time">Cook Time / Minutes</label>
-                </div>
-            </div>
-            <div  class="row">
-                <div class="col s12 m4">
-                    <label>
-                        <input id="check_to_upload_image" name="check_to_upload_image" type="checkbox" />
-                        <span class="black-text">Use same image</span>
-                    </label>
-                </div>
-                <div class="current_img center-align col s12 m8">
-                    <img class="responsive-img" src="{{recipe.recipe_image}}" alt="{{recipe.recipe_name}}">
-                </div>
-                <div class="row m0">
-                    <div class="input-field col s12">
-                        <i class="fas fa-image red-text prefix"></i>
-                        <input id="recipe_image" name="recipe_image" type="text" value="{{recipe.recipe_image}}" class="validate" required>
-                        <label for="recipe_image">Recipe Image URL</label>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col s12 center-align">
-                    <a onclick="history.back();" href="#!" class="btn waves-effect waves-light btn-red red darken-1">
-                        Cancel <i class="fas fa-times-circle right"></i>
-                    </a>
-                    <button class="btn waves-effect waves-light red darken-1 btn-red" type="submit">
-                        Edit Recipe <i class="fas fa-edit right"></i>
-                    </button>
-                </div>
-            </div>
-        </form>
-    </div>
-    {% else %}
-        <div class="center-align valign-wrapper">
-            <h4 class="red-text">You Have To Be Logged-In To Perform This Task</h4>
         </div>
-    {% endif %}
+        <div class="row">
+            <div class="input-field col s12 l6">
+                <i class="fas fa-clock red-text prefix"></i>
+                <input id="prep_time" name="prep_time" type="number" min="1" max="600" class="validate"
+                    value="{{recipe.prep_time}}" required>
+                <label for="prep_time">Preparation Time / Minutes</label>
+            </div>
+            <div class="input-field col s12 l6">
+                <i class="prefix"></i>
+                <input id="cook_time" name="cook_time" type="number" min="0" max="600" class="validate"
+                    value="{{recipe.cook_time}}" required>
+                <label for="cook_time">Cook Time / Minutes</label>
+            </div>
+        </div>
+        <div class="row">
+            <!---------Check box to check if user want to keep the current image or change it------------>
+            <div class="col s12 m4">
+                <label>
+                    <input id="check_to_upload_image" name="check_to_upload_image" type="checkbox" />
+                    <span class="black-text">Use same image</span>
+                </label>
+            </div>
+            <div class="current_img center-align col s12 m8">
+                <img class="responsive-img" src="{{recipe.recipe_image}}" alt="{{recipe.recipe_name}}">
+            </div>
+            <div class="row m0">
+                <div class="input-field col s12">
+                    <i class="fas fa-image red-text prefix"></i>
+                    <input id="recipe_image" name="recipe_image" type="text" value="{{recipe.recipe_image}}"
+                        class="validate" required>
+                    <label for="recipe_image">Recipe Image URL</label>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s12 center-align">
+                <a onclick="history.back();" href="#!" class="btn waves-effect waves-light btn-red red darken-1">
+                    Cancel <i class="fas fa-times-circle right"></i>
+                </a>
+                <button class="btn waves-effect waves-light red darken-1 btn-red" type="submit">
+                    Edit Recipe <i class="fas fa-edit right"></i>
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+{% else %}
+<div class="center-align valign-wrapper">
+    <h4 class="red-text">You Have To Be Logged-In To Perform This Task</h4>
+</div>
+{% endif %}
 
 {% endblock %}

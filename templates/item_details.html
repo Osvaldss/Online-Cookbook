@@ -1,25 +1,27 @@
 {% extends "base.html" %}
 {% block content %}
-
+<!--------Page for each item in details from kitchen_tool list------>
 <div class="row">
     <div class="col s12">
         <h4>{{kitchen_tools.product_name}}</h4>
     </div>
 </div>
 <div class="divider"></div>
+<!--------------Section for BreadCrumbs---------------------->
 <div class="nav-wrapper bcrumbs">
     <div class="col s12">
-        <a href="{{ url_for('get_latest') }}" class="black-text">HOME</a>
+        <a href="{{ url_for('home') }}" class="black-text">HOME</a>
         <i class="fas fa-caret-right red-text"></i>
         <a href="{{ url_for('get_product_list') }}" class="black-text">KITCHEN TOOLS</a>
         <i class="fas fa-caret-right red-text"></i>
         <span>{{kitchen_tools.product_name | truncate(20)}}</span>
-        <a onclick="history.back();" href="#!" class=" waves-effect waves-light right black-text"> <i class="fas fa-caret-left red-text"></i> GO BACK</a>
+        <a onclick="history.back();" href="#!" class=" waves-effect waves-light right black-text">
+            <i class="fas fa-caret-left red-text"></i> GO BACK
+        </a>
     </div>
 </div>
 <div class="divider"></div>
-
-
+<!---------------Section for item details--------------->
 <div class="row rm-bottom-gap">
     <div class="col s12 m6">
         <img class="responsive-img recipe_details" src="{{kitchen_tools.product_image }}"
@@ -45,8 +47,6 @@
         </div>
     </div>
 </div>
-
-
 <div class="col s6 right-align">
     <a href="#" class="btn-large red darken-1 btn-red waves-effect waves-light">
         <i class="fas fa-shopping-cart"></i>

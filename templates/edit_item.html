@@ -1,65 +1,71 @@
 {% extends "base.html" %}
 {% block content %}
-    {% if session.user %}
-    <h3 class="left-align section-hmargin"><span class="bolder-text-part red-text text-darken-1">Editing</span>
-        <span>{{item.product_name}}}</span></h3>
-    <div class="row card-panel">
-        <form class="" method="POST" action="{{ url_for('edit_item', item_id=item._id)}}">
-            <div class="row">
+<!--Form to edit existing item-->
+{% if session.user %}
+<h3 class="left-align section-hmargin"><span class="bolder-text-part red-text text-darken-1">Editing</span>
+    <span>{{item.product_name}}</span></h3>
+<div class="row card-panel">
+    <form class="" method="POST" action="{{ url_for('edit_item', item_id=item._id)}}">
+        <div class="row">
+        </div>
+        <div class="row">
+            <div class="input-field col s12">
+                <i class="fas fa-utensils red-text prefix"></i>
+                <input id="product_name" name="product_name" type="text" value="{{ item.product_name}}" class="validate"
+                    required>
+                <label for="product_name">Item Name</label>
             </div>
-            <div class="row">
-                <div class="input-field col s12">
-                    <i class="fas fa-utensils red-text prefix"></i>
-                    <input id="product_name" name="product_name" type="text" value="{{ item.product_name}}" class="validate" required>
-                    <label for="product_name">Item Name</label>
-                </div>
+        </div>
+        <div class="row">
+            <div class="input-field col s12">
+                <i class="fas fa-utensils red-text prefix"></i>
+                <input id="product_category" name="product_category" type="text" value="{{ item.product_category}}"
+                    class="validate" required>
+                <label for="product_category">Item Category</label>
             </div>
-            <div class="row">
-                <div class="input-field col s12">
-                    <i class="fas fa-utensils red-text prefix"></i>
-                    <input id="product_category" name="product_category" type="text" value="{{ item.product_category}}" class="validate" required>
-                    <label for="product_category">Item Category</label>
-                </div>
+        </div>
+        <div class="row">
+            <div class="input-field col s12">
+                <i class="fas fa-utensils red-text prefix"></i>
+                <input id="product_image" name="product_image" type="text" value="{{ item.product_image}}"
+                    class="validate" required>
+                <label for="product_image">Item Image URL</label>
             </div>
-            <div class="row">
-                <div class="input-field col s12">
-                    <i class="fas fa-utensils red-text prefix"></i>
-                    <input id="product_image" name="product_image" type="text" value="{{ item.product_image}}" class="validate" required>
-                    <label for="product_image">Item Image URL</label>
-                </div>
-            </div>
-            <div class="row">
-                <div class="input-field col s12">
-                    <i class="fas fa-scroll red-text prefix"></i>
-                    <textarea id="description" name="description" class="materialize-textarea validate" required>
+        </div>
+        <div class="row">
+            <div class="input-field col s12">
+                <i class="fas fa-scroll red-text prefix"></i>
+                <textarea id="description" name="description" class="materialize-textarea validate" required>
                         {{- item.description -}}
                     </textarea>
-                    <label for="description">Description Of An Item </label>
-                </div>
+                <label for="description">Description Of An Item </label>
             </div>
-            <div class="row">
-                <div class="input-field col s12 l6">
-                    <i class="fas fa-clock red-text prefix"></i>
-                    <input id="price" name="price" type="number" min="0" step="0.01" value="{{ item.price}}" class="validate" required>
-                    <label for="price">Item Price</label>
-                </div>
+        </div>
+        <div class="row">
+            <div class="input-field col s12 l6">
+                <i class="fas fa-clock red-text prefix"></i>
+                <input id="price" name="price" type="number" min="0" step="0.01" value="{{ item.price}}"
+                    class="validate" required>
+                <label for="price">Item Price</label>
             </div>
-            <div class="row">
-                <div class="col s12 center-align">
-                    <a href="{{ url_for('profile', username=session['user']) }}" class="btn waves-effect waves-light btn-red red darken-1">
-                        Cancel <i class="fas fa-times-circle right"></i>
-                    </a>
-                    <button class="btn waves-effect waves-light red darken-1 btn-red" type="submit">
-                        Edit Item <i class="fas fa-file right"></i>
-                    </button>
-                </div>
+        </div>
+        <div class="row">
+            <div class="col s12 center-align">
+                <a href="{{ url_for('profile', username=session['user']) }}"
+                    class="btn waves-effect waves-light btn-red red darken-1">
+                    Cancel <i class="fas fa-times-circle right"></i>
+                </a>
+                <button class="btn waves-effect waves-light red darken-1 btn-red" type="submit">
+                    Edit Item <i class="fas fa-file right"></i>
+                </button>
             </div>
-        </form>
-    </div>
-    {% else %}
-    <div class="center-align valign-wrapper">
-        <h4 class="red-text">You Have To Be Logged-In To Perform This Task</h4>
-    </div>
-    {% endif %}
+        </div>
+    </form>
+</div>
+{% else %}
+<div class="center-align valign-wrapper">
+    <h4 class="red-text">You Have To Be Logged-In To Perform This Task</h4>
+</div>
+{% endif %}
 
 {% endblock %}

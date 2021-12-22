@@ -1,11 +1,12 @@
 {% extends "base.html" %}
 {% block hero_img %}
+<!--------------------Hero_img container----------------------->
 <div class="image-holder valign-wrapper">
     <div class="row search-bar hide-on-med-and-down ">
         <form action="{{ url_for('search')}}" method="post" class="col s12 ">
             <div class="row valign-wrapper">
                 <div class="input-field col s12 m7 l9">
-                    <input type="text" name="requests" id="requests" minlength="3" class="validate search-bg" required>
+                    <input type="text" name="requests" id="requests" minlength="3" class="validate search-bg search-input-bar" required>
                     <label for="requests" class="white-text"></label>
                 </div>
                 <div class="col s12 m5 l3 center-search-btn">
@@ -16,6 +17,7 @@
             </div>
         </form>
     </div>
+    <!--Short intro text-->
     <div class="row">
         <div class="col s12 l10 offset-l1 white-text text-contrast .mt-hero-img">
             <h2 class="mb0 center">Welcome to <span class="bolder-text-part red-text text-darken-1">Cook</span><span
@@ -49,6 +51,7 @@
     </div>
 </div>
 <div class="divider"></div>
+<!-------------Latest Recipe cards-------------------->
 <div class="row main-section-margins">
     {% for recipe in recipes %}
     <div class="col s12 m6 l4 xl3">
@@ -88,6 +91,7 @@
     </div>
 </div>
 <div class="divider"></div>
+<!-----------------Kitchen Tools cards--------------------->
 <div class="row main-section-margins">
     {% for item in kitchen_tools %}
     <div class="col s12 m6 l4 xl3">

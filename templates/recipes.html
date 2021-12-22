@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% block title_img %}
+<!-----------------Recipes page hero_img container--------------------->
 <div class="image-title-holder recipes">
     <div class="row">
         <div class="col s5">
@@ -12,6 +13,7 @@
 </div>
 {% endblock %}
 {% block content %}
+<!------------------Search bar for large and up screens--------------------------->
 <div class="row hide-on-med-and-down mb0">
     <form action="{{ url_for('search_recipes')}}" method="post" class="col s12">
         <div class="row valign-wrapper center-align mb0">
@@ -24,11 +26,12 @@
                 <button type="submit" class="red darken-1 btn-red btn search-btn">
                     Search
                 </button>
-                <a href="{{ url_for('get_recipe')}}" class="red btn search-btn">Show All ({{all_recipes}})</a>
+                <a href="{{ url_for('get_recipe')}}" class="red btn search-btn">Show All ({{all_recipes|length}})</a>
             </div>
         </div>
     </form>
 </div>
+<!------------------Search bar for small and medium screens--------------------------->
 <div class="row show-on-medium-and-down hide-on-med-and-up mb0">
     <form action="{{ url_for('search_recipes')}}" method="post" class="col s12">
         <div class="row valign-wrapper center-align mb0">
@@ -40,28 +43,32 @@
                 <button type="submit" class="red darken-1 btn-red btn search-btn">
                     <i class="fas fa-search"></i>
                 </button>
-                <a href="{{ url_for('get_recipe')}}" class="red btn search-btn">All ({{all_recipes}})</a>
+                <a href="{{ url_for('get_recipe')}}" class="red btn search-btn">All ({{all_recipes|length}})</a>
             </div>
         </div>
     </form>
 </div>
 <div class="divider"></div>
+<!--------------Section for BreadCrumbs---------------------->
 <div class="nav-wrapper bcrumbs">
     <div class="col s12">
-        <a href="{{ url_for('get_latest') }}" class="black-text">HOME <i class="fas fa-caret-right red-text"></i></a>
+        <a href="{{ url_for('home') }}" class="black-text">HOME <i class="fas fa-caret-right red-text"></i></a>
         <a href="{{ url_for('get_recipe')}}" class="black-text">RECIPE LIST</a>
-        <a onclick="history.back();" href="#!" class=" waves-effect waves-light right black-text"> <i class="fas fa-caret-left red-text"></i> GO BACK</a>
+        <a onclick="history.back();" href="#!" class=" waves-effect waves-light right black-text"> <i
+                class="fas fa-caret-left red-text"></i> GO BACK</a>
     </div>
 </div>
 <div class="divider"></div>
+<!-----------------------Filter by category container ------------------------------->
 <div class="row mb1">
-{% for category in categories %}
+    {% for category in categories %}
     <div class="col category-btn-padding">
-        <form action="{{ url_for('filter_category')}}" method="post">
-            <input type="text" class="hide" name="category_filter" id="category_filter" value="{{category.category_name}}">
+        <form action="{{ url_for('get_recipe')}}" method="post">
+            <input type="text" class="hide" name="category_filter" id="category_filter"
+                value="{{category.category_name}}">
             <button type="submit" class="red darken-1 btn-red btn waves-effect waves-light search-btn">
                 {{category.category_name}}
-                {% for key, value in new_dict.items() %}
+                {% for key, value in recipe_count_by_category_name.items() %}
                 <span>
                     {% if category.category_name == key %}
                     ({{value}})
@@ -71,11 +78,12 @@
             </button>
         </form>
     </div>
-{% endfor %}
+    {% endfor %}
 </div>
-{% if recipes.count() > 0 %}
+
+{% if recipes|length > 0 %}
 <div class="divider"></div>
- 
+<!--------------------------All recipe cards------------------------------------>
 <div class="row main-section-margins">
     {% for recipe in recipes %}
     <div class="col s12 m6 l4 xl3">
@@ -103,9 +111,8 @@
     </div>
     {% endfor %}
 </div>
-
-
 {% else %}
+<!-------------------Search results if not found container----------------------->
 <div class="row main-section-margins valign-wrapper">
     <div class="col s12">
         <h4 class="left-align section-hmargin">
@@ -115,5 +122,4 @@
     </div>
 </div>
 {% endif %}
-
 {% endblock %}

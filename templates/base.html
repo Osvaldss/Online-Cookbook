@@ -20,18 +20,20 @@
         <!--Large screen top navbar-->
         <nav class="nav-extended red darken-1 ">
             <div class="nav-wrapper container">
-                <a href="{{ url_for('get_latest') }}" class="brand-logo"><span class="bolder-text-part">Cook</span><span
+                <a href="{{ url_for('home') }}" class="brand-logo"><span class="bolder-text-part">Cook</span><span
                         class="lighter-text-part ">Book</span></a>
                 <a href="#" data-target="mobile-demo" class="sidenav-trigger right"><i class="fas fa-bars"></i></a>
                 <ul class="right hide-on-med-and-down">
-                    <li><a href="{{ url_for('get_latest') }}">Home</a></li>
+                    <li><a href="{{ url_for('home') }}">Home</a></li>
                     <li><a href="{{ url_for('get_recipe') }}">Recipes</a></li>
                     <li><a href="{{ url_for('get_product_list') }}">Kitchen Tools</a></li>
                     {% if session.user %}
                     <li><a href="{{ url_for('add_recipe') }}">Add Recipe</a></li>
-                    <li><a class="icon-line-height" href="{{ url_for('profile', username=session['user']) }}"><i class="fas fa-user"></i></a>
+                    <li><a class="icon-line-height" href="{{ url_for('profile', username=session['user']) }}"><i
+                                class="fas fa-user"></i></a>
                     </li>
-                    <li><a class="icon-line-height" href="{{ url_for('logout') }}"><i class="fas fa-door-open"></i></a></li>
+                    <li><a class="icon-line-height" href="{{ url_for('logout') }}"><i class="fas fa-door-open"></i></a>
+                    </li>
                     {% else %}
                     <li><a href="{{ url_for('login') }}">Log In</a></li>
                     {% endif %}
@@ -57,7 +59,7 @@
                     </div>
                 </form>
             </li>
-            <li><a href="{{ url_for('get_latest') }}">Home</a></li>
+            <li><a href="{{ url_for('home') }}">Home</a></li>
             <li><a href="{{ url_for('get_recipe') }}">Recipes</a></li>
             <li><a href="{{ url_for('get_product_list') }}">Kitchen Tools</a></li>
             {% if session.user %}
@@ -69,10 +71,12 @@
             {% endif %}
         </ul>
     </header>
+    <!--block for main_page hero-img-->
     <section>
         {% block hero_img %}
         {% endblock %}
     </section>
+    <!--block for recipes.html and tools.hmtl title-img-->
     <section>
         {% block title_img %}
         {% endblock %}
@@ -87,21 +91,26 @@
         {% endif%}
         {% endwith %}
     </section>
+    <!--block for main content of every page-->
     <main class="container">
         {% block content %}
         {% endblock %}
     </main>
+    <!--------------------------------Footer-->
     <footer class="red darken-1">
+        <!--If user not in session show a message for creating an account -->
         {% if not session.user %}
-            <div class="valign-wrapper footer-join">
-                <a href="{{ url_for('register')}}" class="white-text">
-                    <i class="fas fa-heart"></i>
-                    Join Us Now By Creating Your Account
-                </a>
-            </div>
+        <div class="valign-wrapper footer-join">
+            <a href="{{ url_for('register')}}" class="white-text">
+                <i class="fas fa-heart"></i>
+                Join Us Now By Creating Your Account
+            </a>
+        </div>
         {% endif %}
+        <!--Footer content-->
         <div class="container">
             <div class="row">
+                <!--About us section-->
                 <div class="col l4 s12">
                     <h5 class="white-text center">About Us</h5>
                     <div class="divider"></div>
@@ -109,46 +118,56 @@
                         Explore our collection of delicious recipe ideas including: Easy made recipes,
                         Vegan and Vegetarian ideas, Soup recipes, Salads and much more...
                     </p>
-                    {% if not session.user %}
-                    {% endif %}
                 </div>
+                <!--Need Help section-->
                 <div class="col l4 s12 white-text">
                     <h5 class="center">Need Help?</h5>
                     <div class="divider"></div>
                     <p class="grey-text text-lighten-4">Contact Us via phone or email:</p>
                     <p><i class="fas fa-phone-alt prefix"></i> +555-555555555</p>
-                    <p class="email-link"><i class="fas fa-at prefix"></i><a href = "mailto: info@cookbook.com" class="white-text">info@cookbook.com</a></p>
+                    <p class="email-link"><i class="fas fa-at prefix"></i><a href="mailto: info@cookbook.com"
+                            class="white-text">info@cookbook.com</a></p>
                 </div>
+                <!--Follow us section with social media links-->
                 <div class="col l4 s12">
                     <h5 class="white-text center">Follow Us</h5>
                     <div class="divider"></div>
                     <ul class="follow-us-list">
                         <li>
-                            <a class="white-text" target="_blank" href="https://www.facebook.com/"><i class="fab fa-facebook-f"></i></a>
+                            <a class="white-text" target="_blank" href="https://www.facebook.com/"><i
+                                    class="fab fa-facebook-f"></i></a>
                         </li>
                         <li>
-                            <a class="grey-text text-lighten-3" target="_blank" href="https://twitter.com/?lang=en"><i class="fab fa-twitter"></i></a>
+                            <a class="grey-text text-lighten-3" target="_blank" href="https://twitter.com/?lang=en"><i
+                                    class="fab fa-twitter"></i></a>
                         </li>
                         <li>
-                            <a class="grey-text text-lighten-3" target="_blank" href="https://www.google.com/account/about/?hl=lt"><i class="fab fa-google-plus-g"></i></a>
+                            <a class="grey-text text-lighten-3" target="_blank"
+                                href="https://www.google.com/account/about/?hl=lt"><i
+                                    class="fab fa-google-plus-g"></i></a>
                         </li>
                         <li>
-                            <a class="grey-text text-lighten-3" target="_blank" href="https://www.pinterest.ie/"><i class="fab fa-pinterest-p"></i></a>
+                            <a class="grey-text text-lighten-3" target="_blank" href="https://www.pinterest.ie/"><i
+                                    class="fab fa-pinterest-p"></i></a>
                         </li>
                         <li>
-                            <a class="grey-text text-lighten-3" target="_blank" href="https://www.youtube.com/"><i class="fab fa-youtube"></i></a>
+                            <a class="grey-text text-lighten-3" target="_blank" href="https://www.youtube.com/"><i
+                                    class="fab fa-youtube"></i></a>
                         </li>
                     </ul>
                 </div>
             </div>
         </div>
-        <div>
+        <!--Copyright section with a script for current date formm stackoverflow-->
+        <div class="mb1">
             <div class="container center white-text">
                 <div class="divider"></div>
-                &#169 
+                &#169
                 <span>
-                    <script>document.write(/\d{4}/.exec(Date())[0])</script>
-                </span> 
+                    <script>
+                        document.write(/\d{4}/.exec(Date())[0])
+                    </script>
+                </span>
                 CookBook, All content used only for learning puorpose.
             </div>
         </div>
