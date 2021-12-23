@@ -1,9 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Alata&family=Fuzzy+Bubbles:wght@400;700&family=Righteous&display=swap');
 
-/* font-family: 'Alata', sans-serif; */
-/* font-family: 'Fuzzy Bubbles', cursive; */
-/* font-family: 'Righteous', cursive; */
-
 * {
     margin:0;
     padding:0;  
@@ -25,6 +21,16 @@ body {
  .btn-large,
  .btn-small {
     font-family: Alata, sans-serif;;
+}
+
+/*-----------------Logo text styles--------------*/
+
+.bolder-text-part {
+    font-family: Righteous, cursive;
+}
+
+.lighter-text-part {
+    font-family: Fuzzy Bubbles, cursive;
 }
 
 /*-------------------Margin and padding styling-----------------*/
@@ -95,17 +101,6 @@ nav .nav-wrapper a.icon-line-height{
 .opacity-sidenav {
     opacity: 0.95;
 }
-
-/*-----------------Logo text styles--------------*/
-
-.bolder-text-part {
-    font-family: Righteous, cursive;
-}
-
-.lighter-text-part {
-    font-family: Fuzzy Bubbles, cursive;
-}
-
 
 /* ------------------------- Search bar ---------------*/
 

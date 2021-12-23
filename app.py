@@ -441,6 +441,15 @@ def add_item():
     return redirect(url_for("home"))
 
 
+@app.errorhandler(404)
+def error404(error):
+    """
+    404 error page, code from
+    https://flask.palletsprojects.com/en/2.0.x/errorhandling/
+    """
+    return render_template('404.html', error=error), 404
+
+
 if __name__ == "__main__":
     app.run(host=os.environ.get("IP"),
             port=int(os.environ.get("PORT")),
