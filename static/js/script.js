@@ -11,7 +11,7 @@ $(document).ready(function () {
   removeIngrInput();
   check_image_checkbox();
   
-// Fix for materializecss selection require bug
+// Fix for materializecss selection validate bug
   validateMaterializeSelect();
 
   function validateMaterializeSelect() {
